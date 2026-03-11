@@ -49,34 +49,69 @@ body {
   box-shadow: 0 2px 8px rgba(10, 10, 10, 0.08);
 }
 
-/* Buttons: no visible border by default; barely visible border on hover */
+/* Smooth transitions for all interactive hovers */
+.interactive-smooth {
+  transition:
+    background-color 0.22s ease,
+    color 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.28s ease,
+    opacity 0.2s ease;
+}
+
+/* Buttons: no visible border by default; light gray transparent hover */
 .btn-shadow-smooth {
   border: 1px solid transparent;
   box-shadow:
     0 1px 2px rgba(10, 10, 10, 0.04),
     0 4px 16px rgba(10, 10, 10, 0.05);
+  transition:
+    background-color 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.28s ease;
 }
 .btn-shadow-smooth:hover {
-  border-color: rgba(10, 10, 10, 0.08);
+  background-color: rgba(10, 10, 10, 0.035);
+  border-color: rgba(10, 10, 10, 0.06);
   box-shadow:
-    0 2px 6px rgba(10, 10, 10, 0.05),
-    0 8px 24px rgba(10, 10, 10, 0.06);
+    0 2px 8px rgba(10, 10, 10, 0.04),
+    0 6px 20px rgba(10, 10, 10, 0.05);
 }
 
-/* Ghost/outline-style buttons: transparent border default, hairline on hover */
+/* Ghost buttons: light gray wash on hover, text stays dark */
 .btn-ghost-edge {
   border: 1px solid transparent;
+  transition:
+    background-color 0.22s ease,
+    border-color 0.22s ease,
+    color 0.22s ease,
+    box-shadow 0.28s ease;
 }
 .btn-ghost-edge:hover {
-  border-color: rgba(10, 10, 10, 0.09);
+  background-color: rgba(10, 10, 10, 0.055);
+  border-color: rgba(10, 10, 10, 0.07);
+  /* no invert to white — stays readable */
 }
 
-/* Solid dark buttons: no border default; faint light edge on hover */
+/* Solid dark buttons: slightly transparent black on hover (softer than flat #2a2a2a) */
 .btn-solid-edge {
   border: 1px solid transparent;
+  transition:
+    background-color 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.28s ease;
 }
 .btn-solid-edge:hover {
-  border-color: rgba(255, 255, 255, 0.12);
+  background-color: rgba(10, 10, 10, 0.82);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Row / list hover: very light gray, slightly transparent */
+.hover-soft-gray {
+  transition: background-color 0.2s ease;
+}
+.hover-soft-gray:hover {
+  background-color: rgba(10, 10, 10, 0.04);
 }
 
 /* Elevated logo block */

@@ -38,7 +38,7 @@ export default function NewFaqPage() {
         </p>
         <Link
           href="/dashboard"
-          className="btn-shadow-smooth btn-solid-edge mt-6 inline-block rounded-xl bg-[#0a0a0a] px-5 py-2 text-[11px] font-medium uppercase tracking-widest text-white hover:bg-[#2a2a2a]"
+          className="btn-shadow-smooth btn-solid-edge interactive-smooth mt-6 inline-block rounded-xl bg-[#0a0a0a] px-5 py-2 text-[11px] font-medium uppercase tracking-widest text-white"
         >
           Back to Dashboard
         </Link>

@@ -17,7 +17,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
               type="button"
               aria-expanded={isOpen}
               onClick={() => setOpenId(isOpen ? null : faq.id)}
-              className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition hover:bg-[#fafaf9] hover:shadow-inner"
+              className="hover-soft-gray flex w-full items-center justify-between gap-4 px-5 py-4 text-left hover:shadow-inner"
             >
               <span className="text-sm font-medium text-[#0a0a0a]">
                 {faq.title}

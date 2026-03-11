@@ -6,13 +6,13 @@ import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabaseClient";
 
 const navLink =
-  "text-[11px] font-medium uppercase tracking-[0.18em] text-[#0a0a0a]/70 hover:text-[#0a0a0a] transition-colors";
+  "interactive-smooth rounded-md px-1 py-0.5 text-[11px] font-medium uppercase tracking-[0.18em] text-[#0a0a0a]/70 hover:bg-black/[0.05] hover:text-[#0a0a0a]";
 
-/* No border default; barely visible border on hover */
+/* Ghost = light gray transparent hover via .btn-ghost-edge; solid = .btn-solid-edge */
 const btnBase =
-  "btn-shadow-smooth inline-flex h-9 items-center justify-center rounded-lg px-4 text-[11px] font-medium uppercase tracking-[0.12em] transition-colors";
-const btnGhost = `${btnBase} btn-ghost-edge bg-white text-[#0a0a0a] hover:bg-[#0a0a0a] hover:text-white hover:border-white/10`;
-const btnSolid = `${btnBase} btn-solid-edge bg-[#0a0a0a] text-white hover:bg-[#2a2a2a]`;
+  "btn-shadow-smooth interactive-smooth inline-flex h-9 items-center justify-center rounded-lg px-4 text-[11px] font-medium uppercase tracking-[0.12em] text-[#0a0a0a]";
+const btnGhost = `${btnBase} btn-ghost-edge bg-white`;
+const btnSolid = `${btnBase} btn-solid-edge bg-[#0a0a0a] text-white`;
 
 export default function Header() {
   const [user, setUser] = useState<User | null>(null);
@@ -43,7 +43,7 @@ export default function Header() {
         {/* Elevated logo */}
         <Link
           href="/"
-          className="logo-elevated inline-flex items-center border border-[#e8e6e3] bg-white px-4 py-2.5 transition hover:border-[#0a0a0a]/10"
+          className="logo-elevated interactive-smooth inline-flex items-center border border-[#e8e6e3] bg-white px-4 py-2.5 hover:bg-black/[0.03] hover:border-[#0a0a0a]/8"
         >
           <span className="text-sm font-semibold tracking-[0.12em] text-[#0a0a0a]">
             FAQ STUDIO

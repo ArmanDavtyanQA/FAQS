@@ -20,13 +20,13 @@ export default function Home() {
           <div className="flex flex-wrap gap-3 pt-2">
             <Link
               href="/auth?redirectTo=/dashboard"
-              className="btn-shadow-smooth btn-solid-edge inline-flex h-11 items-center justify-center rounded-xl bg-[#0a0a0a] px-8 text-[11px] font-medium uppercase tracking-[0.15em] text-white transition hover:bg-[#2a2a2a]"
+              className="btn-shadow-smooth btn-solid-edge interactive-smooth inline-flex h-11 items-center justify-center rounded-xl bg-[#0a0a0a] px-8 text-[11px] font-medium uppercase tracking-[0.15em] text-white"
             >
               Get started
             </Link>
             <a
               href="#how-it-works"
-              className="btn-shadow-smooth btn-ghost-edge inline-flex h-11 items-center justify-center rounded-xl bg-white px-8 text-[11px] font-medium uppercase tracking-[0.15em] text-[#0a0a0a] transition hover:bg-[#0a0a0a] hover:text-white hover:border-white/10"
+              className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-11 items-center justify-center rounded-xl bg-white px-8 text-[11px] font-medium uppercase tracking-[0.15em] text-[#0a0a0a]"
             >
               How it works
             </a>

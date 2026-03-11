@@ -113,7 +113,7 @@ export default function AccountPage() {
           <button
             type="button"
             onClick={handleLogout}
-            className="btn-shadow-smooth btn-ghost-edge inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.12em] text-[#0a0a0a] transition hover:bg-[#0a0a0a] hover:text-white hover:border-white/10"
+            className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.12em] text-[#0a0a0a]"
           >
             <PowerOffIcon className="shrink-0 opacity-80" />
             Log out

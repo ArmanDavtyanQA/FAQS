@@ -187,7 +187,7 @@ export default function FAQForm({ paidPlan }: Props) {
               type="button"
               disabled={aiLoading}
               onClick={handleGenerateWithAi}
-              className="btn-shadow-smooth btn-solid-edge mt-3 inline-flex h-9 items-center rounded-lg bg-[#0a0a0a] px-4 text-[11px] font-medium uppercase tracking-widest text-white hover:bg-[#2a2a2a] disabled:opacity-50"
+              className="btn-shadow-smooth btn-solid-edge interactive-smooth mt-3 inline-flex h-9 items-center rounded-lg bg-[#0a0a0a] px-4 text-[11px] font-medium uppercase tracking-widest text-white disabled:opacity-50"
             >
               {aiLoading ? "Generating…" : "Generate FAQs with AI"}
             </button>
@@ -212,14 +212,14 @@ export default function FAQForm({ paidPlan }: Props) {
           <button
             type="submit"
             disabled={submitting}
-            className="btn-shadow-smooth btn-solid-edge inline-flex h-10 items-center justify-center rounded-xl bg-[#0a0a0a] px-6 text-[11px] font-medium uppercase tracking-widest text-white hover:bg-[#2a2a2a] disabled:opacity-50"
+            className="btn-shadow-smooth btn-solid-edge interactive-smooth inline-flex h-10 items-center justify-center rounded-xl bg-[#0a0a0a] px-6 text-[11px] font-medium uppercase tracking-widest text-white disabled:opacity-50"
           >
             {submitting ? "Saving…" : "Create FAQ"}
           </button>
           <button
             type="button"
             onClick={() => router.push("/dashboard")}
-            className="btn-shadow-smooth btn-ghost-edge inline-flex h-10 items-center justify-center rounded-xl bg-white px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] hover:bg-[#0a0a0a] hover:text-white hover:border-white/10"
+            className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 items-center justify-center rounded-xl bg-white px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a]"
           >
             Cancel
           </button>

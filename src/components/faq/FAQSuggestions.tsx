@@ -34,7 +34,7 @@ export default function FAQSuggestions({
                     type="button"
                     disabled={disabled}
                     onClick={() => onSelect(item)}
-                    className="btn-ghost-edge w-full rounded-xl border border-transparent bg-[#f7f6f3] px-3 py-2 text-left text-xs text-[#0a0a0a] shadow-sm transition hover:bg-white hover:shadow-md disabled:opacity-50"
+                    className="btn-ghost-edge interactive-smooth w-full rounded-xl border border-transparent bg-[#f7f6f3] px-3 py-2 text-left text-xs text-[#0a0a0a] shadow-sm hover:bg-black/[0.04] hover:shadow-md disabled:opacity-50"
                   >
                     <span className="font-medium text-[#0a0a0a]">
                       {item.question}
