@@ -19,26 +19,26 @@ export default function NewFaqPage() {
       <div>
         <Link
           href="/dashboard"
-          className="text-xs font-medium text-slate-400 hover:text-slate-200"
+          className="text-[11px] font-medium uppercase tracking-widest text-[#6b6b6b] hover:text-[#0a0a0a]"
         >
           ← Back to Dashboard
         </Link>
-        <h1 className="mt-4 text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
+        <h1 className="mt-4 text-2xl font-semibold tracking-tight text-[#0a0a0a] sm:text-3xl">
           Create new FAQ page
         </h1>
-        <p className="mt-1 text-sm text-slate-400">
+        <p className="mt-1 text-sm text-[#6b6b6b]">
           Set up a new FAQ space with its own link and widget.
         </p>
       </div>
 
-      <section className="rounded-3xl border border-slate-800/80 border-dashed bg-slate-950/60 p-12 text-center">
-        <p className="text-sm text-slate-400">
+      <section className="rounded-2xl border border-dashed border-[#e8e6e3] bg-[#f7f6f3] p-12 text-center shadow-lg shadow-black/5">
+        <p className="text-sm text-[#6b6b6b]">
           FAQ creation flow coming soon. You’ll be able to name your FAQ, pick a
           template, and get your unique link and embed code here.
         </p>
         <Link
           href="/dashboard"
-          className="mt-6 inline-block rounded-full border border-slate-700 bg-slate-900/80 px-5 py-2 text-xs font-medium text-slate-200 hover:border-slate-500"
+          className="btn-shadow-smooth btn-solid-edge mt-6 inline-block rounded-xl bg-[#0a0a0a] px-5 py-2 text-[11px] font-medium uppercase tracking-widest text-white hover:bg-[#2a2a2a]"
         >
           Back to Dashboard
         </Link>
