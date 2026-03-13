@@ -8,9 +8,9 @@ import type { FAQ } from "@/lib/faq/types";
 import FAQTable from "./FAQTable";
 
 const actionBtn =
-  "btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 min-w-[10rem] flex-1 items-center justify-center rounded-xl bg-white px-4 text-[11px] font-medium uppercase tracking-[0.12em] text-[#0a0a0a] sm:flex-none sm:min-w-[11rem]";
+  "btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 min-w-[10rem] flex-1 items-center justify-center rounded-3xl bg-black/[0.03] px-4 text-[11px] font-medium uppercase tracking-[0.12em] text-[#111827] sm:flex-none sm:min-w-[11rem]";
 const actionBtnPrimary =
-  "btn-shadow-smooth btn-solid-edge interactive-smooth inline-flex h-10 min-w-[10rem] flex-1 items-center justify-center rounded-xl bg-[#0a0a0a] px-4 text-[11px] font-medium uppercase tracking-[0.12em] text-white sm:flex-none sm:min-w-[11rem]";
+  "btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 min-w-[10rem] flex-1 items-center justify-center rounded-3xl bg-black/[0.05] px-4 text-[11px] font-medium uppercase tracking-[0.12em] text-[#020617] sm:flex-none sm:min-w-[11rem]";
 
 export default function DashboardFaqSection() {
   const [faqs, setFaqs] = useState<FAQ[]>([]);

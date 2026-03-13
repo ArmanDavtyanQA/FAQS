@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
-/* Prada-inspired: warm off-white, black typography, minimal chrome */
+/* Apple Matte Glass: creamy white, black text, matte glass surfaces */
 :root {
-  --background: #f7f6f3;
+  --background: #f9f9f7;
   --foreground: #0a0a0a;
   --muted: #6b6b6b;
   --line: #e8e6e3;
@@ -49,14 +49,14 @@ body {
   box-shadow: 0 2px 8px rgba(10, 10, 10, 0.08);
 }
 
-/* Smooth transitions for all interactive hovers */
+/* Smooth transitions for all interactive hovers (slow, organic) */
 .interactive-smooth {
   transition:
-    background-color 0.22s ease,
-    color 0.22s ease,
-    border-color 0.22s ease,
-    box-shadow 0.28s ease,
-    opacity 0.2s ease;
+    background-color 0.5s ease,
+    color 0.5s ease,
+    border-color 0.5s ease,
+    box-shadow 0.5s ease,
+    opacity 0.5s ease;
 }
 
 /* Buttons: no visible border by default; light gray transparent hover */
@@ -66,9 +66,9 @@ body {
     0 1px 2px rgba(10, 10, 10, 0.04),
     0 4px 16px rgba(10, 10, 10, 0.05);
   transition:
-    background-color 0.22s ease,
-    border-color 0.22s ease,
-    box-shadow 0.28s ease;
+    background-color 0.5s ease,
+    border-color 0.5s ease,
+    box-shadow 0.5s ease;
 }
 .btn-shadow-smooth:hover {
   background-color: rgba(10, 10, 10, 0.035);

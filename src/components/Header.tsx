@@ -8,11 +8,10 @@ import { supabase } from "@/lib/supabaseClient";
 const navLink =
   "interactive-smooth rounded-md px-1 py-0.5 text-[11px] font-medium uppercase tracking-[0.18em] text-[#0a0a0a]/70 hover:bg-black/[0.05] hover:text-[#0a0a0a]";
 
-/* Ghost = light gray transparent hover via .btn-ghost-edge; solid = .btn-solid-edge */
 const btnBase =
-  "btn-shadow-smooth interactive-smooth inline-flex h-9 items-center justify-center rounded-lg px-4 text-[11px] font-medium uppercase tracking-[0.12em] text-[#0a0a0a]";
-const btnGhost = `${btnBase} btn-ghost-edge bg-white`;
-const btnSolid = `${btnBase} btn-solid-edge bg-[#0a0a0a] text-white`;
+  "btn-shadow-smooth interactive-smooth inline-flex h-9 items-center justify-center rounded-lg px-4 text-[11px] font-medium uppercase tracking-[0.12em]";
+const btnGhost = `${btnBase} btn-ghost-edge bg-black/[0.03] text-[#111827]`;
+const btnSolid = `${btnBase} btn-ghost-edge bg-black/[0.05] text-[#020617] font-normal`;
 
 export default function Header() {
   const [user, setUser] = useState<User | null>(null);
@@ -38,20 +37,16 @@ export default function Header() {
     "User";
 
   return (
-    <header className="mb-10 rounded-2xl border border-[#e8e6e3] bg-white/90 px-5 py-5 shadow-lg shadow-black/5 backdrop-blur-sm">
-      <div className="flex flex-wrap items-center gap-4">
-        {/* Elevated logo */}
-        <Link
-          href="/"
-          className="logo-elevated interactive-smooth inline-flex items-center border border-[#e8e6e3] bg-white px-4 py-2.5 hover:bg-black/[0.03] hover:border-[#0a0a0a]/8"
-        >
-          <span className="text-sm font-semibold tracking-[0.12em] text-[#0a0a0a]">
+    <header className="mb-8">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <Link href="/" className="interactive-smooth inline-flex items-center px-1 py-0.5">
+          <span className="text-xs font-semibold tracking-[0.18em] text-[#0a0a0a]">
             FAQ STUDIO
           </span>
         </Link>
 
         {!user && (
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="hidden items-center gap-6 md:flex">
             <a href="/#how-it-works" className={navLink}>
               How it works
             </a>
@@ -62,25 +57,24 @@ export default function Header() {
         )}
 
         {loading ? (
-          <span className="ml-auto text-[11px] uppercase tracking-widest text-[#6b6b6b]">
+          <span className="text-[11px] uppercase tracking-widest text-[#6b6b6b]">
             …
           </span>
         ) : user ? (
-          /* Dashboard left, Username last on the right */
-          <div className="flex min-w-0 flex-1 flex-wrap items-center justify-between gap-3">
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
             <Link href="/dashboard" className={btnGhost}>
               Dashboard
             </Link>
             <Link
               href="/dashboard/account"
-              className={`${btnGhost} max-w-[180px] truncate`}
+              className={`${btnGhost} max-w-[160px] truncate`}
               title="Account"
             >
               {displayName}
             </Link>
           </div>
         ) : (
-          <div className="ml-auto flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <Link
               href="/auth?redirectTo=/"
               className={`${btnGhost} hidden md:inline-flex`}

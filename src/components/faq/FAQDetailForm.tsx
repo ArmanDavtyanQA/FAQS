@@ -163,7 +163,7 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
         <button
           type="submit"
           disabled={saving}
-          className="btn-shadow-smooth btn-solid-edge interactive-smooth inline-flex h-10 items-center justify-center rounded-xl bg-[#0a0a0a] px-6 text-[11px] font-medium uppercase tracking-widest text-white disabled:opacity-50"
+          className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 items-center justify-center rounded-xl bg-black/[0.05] px-6 text-[11px] font-medium uppercase tracking-widest text-[#020617] disabled:opacity-50"
         >
           {saving ? "Saving…" : "Save changes"}
         </button>
