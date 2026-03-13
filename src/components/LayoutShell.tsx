@@ -19,7 +19,7 @@ export default function LayoutShell({
 
   return (
     <div className="min-h-screen bg-[#f7f6f3] text-[#0a0a0a]">
-      <div className="mx-auto flex min-h-screen max-w-5xl flex-col px-5 pb-20 pt-6 sm:px-8 lg:px-10 lg:pb-24 lg:pt-8">
+      <div className="mx-auto flex min-h-screen w-full max-w-8xl flex-col px-10 pb-20 pt-6 sm:px-6 lg:px-40 lg:pb-24 lg:pt-8">
         <Header />
         {children}
       </div>
