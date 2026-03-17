@@ -6,16 +6,16 @@ import { motion } from "framer-motion";
 export default function Home() {
   return (
     <main className="flex flex-1 flex-col gap-24 lg:gap-32">
-      {/* Matte glass hero with central ? motif */}
-      <section className="relative mt-4 overflow-hidden rounded-[3rem] px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24">
-        {/* Large faded question mark behind */}
+      {/* Matte Apple glass hero with central ? motif */}
+      <section className="relative mt-4 overflow-hidden rounded-[3rem] bg-[#FDFDFB] px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24">
+        {/* Large faded question mark behind glass card */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 0.18, scale: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0.22, 0.61, 0.36, 1] }}
           className="pointer-events-none absolute inset-0 flex items-center justify-center"
         >
-          <span className="text-[clamp(10rem,32vw,18rem)] font-light leading-none tracking-[0.25em] text-black/5">
+          <span className="text-[clamp(10rem,32vw,18rem)] font-semibold leading-none tracking-[0.25em] text-black/10 blur-[2px]">
             ?
           </span>
         </motion.div>
@@ -25,17 +25,17 @@ export default function Home() {
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: [0.22, 0.61, 0.36, 1] }}
-          className="relative z-10 mx-auto flex max-w-4xl flex-col items-center rounded-[2.5rem] border border-black/5 bg-black/5 px-6 py-14 text-center shadow-[0_40px_160px_rgba(15,23,42,0.16)] backdrop-blur-2xl sm:px-10 sm:py-16"
+          className="relative z-10 mx-auto flex max-w-4xl flex-col items-center rounded-[3rem] border border-transparent border-t-white/40 border-l-white/40 border-b-black/5 border-r-black/5 bg-white/5 px-6 py-14 text-center shadow-[0_20px_80px_rgba(0,0,0,0.03)] backdrop-blur-[50px] sm:px-10 sm:py-16"
         >
           <p className="label-caps mb-4 text-slate-500/90">FAQ Studio</p>
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.08, ease: [0.22, 0.61, 0.36, 1] }}
-            className="max-w-2xl text-balance text-4xl font-light leading-[1.05] tracking-[0.08em] text-slate-900 sm:text-5xl lg:text-[3.1rem]"
+            className="max-w-2xl text-balance text-4xl font-extralight leading-[1.05] tracking-[0.08em] text-black sm:text-5xl lg:text-[3.1rem]"
           >
             Answer every question with{" "}
-            <span className="bg-gradient-to-r from-zinc-700 via-zinc-400 to-zinc-700 bg-clip-text text-transparent">
+            <span className="text-black/60">
               matte glass clarity.
             </span>
           </motion.h1>
@@ -46,13 +46,13 @@ export default function Home() {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/auth?redirectTo=/dashboard"
-              className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-11 items-center justify-center rounded-3xl bg-black/[0.05] px-8 text-[11px] font-medium uppercase tracking-[0.18em] text-[#111827]"
+              className="btn-shadow-smooth interactive-smooth inline-flex h-11 items-center justify-center rounded-3xl border border-white/40 bg-transparent px-8 text-[11px] font-light uppercase tracking-[0.18em] text-black/80 backdrop-blur-md"
             >
               Get started
             </Link>
             <Link
               href="#how-it-works"
-              className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-11 items-center justify-center rounded-3xl bg-black/[0.02] px-7 text-[11px] font-medium uppercase tracking-[0.18em] text-[#111827]"
+              className="btn-shadow-smooth interactive-smooth inline-flex h-11 items-center justify-center rounded-3xl border border-white/40 bg-transparent px-7 text-[11px] font-light uppercase tracking-[0.18em] text-black/60 backdrop-blur-md"
             >
               Learn more
             </Link>

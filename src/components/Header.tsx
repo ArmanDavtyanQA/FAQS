@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabaseClient";
+import LogoQuantum from "@/components/LogoQuantum";
 
 const navLink =
   "interactive-smooth rounded-md px-1 py-0.5 text-[11px] font-medium uppercase tracking-[0.18em] text-[#0a0a0a]/70 hover:bg-black/[0.05] hover:text-[#0a0a0a]";
@@ -16,6 +18,8 @@ const btnSolid = `${btnBase} btn-ghost-edge bg-black/[0.05] text-[#020617] font-
 export default function Header() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -30,20 +34,33 @@ export default function Header() {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Avoid SSR/CSR pathname differences causing hydration issues
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const displayName =
     user?.user_metadata?.full_name ||
     user?.user_metadata?.name ||
     user?.email?.split("@")[0] ||
     "User";
 
+  // Avoid flashing the unauthenticated nav (How it works / Sign in) before
+  // the client has hydrated and we have a real session value.
+  if (!mounted) {
+    return (
+      <header className="sticky top-0 z-40 mb-8">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <LogoQuantum />
+        </div>
+      </header>
+    );
+  }
+
   return (
-    <header className="mb-8">
+    <header className="sticky top-0 z-40 mb-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <Link href="/" className="interactive-smooth inline-flex items-center px-1 py-0.5">
-          <span className="text-xs font-semibold tracking-[0.18em] text-[#0a0a0a]">
-            FAQ STUDIO
-          </span>
-        </Link>
+        <LogoQuantum />
 
         {!user && (
           <nav className="hidden items-center gap-6 md:flex">
@@ -62,15 +79,17 @@ export default function Header() {
           </span>
         ) : user ? (
           <div className="flex min-w-0 flex-wrap items-center gap-2">
-            <Link href="/dashboard" className={btnGhost}>
-              Dashboard
-            </Link>
+            {pathname !== "/dashboard" && (
+              <Link href="/dashboard" className={btnGhost}>
+                Dashboard
+              </Link>
+            )}
             <Link
               href="/dashboard/account"
               className={`${btnGhost} max-w-[160px] truncate`}
               title="Account"
             >
-              {displayName}
+              My account
             </Link>
           </div>
         ) : (

@@ -107,22 +107,27 @@ export default function DashboardFaqSection() {
         </p>
       )}
       <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <Link
+            href={`/faq/${userId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={actionBtn}
+          >
+            View published FAQs
+          </Link>
+          <button
+            type="button"
+            onClick={() => navigator.clipboard.writeText(publicUrl)}
+            className={actionBtn}
+          >
+            Copy link
+          </button>
+        </div>
         <Link
-          href={`/faq/${userId}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={actionBtn}
+          href="/dashboard/faq/create"
+          className={`${actionBtnPrimary} sm:ml-auto`}
         >
-          View published FAQs
-        </Link>
-        <button
-          type="button"
-          onClick={() => navigator.clipboard.writeText(publicUrl)}
-          className={actionBtn}
-        >
-          Copy link
-        </button>
-        <Link href="/dashboard/faq/create" className={actionBtnPrimary}>
           Create FAQ
         </Link>
       </div>
