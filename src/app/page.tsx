@@ -7,15 +7,18 @@ export default function Home() {
   return (
     <main className="flex flex-1 flex-col gap-24 lg:gap-32">
       {/* Matte Apple glass hero with central ? motif */}
-      <section className="relative mt-4 overflow-hidden rounded-[3rem] bg-[#FDFDFB] px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24">
-        {/* Large faded question mark behind glass card */}
+      <section className="relative mt-4 overflow-hidden rounded-[3rem] px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24">
+        {/* Large 3D question mark behind glass card */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
-          animate={{ opacity: 0.18, scale: 1, y: 0 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0.22, 0.61, 0.36, 1] }}
-          className="pointer-events-none absolute inset-0 flex items-center justify-center"
+          className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-80"
         >
-          <span className="text-[clamp(10rem,32vw,18rem)] font-semibold leading-none tracking-[0.25em] text-black/10 blur-[2px]">
+          <span
+            className="text-[clamp(15rem,45vw,25rem)] font-bold leading-none tracking-tight text-transparent drop-shadow-[0_10px_20px_rgba(0,0,0,0.08)] bg-clip-text bg-gradient-to-br from-white/90 via-black/5 to-black/10"
+            style={{ WebkitTextStroke: "1px rgba(255,255,255,0.5)" }}
+          >
             ?
           </span>
         </motion.div>
@@ -25,38 +28,51 @@ export default function Home() {
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: [0.22, 0.61, 0.36, 1] }}
-          className="relative z-10 mx-auto flex max-w-4xl flex-col items-center rounded-[3rem] border border-transparent border-t-white/40 border-l-white/40 border-b-black/5 border-r-black/5 bg-white/5 px-6 py-14 text-center shadow-[0_20px_80px_rgba(0,0,0,0.03)] backdrop-blur-[50px] sm:px-10 sm:py-16"
+          className="relative z-10 mx-auto flex max-w-5xl flex-col items-center rounded-[2rem] border border-[rgba(255,255,255,0.8)] bg-white/10 px-8 py-20 text-center shadow-[0_20px_40px_rgba(0,0,0,0.05),inset_0_2px_4px_rgba(255,255,255,0.9),inset_0_0_30px_rgba(255,255,255,0.3)] backdrop-blur-xl sm:px-12 sm:py-24"
         >
-          <p className="label-caps mb-4 text-slate-500/90">FAQ Studio</p>
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.08, ease: [0.22, 0.61, 0.36, 1] }}
-            className="max-w-2xl text-balance text-4xl font-extralight leading-[1.05] tracking-[0.08em] text-black sm:text-5xl lg:text-[3.1rem]"
+            className="max-w-3xl text-balance text-5xl font-light leading-[1.1] tracking-tight text-black sm:text-6xl lg:text-[4.5rem]"
           >
-            Answer every question with{" "}
-            <span className="text-black/60">
-              matte glass clarity.
-            </span>
+            QUANTUM NEXT.JS<br />FRAMEWORK
           </motion.h1>
-          <p className="mt-5 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
-            Publish a calm, glass-like FAQ surface and embed it into your site. One link, one
-            widget, always up to date.
+          <p className="mt-8 max-w-2xl text-base leading-relaxed text-black sm:text-lg">
+            Build Scalable Applications with Intelligent Glassmorphism.<br />
+            Faded matte dark glass design.
           </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/auth?redirectTo=/dashboard"
-              className="btn-shadow-smooth interactive-smooth inline-flex h-11 items-center justify-center rounded-3xl border border-white/40 bg-transparent px-8 text-[11px] font-light uppercase tracking-[0.18em] text-black/80 backdrop-blur-md"
+              className="interactive-smooth inline-flex h-12 items-center justify-center rounded-2xl border border-white/60 bg-white/40 px-8 text-xs font-semibold uppercase tracking-[0.12em] text-black shadow-[0_4px_12px_rgba(0,0,0,0.05),inset_0_1px_2px_rgba(255,255,255,1)] backdrop-blur-md transition-all hover:bg-white/60"
             >
               Get started
             </Link>
             <Link
               href="#how-it-works"
-              className="btn-shadow-smooth interactive-smooth inline-flex h-11 items-center justify-center rounded-3xl border border-white/40 bg-transparent px-7 text-[11px] font-light uppercase tracking-[0.18em] text-black/60 backdrop-blur-md"
+              className="interactive-smooth inline-flex h-12 items-center justify-center rounded-2xl border border-white/40 bg-white/20 px-7 text-xs font-semibold uppercase tracking-[0.12em] text-black/80 shadow-[0_4px_12px_rgba(0,0,0,0.03),inset_0_1px_2px_rgba(255,255,255,0.6)] backdrop-blur-md transition-all hover:bg-white/40"
             >
               Learn more
             </Link>
           </div>
+
+          {/* The Dot: floating glass sphere with sparkle */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.4, ease: [0.22, 0.61, 0.36, 1] }}
+            className="absolute -bottom-10 left-1/2 flex h-20 w-20 -translate-x-1/2 items-center justify-center rounded-full border border-white/60 bg-white/20 shadow-[0_10px_40px_rgba(0,0,0,0.08),inset_0_4px_8px_rgba(255,255,255,0.9)] backdrop-blur-xl"
+          >
+            <svg
+              className="h-6 w-6 text-white"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M12 0l2.5 9.5L24 12l-9.5 2.5L12 24l-2.5-9.5L0 12l9.5-2.5z" />
+            </svg>
+          </motion.div>
         </motion.div>
       </section>
 

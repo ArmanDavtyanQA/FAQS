@@ -11,9 +11,9 @@ const navLink =
   "interactive-smooth rounded-md px-1 py-0.5 text-[11px] font-medium uppercase tracking-[0.18em] text-[#0a0a0a]/70 hover:bg-black/[0.05] hover:text-[#0a0a0a]";
 
 const btnBase =
-  "btn-shadow-smooth interactive-smooth inline-flex h-9 items-center justify-center rounded-lg px-4 text-[11px] font-medium uppercase tracking-[0.12em]";
-const btnGhost = `${btnBase} btn-ghost-edge bg-black/[0.03] text-[#111827]`;
-const btnSolid = `${btnBase} btn-ghost-edge bg-black/[0.05] text-[#020617] font-normal`;
+  "btn-shadow-smooth interactive-smooth inline-flex h-9 items-center justify-center rounded-lg px-4 text-[11px] font-medium uppercase tracking-[0.12em] bg-transparent border border-white/20 backdrop-blur-xl text-black/80";
+const btnGhost = `${btnBase}`;
+const btnSolid = `${btnBase} font-normal`;
 
 export default function Header() {
   const [user, setUser] = useState<User | null>(null);

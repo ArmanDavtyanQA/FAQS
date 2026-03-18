@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import type { FAQ } from "@/lib/faq/types";
+import RichText from "@/components/RichText";
 
 export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
-  const [openId, setOpenId] = useState<string | null>(faqs[0]?.id ?? null);
+  const [openId, setOpenId] = useState<string | null>(null);
   if (faqs.length === 0) return null;
 
   return (
@@ -30,7 +31,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
               <div className="border-t border-[#e8e6e3] bg-[#fafaf9] px-5 py-4 shadow-inner">
                 <div className="space-y-4 text-sm leading-relaxed text-[#6b6b6b]">
                   {faq.answers.map((answer, i) => (
-                    <p key={i}>{answer}</p>
+                    <RichText key={i} html={answer} />
                   ))}
                 </div>
               </div>
