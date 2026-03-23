@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabaseClient";
 type FormState = "idle" | "sending" | "sent" | "error";
 
 const fieldClass =
-  "mt-2 w-full rounded-xl border border-[#e8e6e3] bg-white px-4 py-3 text-sm text-[#0a0a0a] shadow-sm placeholder:text-[#6b6b6b] focus:border-[#0a0a0a] focus:shadow-md focus:outline-none";
+  "mt-2 w-full rounded-xl border-t border-l border-white/60 border-b border-r border-black/[0.03] bg-white/[0.01] px-4 py-3 text-sm font-light tracking-widest text-black shadow-[0_20px_50px_rgba(0,0,0,0.02)] backdrop-blur-[30px] placeholder:text-[#6b6b6b] focus:bg-white/[0.05] focus:outline-none transition-all duration-300";
 
 type Props = {
   defaultOpen?: boolean;
@@ -94,7 +94,7 @@ export default function ContactForm({
           <button
             type="button"
             onClick={() => router.push("/dashboard")}
-            className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 items-center justify-center rounded-xl bg-black/[0.05] px-6 text-[11px] font-medium uppercase tracking-widest text-[#020617]"
+            className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl px-6 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5"
           >
             Back to dashboard
           </button>
@@ -107,7 +107,7 @@ export default function ContactForm({
               setState("idle");
               setOpen(true);
             }}
-            className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 items-center justify-center rounded-xl bg-white px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a]"
+            className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl px-6 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5"
           >
             Send another message
           </button>
@@ -142,7 +142,7 @@ export default function ContactForm({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 items-center justify-center rounded-xl bg-black/[0.05] px-6 text-[11px] font-medium uppercase tracking-widest text-[#020617]"
+          className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl px-6 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5"
         >
           Ask a question
         </button>
@@ -154,9 +154,9 @@ export default function ContactForm({
     <>
       <form
         onSubmit={handleSubmit}
-        className="space-y-6 rounded-2xl border border-[#e8e6e3] bg-white p-6 shadow-xl shadow-black/5 sm:p-8"
+        className="space-y-6 rounded-[2rem] border-t border-l border-white/60 border-b border-r border-black/[0.03] bg-white/[0.01] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.02)] backdrop-blur-[30px] sm:p-8"
       >
-        <div className="rounded-2xl border border-[#e8e6e3] bg-[#f9f9f7] p-4 shadow-sm">
+        <div className="rounded-2xl border border-white/40 bg-white/[0.01] p-4 shadow-sm backdrop-blur-[10px]">
           <div>
             <label className="label-caps block">
               Subject <span className="text-[#6b6b6b]">*</span>
@@ -189,7 +189,7 @@ export default function ContactForm({
           <button
             type="submit"
             disabled={!canSubmit}
-            className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 items-center justify-center rounded-xl bg-black/[0.05] px-6 text-[11px] font-medium uppercase tracking-widest text-[#020617] disabled:opacity-50"
+            className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl px-6 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5 disabled:opacity-50"
           >
             {state === "sending" ? "Sending…" : "Send"}
           </button>
@@ -197,7 +197,7 @@ export default function ContactForm({
             type="button"
             onClick={handleCancelClick}
             disabled={state === "sending"}
-            className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 items-center justify-center rounded-xl bg-white px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] disabled:opacity-50"
+            className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl px-6 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5 disabled:opacity-50"
           >
             Cancel
           </button>
@@ -225,14 +225,14 @@ export default function ContactForm({
                 <button
                   type="button"
                   onClick={() => setConfirmCancelOpen(false)}
-                  className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 items-center justify-center rounded-xl bg-white px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a]"
+                  className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl px-6 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5"
                 >
                   Keep editing
                 </button>
                 <button
                   type="button"
                   onClick={resetAndClose}
-                  className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 items-center justify-center rounded-xl bg-black/[0.05] px-6 text-[11px] font-medium uppercase tracking-widest text-[#020617]"
+                  className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl px-6 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5"
                 >
                   Discard
                 </button>

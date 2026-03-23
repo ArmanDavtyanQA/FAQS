@@ -174,13 +174,13 @@ export default function FAQForm({ paidPlan }: Props) {
   }
 
   const field =
-    "mt-2 w-full rounded-xl border border-[#e8e6e3] bg-white px-4 py-3 text-sm text-[#0a0a0a] shadow-sm placeholder:text-[#6b6b6b] focus:border-[#0a0a0a] focus:shadow-md focus:outline-none";
+    "mt-2 w-full rounded-xl border-t border-l border-white/60 border-b border-r border-black/[0.03] bg-white/[0.01] px-4 py-3 text-sm font-light tracking-widest text-[#0a0a0a] shadow-[0_20px_50px_rgba(0,0,0,0.02)] backdrop-blur-[30px] placeholder:text-[#6b6b6b] focus:bg-white/[0.05] focus:outline-none transition-all duration-300";
 
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
       <form
         onSubmit={handleSubmit}
-        className="space-y-6 rounded-2xl border border-[#e8e6e3] bg-white p-6 shadow-xl shadow-black/5"
+        className="space-y-6 rounded-[2rem] border-t border-l border-white/60 border-b border-r border-black/[0.03] bg-white/[0.01] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.02)] backdrop-blur-[30px]"
       >
         <div>
           <label className="label-caps block">
@@ -196,7 +196,7 @@ export default function FAQForm({ paidPlan }: Props) {
             return (
               <div
                 key={questionIndex}
-                className="rounded-2xl border border-[#e8e6e3] bg-[#f9f9f7] p-4 shadow-sm"
+                className="rounded-2xl border border-white/40 bg-white/[0.01] p-4 shadow-sm backdrop-blur-[10px]"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1">
@@ -268,7 +268,7 @@ export default function FAQForm({ paidPlan }: Props) {
             <button
               type="button"
               onClick={addQuestion}
-              className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-9 items-center rounded-lg bg-black/[0.03] px-3 text-[11px] font-medium uppercase tracking-widest text-[#020617]"
+              className="interactive-smooth inline-flex h-9 items-center justify-center rounded-xl px-3 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5"
             >
               + Add question
             </button>
@@ -307,7 +307,7 @@ export default function FAQForm({ paidPlan }: Props) {
               type="button"
               disabled={aiLoading}
               onClick={handleGenerateWithAi}
-              className="btn-shadow-smooth btn-ghost-edge interactive-smooth mt-3 inline-flex h-9 items-center rounded-lg bg-black/[0.05] px-4 text-[11px] font-medium uppercase tracking-widest text-[#020617] disabled:opacity-50"
+              className="interactive-smooth mt-3 inline-flex h-9 items-center justify-center rounded-xl px-4 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5 disabled:opacity-50"
             >
               {aiLoading ? "Generating…" : "Generate FAQs with AI"}
             </button>
@@ -332,21 +332,21 @@ export default function FAQForm({ paidPlan }: Props) {
           <button
             type="submit"
             disabled={submitting}
-            className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 items-center justify-center rounded-xl bg-black/[0.05] px-6 text-[11px] font-medium uppercase tracking-widest text-[#020617] disabled:opacity-50"
+            className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl px-6 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5 disabled:opacity-50"
           >
             {submitting ? "Saving…" : "Save"}
           </button>
           <button
             type="button"
             onClick={() => router.push("/dashboard")}
-            className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 items-center justify-center rounded-xl bg-white px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a]"
+            className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl px-6 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5"
           >
             Cancel
           </button>
         </div>
       </form>
 
-      <aside className="space-y-6 rounded-2xl border border-[#e8e6e3] bg-white p-6 shadow-lg shadow-black/5">
+      <aside className="space-y-6 rounded-[2rem] border-t border-l border-white/60 border-b border-r border-black/[0.03] bg-white/[0.01] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.02)] backdrop-blur-[30px]">
         <div>
           <p className="label-caps mb-3 text-[#6b6b6b]">Live preview</p>
           <div className="space-y-3">

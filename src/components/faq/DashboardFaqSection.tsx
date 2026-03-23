@@ -8,9 +8,9 @@ import type { FAQ } from "@/lib/faq/types";
 import FAQTable from "./FAQTable";
 
 const actionBtn =
-  "btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 min-w-[10rem] flex-1 items-center justify-center rounded-3xl bg-black/[0.03] px-4 text-[11px] font-medium uppercase tracking-[0.12em] text-[#111827] sm:flex-none sm:min-w-[11rem]";
+  "interactive-smooth inline-flex h-10 min-w-[10rem] flex-1 items-center justify-center rounded-2xl bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] px-4 text-[11px] font-light uppercase tracking-widest text-[#111827] shadow-[0_20px_50px_rgba(0,0,0,0.02)] transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5 sm:flex-none sm:min-w-[11rem]";
 const actionBtnPrimary =
-  "btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 min-w-[10rem] flex-1 items-center justify-center rounded-3xl bg-black/[0.05] px-4 text-[11px] font-medium uppercase tracking-[0.12em] text-[#020617] sm:flex-none sm:min-w-[11rem]";
+  "interactive-smooth inline-flex h-10 min-w-[10rem] flex-1 items-center justify-center rounded-2xl bg-white/[0.02] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] px-4 text-[11px] font-light uppercase tracking-widest text-[#020617] shadow-[0_20px_50px_rgba(0,0,0,0.02)] transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5 sm:flex-none sm:min-w-[11rem]";
 
 export default function DashboardFaqSection() {
   const [faqs, setFaqs] = useState<FAQ[]>([]);
@@ -102,7 +102,7 @@ export default function DashboardFaqSection() {
   return (
     <>
       {error && (
-        <p className="rounded-xl border border-[#c4c4c4] bg-[#fafaf9] px-4 py-3 text-sm text-[#0a0a0a] shadow-md">
+        <p className="rounded-xl border-t border-l border-white/60 border-b border-r border-black/[0.03] bg-white/[0.01] px-4 py-3 text-sm font-light text-[#0a0a0a] shadow-[0_20px_50px_rgba(0,0,0,0.02)] backdrop-blur-[30px]">
           {error}
         </p>
       )}

@@ -8,12 +8,12 @@ import { supabase } from "@/lib/supabaseClient";
 import LogoQuantum from "@/components/LogoQuantum";
 
 const navLink =
-  "interactive-smooth rounded-md px-1 py-0.5 text-[11px] font-medium uppercase tracking-[0.18em] text-[#0a0a0a]/70 hover:bg-black/[0.05] hover:text-[#0a0a0a]";
+  "interactive-smooth rounded-md px-1 py-0.5 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a]/70 hover:bg-white/[0.05] hover:text-[#0a0a0a] transition-all";
 
 const btnBase =
-  "btn-shadow-smooth interactive-smooth inline-flex h-9 items-center justify-center rounded-lg px-4 text-[11px] font-medium uppercase tracking-[0.12em] bg-transparent border border-white/20 backdrop-blur-xl text-black/80";
+  "btn-shadow-smooth interactive-smooth inline-flex h-9 items-center justify-center rounded-lg px-4 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black/80 transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5";
 const btnGhost = `${btnBase}`;
-const btnSolid = `${btnBase} font-normal`;
+const btnSolid = `${btnBase} font-light`;
 
 export default function Header() {
   const [user, setUser] = useState<User | null>(null);
