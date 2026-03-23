@@ -7,6 +7,89 @@
   --muted: #6b6b6b;
   --line: #e8e6e3;
   --accent: #0a0a0a;
+  /* Physical Glass — global constants (refraction + bevel; no solid gray fills) */
+  --glass-blur-hero: 60px;
+  --glass-blur-card: 30px;
+  --glass-highlight-t: rgba(255, 255, 255, 0.6);
+  --glass-highlight-l: rgba(255, 255, 255, 0.6);
+  --glass-shadow-br: rgba(0, 0, 0, 0.03);
+  --glass-float: 0 20px 50px rgba(0, 0, 0, 0.02);
+}
+
+/*
+ * Physical Glass design system (use these classes for new sections):
+ * 1) Refraction: white alpha + backdrop blur (never flat bg-gray-* for “glass”).
+ * 2) Bevel: top/left highlight, bottom/right shadow edge — not uniform border-white/20.
+ * 3) Antigravity: pair with framer-motion (y lift, blur-in).
+ * 4) Studio depth: large blurred motifs behind panels at ~10% opacity.
+ * 5) Type: font-extralight (200) / font-light (300) + tracking-widest on hero headings.
+ */
+.glass-hero-panel {
+  background-color: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(var(--glass-blur-hero));
+  -webkit-backdrop-filter: blur(var(--glass-blur-hero));
+  border-top: 1px solid var(--glass-highlight-t);
+  border-left: 1px solid var(--glass-highlight-l);
+  border-bottom: 1px solid var(--glass-shadow-br);
+  border-right: 1px solid var(--glass-shadow-br);
+  box-shadow: var(--glass-float);
+}
+.glass-hero-panel:hover {
+  backdrop-filter: blur(80px);
+  -webkit-backdrop-filter: blur(80px);
+}
+
+.glass-feature-card {
+  background-color: rgba(255, 255, 255, 0.01);
+  backdrop-filter: blur(var(--glass-blur-card));
+  -webkit-backdrop-filter: blur(var(--glass-blur-card));
+  border-top: 1px solid var(--glass-highlight-t);
+  border-left: 1px solid var(--glass-highlight-l);
+  border-bottom: 1px solid var(--glass-shadow-br);
+  border-right: 1px solid var(--glass-shadow-br);
+  box-shadow: var(--glass-float);
+}
+
+.glass-cta-primary {
+  background-color: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(var(--glass-blur-card));
+  -webkit-backdrop-filter: blur(var(--glass-blur-card));
+  border-top: 1px solid var(--glass-highlight-t);
+  border-left: 1px solid var(--glass-highlight-l);
+  border-bottom: 1px solid var(--glass-shadow-br);
+  border-right: 1px solid var(--glass-shadow-br);
+  box-shadow: var(--glass-float);
+  transition:
+    background-color 0.5s ease,
+    backdrop-filter 0.5s ease,
+    -webkit-backdrop-filter 0.5s ease,
+    transform 0.5s ease;
+}
+.glass-cta-primary:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+}
+
+.glass-cta-secondary {
+  background-color: rgba(255, 255, 255, 0.01);
+  backdrop-filter: blur(var(--glass-blur-card));
+  -webkit-backdrop-filter: blur(var(--glass-blur-card));
+  border-top: 1px solid var(--glass-highlight-t);
+  border-left: 1px solid var(--glass-highlight-l);
+  border-bottom: 1px solid var(--glass-shadow-br);
+  border-right: 1px solid var(--glass-shadow-br);
+  box-shadow: var(--glass-float);
+  transition:
+    background-color 0.5s ease,
+    backdrop-filter 0.5s ease,
+    -webkit-backdrop-filter 0.5s ease,
+    transform 0.5s ease;
+}
+.glass-cta-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
 
 @theme inline {

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabaseClient";
-import LogoQuantum from "@/components/LogoQuantum";
+import GlassLogo from "@/components/GlassLogo";
 
 const navLink =
   "interactive-smooth rounded-md px-1 py-0.5 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a]/70 hover:bg-white/[0.05] hover:text-[#0a0a0a] transition-all";
@@ -14,6 +14,12 @@ const btnBase =
   "btn-shadow-smooth interactive-smooth inline-flex h-9 items-center justify-center rounded-lg px-4 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black/80 transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5";
 const btnGhost = `${btnBase}`;
 const btnSolid = `${btnBase} font-light`;
+
+const headerBar =
+  "fixed inset-x-0 top-0 z-50 border-b border-[#e8e6e3]/70 bg-[#FDFDFB]/68 shadow-[0_1px_0_rgba(255,255,255,0.45)] backdrop-blur-xl backdrop-saturate-150";
+
+const headerInner =
+  "mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-4 px-4 pt-6 pb-4 sm:px-6 lg:px-10";
 
 export default function Header() {
   const [user, setUser] = useState<User | null>(null);
@@ -49,18 +55,18 @@ export default function Header() {
   // the client has hydrated and we have a real session value.
   if (!mounted) {
     return (
-      <header className="sticky top-0 z-40 mb-8">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <LogoQuantum />
+      <header className={headerBar}>
+        <div className={headerInner}>
+          <GlassLogo />
         </div>
       </header>
     );
   }
 
   return (
-    <header className="sticky top-0 z-40 mb-8">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <LogoQuantum />
+    <header className={headerBar}>
+      <div className={headerInner}>
+        <GlassLogo />
 
         {!user && (
           <nav className="hidden items-center gap-6 md:flex">

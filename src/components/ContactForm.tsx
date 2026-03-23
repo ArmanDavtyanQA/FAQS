@@ -1,25 +1,40 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 
 type FormState = "idle" | "sending" | "sent" | "error";
 
 const fieldClass =
-  "mt-2 w-full rounded-xl border-t border-l border-white/60 border-b border-r border-black/[0.03] bg-white/[0.01] px-4 py-3 text-sm font-light tracking-widest text-black shadow-[0_20px_50px_rgba(0,0,0,0.02)] backdrop-blur-[30px] placeholder:text-[#6b6b6b] focus:bg-white/[0.05] focus:outline-none transition-all duration-300";
+  "mt-2 w-full rounded-xl border border-[#e8e6e3] bg-white px-4 py-3 text-sm font-light tracking-widest text-[#0a0a0a] shadow-sm placeholder:text-[#6b6b6b] focus:border-[#0a0a0a] focus:outline-none focus:ring-1 focus:ring-[#0a0a0a]/15 transition-all duration-300";
 
 type Props = {
   defaultOpen?: boolean;
   redirectTo?: string;
+  /**
+   * When true, the open form (and success state) render in a fixed popup over the page.
+   * Use on public FAQ; omit on full-page contact.
+   */
+  asModal?: boolean;
+  /**
+   * When true, do not redirect to /auth if there is no session.
+   * Guests see a sign-in link; the FAQ page stays readable without login.
+   */
+  allowAnonymous?: boolean;
 };
 
 export default function ContactForm({
   defaultOpen = false,
   redirectTo = "/dashboard/contact",
+  asModal = false,
+  allowAnonymous = false,
 }: Props) {
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
+  const [authResolved, setAuthResolved] = useState(false);
+  const [hasSession, setHasSession] = useState(false);
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [state, setState] = useState<FormState>("idle");
@@ -34,21 +49,88 @@ export default function ContactForm({
     return true;
   }, [subject, message, state]);
 
+  const isDirty = subject.trim().length > 0 || message.trim().length > 0;
+
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (cancelled) return;
+      if (allowAnonymous) {
+        setHasSession(!!user);
+        if (user) setEmail(user.email ?? "");
+        setAuthResolved(true);
+        return;
+      }
       if (!user) {
         router.replace(`/auth?redirectTo=${encodeURIComponent(redirectTo)}`);
         return;
       }
       setEmail(user.email ?? "");
+      setAuthResolved(true);
     })();
     return () => {
       cancelled = true;
     };
-  }, [router, redirectTo]);
+  }, [router, redirectTo, allowAnonymous]);
+
+  useEffect(() => {
+    if (!allowAnonymous) return;
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setHasSession(!!session?.user);
+      if (session?.user) setEmail(session.user.email ?? "");
+    });
+    return () => subscription.unsubscribe();
+  }, [allowAnonymous]);
+
+  useEffect(() => {
+    if (!asModal || !open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [asModal, open]);
+
+  const requestCloseModal = useCallback(() => {
+    if (state === "sending") return;
+    if (state === "sent") {
+      setOpen(false);
+      setState("idle");
+      setSubject("");
+      setMessage("");
+      setError(null);
+      return;
+    }
+    if (!isDirty) {
+      setConfirmCancelOpen(false);
+      setError(null);
+      setSubject("");
+      setMessage("");
+      setState("idle");
+      setOpen(false);
+      return;
+    }
+    setConfirmCancelOpen(true);
+  }, [state, isDirty]);
+
+  useEffect(() => {
+    if (!asModal || !open) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key !== "Escape") return;
+      if (confirmCancelOpen) {
+        setConfirmCancelOpen(false);
+        return;
+      }
+      requestCloseModal();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [asModal, open, confirmCancelOpen, requestCloseModal]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -56,7 +138,9 @@ export default function ContactForm({
     setState("sending");
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) {
         router.replace(`/auth?redirectTo=${encodeURIComponent(redirectTo)}`);
         return;
@@ -80,44 +164,6 @@ export default function ContactForm({
     }
   }
 
-  if (state === "sent") {
-    return (
-      <div className="rounded-2xl border border-[#e8e6e3] bg-white p-6 shadow-xl shadow-black/5 sm:p-8">
-        <p className="label-caps text-[#6b6b6b]">Message sent</p>
-        <h2 className="mt-3 text-xl font-semibold tracking-tight text-[#0a0a0a]">
-          Thanks — we received your message.
-        </h2>
-        <p className="mt-2 text-sm leading-relaxed text-[#6b6b6b]">
-          Your form was sent successfully. A manager will contact you soon.
-        </p>
-        <div className="mt-6 flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={() => router.push("/dashboard")}
-            className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl px-6 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5"
-          >
-            Back to dashboard
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setError(null);
-              setSubject("");
-              setMessage("");
-              setState("idle");
-              setOpen(true);
-            }}
-            className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl px-6 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5"
-          >
-            Send another message
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  const isDirty = subject.trim().length > 0 || message.trim().length > 0;
-
   function resetAndClose() {
     setConfirmCancelOpen(false);
     setError(null);
@@ -136,74 +182,286 @@ export default function ContactForm({
     setConfirmCancelOpen(true);
   }
 
-  if (!open) {
-    return (
-      <div className="rounded-2xl border border-[#e8e6e3] bg-white p-6 shadow-xl shadow-black/5 sm:p-8">
+  function handleBackdropClick() {
+    if (state === "sending") return;
+    if (confirmCancelOpen) {
+      setConfirmCancelOpen(false);
+      return;
+    }
+    if (state === "sent") {
+      setOpen(false);
+      setState("idle");
+      setSubject("");
+      setMessage("");
+      setError(null);
+      return;
+    }
+    handleCancelClick();
+  }
+
+  const askQuestionBtnClass =
+    "interactive-smooth inline-flex min-h-11 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-white px-8 py-3 text-center text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm shadow-black/[0.06] transition-all duration-300 hover:bg-[#fafaf9] hover:border-[#d6d3d1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a0a0a] active:scale-[0.98]";
+
+  const successBlock = (
+    <div className="rounded-2xl border border-[#e8e6e3] bg-white p-6 shadow-xl shadow-black/5 sm:p-8">
+      <p className="label-caps text-[#6b6b6b]">Message sent</p>
+      <h2 className="mt-3 text-xl font-semibold tracking-tight text-[#0a0a0a]">
+        Thanks — we received your message.
+      </h2>
+      <p className="mt-2 text-sm leading-relaxed text-[#6b6b6b]">
+        Your form was sent successfully. A manager will contact you soon.
+      </p>
+      <div className="mt-6 flex flex-wrap gap-3">
         <button
           type="button"
-          onClick={() => setOpen(true)}
-          className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl px-6 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5"
+          onClick={() => router.push("/dashboard")}
+          className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9]"
         >
-          Ask a question
+          Back to dashboard
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setError(null);
+            setSubject("");
+            setMessage("");
+            setState("idle");
+            setOpen(true);
+          }}
+          className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9]"
+        >
+          Send another message
         </button>
       </div>
+    </div>
+  );
+
+  const formBlock = (
+    <form
+      onSubmit={handleSubmit}
+      className={
+        asModal
+          ? "space-y-6"
+          : "space-y-6 rounded-2xl border border-[#e8e6e3] bg-white p-6 shadow-xl shadow-black/5 sm:p-8"
+      }
+    >
+      <div className="rounded-2xl border border-[#e8e6e3] bg-[#fafaf9] p-4 shadow-sm">
+        <div>
+          <label className="label-caps block">
+            Subject <span className="text-[#6b6b6b]">*</span>
+          </label>
+          <input
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+            className={fieldClass}
+            placeholder="How can we help?"
+          />
+        </div>
+
+        <div className="mt-5">
+          <label className="label-caps block">
+            Message <span className="text-[#6b6b6b]">*</span>
+          </label>
+          <textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            rows={asModal ? 5 : 6}
+            className={`${fieldClass} min-h-[120px] sm:min-h-[140px]`}
+            placeholder="Describe your request…"
+          />
+        </div>
+      </div>
+
+      {error && <p className="text-sm text-[#0a0a0a]">{error}</p>}
+
+      <div className="flex flex-wrap gap-3">
+        <button
+          type="submit"
+          disabled={!canSubmit}
+          className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9] disabled:opacity-50"
+        >
+          {state === "sending" ? "Sending…" : "Send"}
+        </button>
+        <button
+          type="button"
+          onClick={handleCancelClick}
+          disabled={state === "sending"}
+          className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9] disabled:opacity-50"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  );
+
+  const authHref = `/auth?redirectTo=${encodeURIComponent(redirectTo)}`;
+
+  if (allowAnonymous && !authResolved) {
+    return (
+      <div className="inline-flex min-h-11 items-center">
+        <span className="text-[11px] uppercase tracking-widest text-[#6b6b6b]">
+          Loading…
+        </span>
+      </div>
+    );
+  }
+
+  if (allowAnonymous && !hasSession) {
+    return (
+      <Link href={authHref} className={askQuestionBtnClass}>
+        Sign in to ask a question
+      </Link>
+    );
+  }
+
+  if (state === "sent" && !asModal) {
+    return successBlock;
+  }
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className={askQuestionBtnClass}
+      >
+        Ask a question
+      </button>
+    );
+  }
+
+  if (asModal) {
+    return (
+      <>
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6"
+          role="presentation"
+        >
+          <button
+            type="button"
+            aria-label="Close dialog"
+            className="absolute inset-0 bg-black/25 backdrop-blur-sm"
+            disabled={state === "sending"}
+            onClick={handleBackdropClick}
+          />
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="contact-form-title"
+            className="relative z-[1] flex max-h-[min(90dvh,640px)] w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-[#e8e6e3] bg-white shadow-[0_20px_80px_rgba(0,0,0,0.12)]"
+          >
+            <div className="flex shrink-0 items-center justify-between gap-4 border-b border-[#e8e6e3] px-5 py-4 sm:px-6">
+              <div className="min-w-0">
+                <h2
+                  id="contact-form-title"
+                  className="text-lg font-semibold tracking-tight text-[#0a0a0a]"
+                >
+                  {state === "sent" ? "Message sent" : "Ask a question"}
+                </h2>
+              </div>
+              <button
+                type="button"
+                disabled={state === "sending"}
+                onClick={() => {
+                  if (state === "sent") {
+                    setOpen(false);
+                    setState("idle");
+                    setSubject("");
+                    setMessage("");
+                    setError(null);
+                    return;
+                  }
+                  requestCloseModal();
+                }}
+                className="interactive-smooth flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[#6b6b6b] transition-colors hover:bg-[#fafaf9] hover:text-[#0a0a0a] disabled:opacity-45"
+                aria-label="Close"
+              >
+                <span className="text-2xl leading-none" aria-hidden>
+                  ×
+                </span>
+              </button>
+            </div>
+
+            <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5 sm:px-6">
+              {state === "sent" ? (
+                <div className="space-y-4">
+                  <p className="text-sm leading-relaxed text-[#6b6b6b]">
+                    Thanks — we received your message. A manager will contact
+                    you soon.
+                  </p>
+                  <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                    <button
+                      type="button"
+                      onClick={() => router.push("/dashboard")}
+                      className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9]"
+                    >
+                      Back to dashboard
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setError(null);
+                        setSubject("");
+                        setMessage("");
+                        setState("idle");
+                      }}
+                      className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-[#0a0a0a] px-6 text-[11px] font-light uppercase tracking-widest text-white shadow-sm transition-all duration-300 hover:bg-[#262626]"
+                    >
+                      Send another message
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                formBlock
+              )}
+            </div>
+          </div>
+        </div>
+
+        {confirmCancelOpen && (
+          <div className="fixed inset-0 z-[210] flex items-center justify-center px-4">
+            <button
+              type="button"
+              aria-label="Close"
+              onClick={() => setConfirmCancelOpen(false)}
+              className="absolute inset-0 bg-black/35 backdrop-blur-sm"
+            />
+            <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-[#e8e6e3] bg-white shadow-[0_20px_80px_rgba(0,0,0,0.12)]">
+              <div className="p-6">
+                <p className="label-caps text-[#6b6b6b]">Confirm cancellation</p>
+                <h3 className="mt-2 text-lg font-semibold tracking-tight text-[#0a0a0a]">
+                  Discard this message?
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-[#6b6b6b]">
+                  If you confirm, all entered data will be lost.
+                </p>
+                <div className="mt-6 flex flex-wrap justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setConfirmCancelOpen(false)}
+                    className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9]"
+                  >
+                    Keep editing
+                  </button>
+                  <button
+                    type="button"
+                    onClick={resetAndClose}
+                    className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9]"
+                  >
+                    Discard
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </>
     );
   }
 
   return (
     <>
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-6 rounded-[2rem] border-t border-l border-white/60 border-b border-r border-black/[0.03] bg-white/[0.01] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.02)] backdrop-blur-[30px] sm:p-8"
-      >
-        <div className="rounded-2xl border border-white/40 bg-white/[0.01] p-4 shadow-sm backdrop-blur-[10px]">
-          <div>
-            <label className="label-caps block">
-              Subject <span className="text-[#6b6b6b]">*</span>
-            </label>
-            <input
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              className={fieldClass}
-              placeholder="How can we help?"
-            />
-          </div>
-
-          <div className="mt-5">
-            <label className="label-caps block">
-              Message <span className="text-[#6b6b6b]">*</span>
-            </label>
-            <textarea
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              rows={6}
-              className={`${fieldClass} min-h-[160px]`}
-              placeholder="Describe your request…"
-            />
-          </div>
-        </div>
-
-        {error && <p className="text-sm text-[#0a0a0a]">{error}</p>}
-
-        <div className="flex flex-wrap gap-3">
-          <button
-            type="submit"
-            disabled={!canSubmit}
-            className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl px-6 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5 disabled:opacity-50"
-          >
-            {state === "sending" ? "Sending…" : "Send"}
-          </button>
-          <button
-            type="button"
-            onClick={handleCancelClick}
-            disabled={state === "sending"}
-            className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl px-6 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5 disabled:opacity-50"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
-
+      {formBlock}
       {confirmCancelOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
           <button
@@ -212,7 +470,7 @@ export default function ContactForm({
             onClick={() => setConfirmCancelOpen(false)}
             className="absolute inset-0 bg-black/20 backdrop-blur-sm"
           />
-          <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-white/20 bg-white/70 shadow-[0_20px_80px_rgba(0,0,0,0.08)] backdrop-blur-2xl">
+          <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-[#e8e6e3] bg-white shadow-[0_20px_80px_rgba(0,0,0,0.08)]">
             <div className="p-6">
               <p className="label-caps text-[#6b6b6b]">Confirm cancellation</p>
               <h3 className="mt-2 text-lg font-semibold tracking-tight text-[#0a0a0a]">
@@ -225,14 +483,14 @@ export default function ContactForm({
                 <button
                   type="button"
                   onClick={() => setConfirmCancelOpen(false)}
-                  className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl px-6 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5"
+                  className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9]"
                 >
                   Keep editing
                 </button>
                 <button
                   type="button"
                   onClick={resetAndClose}
-                  className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl px-6 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5"
+                  className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9]"
                 >
                   Discard
                 </button>
@@ -244,4 +502,3 @@ export default function ContactForm({
     </>
   );
 }
-

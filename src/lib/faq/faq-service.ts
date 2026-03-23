@@ -48,6 +48,7 @@ export function createFaq(input: FAQInput): FAQ {
     status: input.status ?? "draft",
     createdAt: nowIso(),
     userId: input.userId ?? null,
+    topicIds: [],
   };
   getStore().set(id, faq);
   return faq;
@@ -55,7 +56,7 @@ export function createFaq(input: FAQInput): FAQ {
 
 export function updateFaq(
   id: string,
-  patch: Partial<Pick<FAQ, "title" | "answers" | "status">>,
+  patch: Partial<Pick<FAQ, "title" | "answers" | "status" | "topicIds">>,
 ): FAQ {
   const store = getStore();
   const existing = store.get(id);
@@ -71,11 +72,15 @@ export function updateFaq(
   if (!title) throw new Error("Question (title) is required");
   if (answers.length === 0) throw new Error("At least one answer is required");
 
+  const topicIds =
+    patch.topicIds !== undefined ? patch.topicIds : existing.topicIds;
+
   const updated: FAQ = {
     ...existing,
     title,
     answers,
     status,
+    topicIds,
   };
   store.set(id, updated);
   return updated;
@@ -97,6 +102,7 @@ const MOCK_SEED: FAQ[] = [
     status: "published",
     createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
     userId: null,
+    topicIds: [],
   },
 ];
 

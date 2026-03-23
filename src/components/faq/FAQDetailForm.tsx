@@ -1,20 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "@/lib/supabaseClient";
 import { dbUpdateFaq } from "@/lib/faq/supabase-faq";
-import type { FAQ } from "@/lib/faq/types";
+import { dbListTopicsByUserId } from "@/lib/faq/supabase-topics";
+import type { FAQ, Topic } from "@/lib/faq/types";
 import RichTextEditor from "@/components/RichTextEditor";
 import RichText from "@/components/RichText";
-
-function formatDate(iso: string) {
-  try {
-    return new Date(iso).toLocaleString();
-  } catch {
-    return iso;
-  }
-}
 
 const inputClass =
   "mt-2 w-full rounded-xl border border-[#e8e6e3] bg-white px-4 py-3 text-sm text-[#0a0a0a] shadow-sm placeholder:text-[#6b6b6b] focus:border-[#0a0a0a] focus:shadow-md focus:outline-none";
@@ -26,8 +20,36 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
     initial.answers.length ? initial.answers : [""],
   );
   const [status, setStatus] = useState<"draft" | "published">(initial.status);
+  const [topicIds, setTopicIds] = useState<string[]>(initial.topicIds ?? []);
+  const [topics, setTopics] = useState<Topic[]>([]);
+  const [topicsLoading, setTopicsLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (!user?.id || cancelled) return;
+        const list = await dbListTopicsByUserId(supabase, user.id);
+        if (!cancelled) setTopics(list);
+      } catch {
+        if (!cancelled) setError("Could not load topics.");
+      } finally {
+        if (!cancelled) setTopicsLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    setTopicIds(initial.topicIds ?? []);
+  }, [initial.id]);
 
   function addAnswer() {
     setAnswers((a) => [...a, ""]);
@@ -43,6 +65,15 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
     setAnswers((a) => a.filter((_, i) => i !== index));
   }
 
+  function toggleTopic(id: string) {
+    setTopicIds((prev) => {
+      const s = new Set(prev);
+      if (s.has(id)) s.delete(id);
+      else s.add(id);
+      return [...s];
+    });
+  }
+
   function hasMeaningfulText(html: string) {
     const text = html
       .replace(/<[^>]*>/g, " ")
@@ -55,6 +86,13 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    const validTopicIds = topicIds.filter((id) =>
+      topics.some((t) => t.id === id),
+    );
+    if (validTopicIds.length === 0) {
+      setError("Select at least one topic for this question.");
+      return;
+    }
     setSaving(true);
     try {
       const trimmed = answers.map((a) => a.trim()).filter(hasMeaningfulText);
@@ -62,10 +100,12 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
         title: title.trim(),
         answers: trimmed,
         status,
+        topicIds: validTopicIds,
       });
       setTitle(updated.title);
       setAnswers(updated.answers.length ? updated.answers : [""]);
       setStatus(updated.status);
+      setTopicIds(updated.topicIds ?? []);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Save failed");
     } finally {
@@ -91,6 +131,8 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
   const hasPreviewContent =
     title.trim() || answers.some((a) => hasMeaningfulText(a));
 
+  const topicLabels = topics.filter((t) => topicIds.includes(t.id));
+
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
       <form
@@ -99,12 +141,54 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
       >
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="label-caps">
-              Created
+            <p className="label-caps text-[#6b6b6b]">Topics</p>
+            <p className="mt-1 text-xs text-[#9ca3af]">
+              At least one required.{" "}
+              <Link
+                href="/dashboard/faq/topics"
+                className="underline hover:text-[#0a0a0a]"
+              >
+                Manage topics
+              </Link>
             </p>
-            <p className="mt-1 text-sm text-[#0a0a0a]">
-              {formatDate(initial.createdAt)}
-            </p>
+            {topicsLoading ? (
+              <p className="mt-2 text-sm text-[#6b6b6b]">Loading topics…</p>
+            ) : topics.length === 0 ? (
+              <p className="mt-2 text-sm text-[#6b6b6b]">
+                No topics yet.{" "}
+                <Link
+                  href="/dashboard/faq/create"
+                  className="underline hover:text-[#0a0a0a]"
+                >
+                  Create topics
+                </Link>{" "}
+                first.
+              </p>
+            ) : (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {topics.map((t) => {
+                  const checked = topicIds.includes(t.id);
+                  return (
+                    <label
+                      key={t.id}
+                      className={`inline-flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-[11px] font-medium uppercase tracking-widest transition-colors ${
+                        checked
+                          ? "border-[#0a0a0a] bg-[#f9f9f7] text-[#0a0a0a]"
+                          : "border-[#e8e6e3] text-[#6b6b6b]"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        className="sr-only"
+                        checked={checked}
+                        onChange={() => toggleTopic(t.id)}
+                      />
+                      {t.title}
+                    </label>
+                  );
+                })}
+              </div>
+            )}
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <span
@@ -131,9 +215,7 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
           <div className="rounded-2xl border border-[#e8e6e3] bg-[#f9f9f7] p-4 shadow-sm">
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1">
-                <label className="label-caps block">
-                  Question
-                </label>
+                <label className="label-caps block">Question</label>
                 <input
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
@@ -188,7 +270,7 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
         <div className="flex flex-wrap gap-3">
           <button
             type="submit"
-            disabled={saving}
+            disabled={saving || topicsLoading || topics.length === 0}
             className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 items-center justify-center rounded-xl bg-black/[0.05] px-6 text-[11px] font-medium uppercase tracking-widest text-[#020617] disabled:opacity-50"
           >
             {saving ? "Saving…" : "Save changes"}
@@ -216,6 +298,13 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
                   +
                 </span>
               </div>
+              {topicLabels.length > 0 && (
+                <div className="border-t border-black/5 px-5 py-2">
+                  <p className="text-[10px] uppercase tracking-widest text-[#6b6b6b]">
+                    {topicLabels.map((t) => t.title).join(" · ")}
+                  </p>
+                </div>
+              )}
               {answers.some((a) => hasMeaningfulText(a)) && (
                 <div className="border-t border-black/5 bg-[#f9f9f7] px-5 py-4">
                   <div className="space-y-3 text-sm leading-relaxed text-[#4b5563]">
@@ -235,10 +324,12 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
           ) : (
             <div className="rounded-2xl border border-black/5 bg-black/[0.02] px-5 py-5 text-sm text-[#4b5563] shadow-sm backdrop-blur-sm">
               <p className="font-medium text-[#0a0a0a]">
-                Your question will appear here as it looks on the public FAQ page.
+                Your question will appear here as it looks on the public FAQ
+                page.
               </p>
               <p className="mt-2">
-                Edit the question and answers on the left to see them update in real time.
+                Edit the question, topics, and answers on the left to see them
+                update in real time.
               </p>
             </div>
           )}
