@@ -3,13 +3,18 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 
+const publishedFaqHref =
+  typeof process.env.NEXT_PUBLIC_LANDING_PUBLISHED_FAQ_USER_ID === "string" &&
+  process.env.NEXT_PUBLIC_LANDING_PUBLISHED_FAQ_USER_ID.length >= 10
+    ? `/faq/${process.env.NEXT_PUBLIC_LANDING_PUBLISHED_FAQ_USER_ID}`
+    : "#plans";
+
 /**
- * Physical Glass — hero (source of truth)
- * - Refraction: bg-white/[0.01–0.05] + backdrop-blur-[60px] (large surface)
- * - Bevel: border-t/l white/60, border-b/r black/[0.03] — no uniform border-white/20
- * - Studio depth: large blurred ? at ~10% behind panel
- * - Typography: font-extralight / font-light + tracking-widest
- * - Antigravity: subtle y + blur-in on enter; hover lift on CTAs
+ * Physical Glass — hero
+ * - Primary title: QUANTUM — Geist Sans, extralight, tracking-widest
+ * - Option 1 mono block below: START SMALL. / BUILD BEYOND. (font-mono, 72px)
+ * - Panel: .glass-hero-panel — 80px blur, specular border-top white/60
+ * - Depth: blurred ? motif behind card
  */
 export default function GlassHero() {
   return (
@@ -43,7 +48,7 @@ export default function GlassHero() {
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.95, ease: [0.22, 0.61, 0.36, 1] }}
         whileHover={{ y: -4 }}
-        className="glass-hero-panel group relative z-10 mx-auto flex max-w-5xl flex-col items-center rounded-[2rem] px-8 py-20 text-center transition-all duration-500 sm:px-12 sm:py-24"
+        className="glass-hero-panel group relative z-10 mx-auto flex max-w-5xl flex-col items-center rounded-[2rem] px-6 py-16 text-center transition-all duration-500 sm:px-10 sm:py-20 lg:px-12 lg:py-24"
       >
         <motion.h1
           initial={{ opacity: 0, y: 14 }}
@@ -51,25 +56,38 @@ export default function GlassHero() {
           transition={{ duration: 0.9, delay: 0.06, ease: [0.22, 0.61, 0.36, 1] }}
           className="max-w-3xl text-balance text-5xl font-extralight leading-[1.1] tracking-widest text-black sm:text-6xl lg:text-[4.5rem]"
         >
-          QUANTUM NEXT.JS
-          <br />
-          FRAMEWORK
+          QUANTUM
         </motion.h1>
-        <p className="mt-8 max-w-2xl text-base font-light leading-relaxed tracking-widest text-black/60 sm:text-lg">
-          Build Scalable Applications with Intelligent Glassmorphism.
-          <br />
-          Faded matte dark glass design.
+
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.12, ease: [0.22, 0.61, 0.36, 1] }}
+          className="font-mono mt-8 max-w-[min(100%,42rem)] text-balance text-center"
+          aria-label="START SMALL BUILD BEYOND"
+        >
+          <span className="block text-[72px] font-extralight uppercase leading-[1.1] tracking-[-0.02em] text-black">
+            START SMALL
+          </span>
+          <span className="mt-2 block text-[72px] font-medium uppercase leading-[1.1] tracking-[-0.02em] text-black">
+            BUILD BEYOND
+          </span>
+        </motion.div>
+
+        <p className="mt-10 max-w-xl font-sans text-base font-light leading-relaxed text-black/60 sm:text-lg">
+          From 3 topics to unlimited AI-driven design. Quantum scales your
+          support from free to Pro in one click.
         </p>
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
           <motion.div
             whileHover={{ y: -6, scale: 1.02 }}
             transition={{ type: "spring", stiffness: 380, damping: 28 }}
           >
             <Link
-              href="/auth?redirectTo=/dashboard"
+              href="/dashboard"
               className="glass-cta-primary interactive-smooth inline-flex h-12 items-center justify-center rounded-2xl px-8 text-xs font-light uppercase tracking-widest text-black"
             >
-              Get started
+              Dashboard
             </Link>
           </motion.div>
           <motion.div
@@ -77,10 +95,10 @@ export default function GlassHero() {
             transition={{ type: "spring", stiffness: 380, damping: 28 }}
           >
             <Link
-              href="#how-it-works"
+              href={publishedFaqHref}
               className="glass-cta-secondary interactive-smooth inline-flex h-12 items-center justify-center rounded-2xl px-7 text-xs font-light uppercase tracking-widest text-black/80"
             >
-              Learn more
+              View published FAQs
             </Link>
           </motion.div>
         </div>

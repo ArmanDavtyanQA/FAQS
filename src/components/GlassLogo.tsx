@@ -38,12 +38,9 @@ export default function GlassLogo() {
         />
       </div>
 
-      <div className="flex flex-col items-start gap-0.5 leading-none">
+      <div className="flex flex-col items-start leading-none">
         <span className="text-[10px] font-medium uppercase tracking-[0.3em] text-black">
           Quantum
-        </span>
-        <span className="text-[7px] font-light tracking-[0.1em] text-black/50">
-          Refractive Design
         </span>
       </div>
     </Link>

@@ -8,7 +8,7 @@
   --line: #e8e6e3;
   --accent: #0a0a0a;
   /* Physical Glass — global constants (refraction + bevel; no solid gray fills) */
-  --glass-blur-hero: 60px;
+  --glass-blur-hero: 80px;
   --glass-blur-card: 30px;
   --glass-highlight-t: rgba(255, 255, 255, 0.6);
   --glass-highlight-l: rgba(255, 255, 255, 0.6);
@@ -35,8 +35,8 @@
   box-shadow: var(--glass-float);
 }
 .glass-hero-panel:hover {
-  backdrop-filter: blur(80px);
-  -webkit-backdrop-filter: blur(80px);
+  backdrop-filter: blur(96px);
+  -webkit-backdrop-filter: blur(96px);
 }
 
 .glass-feature-card {

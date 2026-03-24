@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabaseClient";
 import { dbUpdateFaq } from "@/lib/faq/supabase-faq";
 import { dbListTopicsByUserId } from "@/lib/faq/supabase-topics";
 import type { FAQ, Topic } from "@/lib/faq/types";
+import { Trash2 } from "lucide-react";
 import RichTextEditor from "@/components/RichTextEditor";
 import RichText from "@/components/RichText";
 
@@ -25,6 +26,18 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
   const [topicsLoading, setTopicsLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [previewOpen, setPreviewOpen] = useState(true);
+  const [topicSectionHighlight, setTopicSectionHighlight] = useState(false);
+  const topicsHighlightRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!topicSectionHighlight) return;
+    const el = topicsHighlightRef.current;
+    if (!el) return;
+    requestAnimationFrame(() => {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  }, [topicSectionHighlight]);
 
   useEffect(() => {
     let cancelled = false;
@@ -66,6 +79,7 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
   }
 
   function toggleTopic(id: string) {
+    setTopicSectionHighlight(false);
     setTopicIds((prev) => {
       const s = new Set(prev);
       if (s.has(id)) s.delete(id);
@@ -86,10 +100,12 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setTopicSectionHighlight(false);
     const validTopicIds = topicIds.filter((id) =>
       topics.some((t) => t.id === id),
     );
     if (validTopicIds.length === 0) {
+      setTopicSectionHighlight(true);
       setError("Select at least one topic for this question.");
       return;
     }
@@ -140,7 +156,14 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
         className="space-y-6 rounded-2xl border border-[#e8e6e3] bg-white p-6 shadow-xl shadow-black/5 sm:p-8"
       >
         <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
+          <div
+            ref={topicsHighlightRef}
+            className={`min-w-0 max-w-full flex-1 scroll-mt-24 rounded-xl p-3 transition-[background-color,box-shadow] ${
+              topicSectionHighlight
+                ? "bg-[#fffbeb] shadow-sm shadow-amber-900/5 ring-1 ring-amber-300/70"
+                : ""
+            }`}
+          >
             <p className="label-caps text-[#6b6b6b]">Topics</p>
             <p className="mt-1 text-xs text-[#9ca3af]">
               At least one required.{" "}
@@ -226,22 +249,13 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
             </div>
 
             <div className="mt-4">
-              <div className="flex items-center justify-between">
-                <label className="label-caps">
-                  Answers <span className="text-[#6b6b6b]">*</span>
-                </label>
-                <button
-                  type="button"
-                  onClick={addAnswer}
-                  className="text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] underline"
-                >
-                  + Add answer
-                </button>
-              </div>
-              <div className="mt-2 space-y-2">
+              <label className="label-caps block">
+                Answers <span className="text-[#6b6b6b]">*</span>
+              </label>
+              <div className="mt-2 space-y-3">
                 {answers.map((a, i) => (
-                  <div key={i} className="flex gap-2">
-                    <div className="flex-1">
+                  <div key={i} className="flex items-start gap-2">
+                    <div className="min-w-0 flex-1">
                       <RichTextEditor
                         value={a}
                         onChange={(html) => setAnswerAt(i, html)}
@@ -253,14 +267,28 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
                       <button
                         type="button"
                         onClick={() => removeAnswer(i)}
-                        className="btn-ghost-edge shrink-0 rounded-lg border border-transparent bg-white px-3 py-2 text-[11px] uppercase tracking-widest text-[#6b6b6b] shadow-sm hover:text-[#0a0a0a] hover:shadow-md"
+                        className="interactive-smooth mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#e8e6e3] bg-white text-[#6b6b6b] shadow-sm transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-700"
+                        aria-label={`Remove answer ${i + 1}`}
+                        title="Remove this answer"
                       >
-                        Remove
+                        <Trash2
+                          className="size-3.5"
+                          strokeWidth={1.75}
+                          aria-hidden
+                        />
                       </button>
                     )}
                   </div>
                 ))}
               </div>
+              <button
+                type="button"
+                onClick={addAnswer}
+                disabled={saving}
+                className="interactive-smooth mt-4 inline-flex h-8 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-3 text-[10px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9] disabled:opacity-50"
+              >
+                + Add answer
+              </button>
             </div>
           </div>
         </div>
@@ -289,40 +317,65 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
         <div>
           <p className="label-caps mb-3 text-[#6b6b6b]">Live preview</p>
           {hasPreviewContent ? (
-            <div className="overflow-hidden rounded-2xl border border-black/5 bg-black/[0.02] shadow-sm backdrop-blur-sm">
-              <div className="flex items-center justify-between gap-4 px-5 py-4">
+            <div
+              className={`overflow-hidden rounded-2xl bg-white transition-[box-shadow,border-color] ${
+                previewOpen
+                  ? "border-2 border-[#0a0a0a] shadow-md shadow-black/15 ring-1 ring-[#0a0a0a]/10"
+                  : "border border-[#e8e6e3] shadow-sm shadow-black/[0.06]"
+              }`}
+            >
+              <button
+                type="button"
+                aria-expanded={previewOpen}
+                onClick={() => setPreviewOpen((o) => !o)}
+                className={`flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors ${
+                  previewOpen ? "bg-white" : "hover:bg-[#fafaf9]/90"
+                }`}
+              >
                 <span className="text-sm font-medium text-[#0a0a0a]">
                   {title.trim() || "Untitled question"}
                 </span>
-                <span className="text-[11px] uppercase tracking-widest text-[#6b6b6b]">
-                  +
+                <span className="shrink-0 text-lg font-light leading-none text-[#6b6b6b] tabular-nums">
+                  {previewOpen ? "−" : "+"}
                 </span>
-              </div>
-              {topicLabels.length > 0 && (
-                <div className="border-t border-black/5 px-5 py-2">
-                  <p className="text-[10px] uppercase tracking-widest text-[#6b6b6b]">
-                    {topicLabels.map((t) => t.title).join(" · ")}
-                  </p>
-                </div>
-              )}
-              {answers.some((a) => hasMeaningfulText(a)) && (
-                <div className="border-t border-black/5 bg-[#f9f9f7] px-5 py-4">
-                  <div className="space-y-3 text-sm leading-relaxed text-[#4b5563]">
-                    {answers
-                      .filter((a) => hasMeaningfulText(a))
-                      .map((answer, i) => (
-                        <RichText
-                          key={i}
-                          html={answer}
-                          className="text-sm leading-relaxed text-[#4b5563]"
-                        />
-                      ))}
-                  </div>
-                </div>
+              </button>
+              {previewOpen && (
+                <>
+                  {topicLabels.length > 0 && (
+                    <div className="border-t border-[#e8e6e3] bg-white px-5 py-2">
+                      <p className="text-[10px] uppercase tracking-widest text-[#6b6b6b]">
+                        {topicLabels.map((t) => t.title).join(" · ")}
+                      </p>
+                    </div>
+                  )}
+                  {answers.some((a) => hasMeaningfulText(a)) && (
+                    <div className="border-t border-[#e8e6e3] bg-white px-5 py-4">
+                      <div>
+                        {answers
+                          .filter((a) => hasMeaningfulText(a))
+                          .map((answer, i) => (
+                            <div key={i}>
+                              {i > 0 && (
+                                <div
+                                  className="my-5 h-px w-full bg-[#e8e6e3]"
+                                  role="separator"
+                                  aria-hidden
+                                />
+                              )}
+                              <RichText
+                                html={answer}
+                                className="text-sm leading-relaxed text-[#6b6b6b]"
+                              />
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           ) : (
-            <div className="rounded-2xl border border-black/5 bg-black/[0.02] px-5 py-5 text-sm text-[#4b5563] shadow-sm backdrop-blur-sm">
+            <div className="rounded-2xl border border-[#e8e6e3] bg-white px-5 py-5 text-sm text-[#6b6b6b] shadow-sm shadow-black/[0.06]">
               <p className="font-medium text-[#0a0a0a]">
                 Your question will appear here as it looks on the public FAQ
                 page.

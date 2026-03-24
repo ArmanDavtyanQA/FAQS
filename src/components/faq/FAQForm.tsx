@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
@@ -8,6 +8,7 @@ import { dbInsertFaq } from "@/lib/faq/supabase-faq";
 import { dbInsertTopic, dbListTopicsByUserId } from "@/lib/faq/supabase-topics";
 import { DEFAULT_FAQ_TEMPLATES } from "@/lib/faq/faq-ai";
 import type { FAQGenerateItem, Topic } from "@/lib/faq/types";
+import { Trash2 } from "lucide-react";
 import FAQSuggestions from "./FAQSuggestions";
 import RichTextEditor from "@/components/RichTextEditor";
 import RichText from "@/components/RichText";
@@ -45,6 +46,21 @@ export default function FAQForm({
   const [error, setError] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
   const [merchantUrl, setMerchantUrl] = useState("");
+  /** Live preview accordion: which question row is expanded (null = all collapsed). */
+  const [previewOpenIndex, setPreviewOpenIndex] = useState<number | null>(null);
+  /** Question indices missing topics after failed save (highlights “Topics for this question”). */
+  const [topicFieldHighlight, setTopicFieldHighlight] = useState<number[]>([]);
+  const topicSectionRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+
+  useEffect(() => {
+    if (topicFieldHighlight.length === 0) return;
+    const first = Math.min(...topicFieldHighlight);
+    const el = topicSectionRefs.current.get(first);
+    if (!el) return;
+    requestAnimationFrame(() => {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  }, [topicFieldHighlight]);
 
   useEffect(() => {
     let cancelled = false;
@@ -157,6 +173,7 @@ export default function FAQForm({
   }
 
   function toggleQuestionTopic(questionIndex: number, topicId: string) {
+    setTopicFieldHighlight((prev) => prev.filter((i) => i !== questionIndex));
     setQuestions((qs) => {
       const next = [...qs];
       const q = { ...next[questionIndex] };
@@ -250,6 +267,7 @@ export default function FAQForm({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setTopicFieldHighlight([]);
     setSubmitting(true);
     try {
       if (topics.length === 0) {
@@ -258,7 +276,8 @@ export default function FAQForm({
       }
 
       const prepared = questions
-        .map((q) => ({
+        .map((q, questionIndex) => ({
+          questionIndex,
           title: q.title.trim(),
           answers: q.answers.map((a) => a.trim()).filter(hasMeaningfulText),
           topicIds: q.topicIds.filter((id) =>
@@ -272,8 +291,9 @@ export default function FAQForm({
         return;
       }
 
-      const missingTopics = prepared.find((q) => q.topicIds.length === 0);
-      if (missingTopics) {
+      const missingTopicRows = prepared.filter((q) => q.topicIds.length === 0);
+      if (missingTopicRows.length > 0) {
+        setTopicFieldHighlight(missingTopicRows.map((r) => r.questionIndex));
         setError("Each question must have at least one topic selected.");
         return;
       }
@@ -286,13 +306,13 @@ export default function FAQForm({
         return;
       }
 
-      for (const q of prepared) {
+      for (const row of prepared) {
         await dbInsertFaq(supabase, {
           userId: user.id,
-          title: q.title,
-          answers: q.answers,
+          title: row.title,
+          answers: row.answers,
           status,
-          topicIds: q.topicIds,
+          topicIds: row.topicIds,
         });
       }
 
@@ -425,7 +445,18 @@ export default function FAQForm({
                     )}
                   </div>
 
-                  <div className="mt-4">
+                  <div
+                    ref={(node) => {
+                      if (node)
+                        topicSectionRefs.current.set(questionIndex, node);
+                      else topicSectionRefs.current.delete(questionIndex);
+                    }}
+                    className={`mt-4 scroll-mt-24 rounded-xl p-3 transition-[background-color,box-shadow] ${
+                      topicFieldHighlight.includes(questionIndex)
+                        ? "bg-[#fffbeb] shadow-sm shadow-amber-900/5 ring-1 ring-amber-300/70"
+                        : ""
+                    }`}
+                  >
                     <p className="label-caps">
                       Topics for this question{" "}
                       <span className="text-[#6b6b6b]">*</span>
@@ -465,23 +496,16 @@ export default function FAQForm({
                   </div>
 
                   <div className="mt-4">
-                    <div className="flex items-center justify-between">
-                      <label className="label-caps">
-                        Answers <span className="text-[#6b6b6b]">*</span>
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() => addAnswer(questionIndex)}
-                        className="text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] underline"
-                        disabled={!canEditQuestions}
-                      >
-                        + Add answer
-                      </button>
-                    </div>
-                    <div className="mt-2 space-y-2">
+                    <label className="label-caps block">
+                      Answers <span className="text-[#6b6b6b]">*</span>
+                    </label>
+                    <div className="mt-2 space-y-3">
                       {q.answers.map((a, answerIndex) => (
-                        <div key={answerIndex} className="flex gap-2">
-                          <div className="flex-1">
+                        <div
+                          key={answerIndex}
+                          className="flex items-start gap-2"
+                        >
+                          <div className="min-w-0 flex-1">
                             <RichTextEditor
                               value={a}
                               onChange={(html) =>
@@ -501,14 +525,28 @@ export default function FAQForm({
                               onClick={() =>
                                 removeAnswer(questionIndex, answerIndex)
                               }
-                              className="shrink-0 rounded-xl border border-[#e8e6e3] bg-white px-3 py-2 text-[11px] uppercase tracking-widest text-[#6b6b6b] shadow-sm transition-colors hover:border-[#d6d3d1] hover:bg-[#fafaf9] hover:text-[#0a0a0a]"
+                              className="interactive-smooth mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#e8e6e3] bg-white text-[#6b6b6b] shadow-sm transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-700"
+                              aria-label={`Remove answer ${answerIndex + 1}`}
+                              title="Remove this answer"
                             >
-                              Remove
+                              <Trash2
+                                className="size-3.5"
+                                strokeWidth={1.75}
+                                aria-hidden
+                              />
                             </button>
                           )}
                         </div>
                       ))}
                     </div>
+                    <button
+                      type="button"
+                      onClick={() => addAnswer(questionIndex)}
+                      disabled={!canEditQuestions}
+                      className={`${btnSolid} mt-4 h-8 px-3 text-[10px] disabled:opacity-40`}
+                    >
+                      + Add answer
+                    </button>
                   </div>
                 </div>
               );
@@ -608,40 +646,71 @@ export default function FAQForm({
                 const labels = topics
                   .filter((t) => q.topicIds.includes(t.id))
                   .map((t) => t.title);
+                const isPreviewOpen = previewOpenIndex === idx;
+                const previewAnswers = q.answers.filter((a) =>
+                  hasMeaningfulText(a),
+                );
                 return (
                   <div
                     key={idx}
-                    className="overflow-hidden rounded-xl border border-[#e8e6e3] bg-white shadow-sm"
+                    className={`overflow-hidden rounded-xl bg-white transition-[box-shadow,border-color] ${
+                      isPreviewOpen
+                        ? "border-2 border-[#0a0a0a] shadow-md shadow-black/15 ring-1 ring-[#0a0a0a]/10"
+                        : "border border-[#e8e6e3] shadow-sm shadow-black/[0.06]"
+                    }`}
                   >
-                    <div className="flex items-center justify-between gap-4 px-5 py-4">
+                    <button
+                      type="button"
+                      aria-expanded={isPreviewOpen}
+                      onClick={() =>
+                        setPreviewOpenIndex((cur) =>
+                          cur === idx ? null : idx,
+                        )
+                      }
+                      className={`flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors ${
+                        isPreviewOpen
+                          ? "bg-white"
+                          : "hover:bg-[#fafaf9]/90"
+                      }`}
+                    >
                       <span className="text-sm font-medium text-[#0a0a0a]">
                         {q.title.trim() || "Untitled question"}
                       </span>
-                      <span className="text-[11px] uppercase tracking-widest text-[#6b6b6b]">
-                        +
+                      <span className="shrink-0 text-lg font-light leading-none text-[#6b6b6b] tabular-nums">
+                        {isPreviewOpen ? "−" : "+"}
                       </span>
-                    </div>
-                    {labels.length > 0 && (
-                      <div className="border-t border-[#e8e6e3] px-5 py-2">
-                        <p className="text-[10px] uppercase tracking-widest text-[#6b6b6b]">
-                          {labels.join(" · ")}
-                        </p>
-                      </div>
-                    )}
-                    {q.answers.some((a) => hasMeaningfulText(a)) && (
-                      <div className="border-t border-[#e8e6e3] bg-[#fafaf9] px-5 py-4 shadow-inner">
-                        <div className="space-y-3 text-sm leading-relaxed text-[#6b6b6b]">
-                          {q.answers
-                            .filter((a) => hasMeaningfulText(a))
-                            .map((answer, answerIdx) => (
-                              <RichText
-                                key={answerIdx}
-                                html={answer}
-                                className="text-sm leading-relaxed text-[#6b6b6b]"
-                              />
-                            ))}
-                        </div>
-                      </div>
+                    </button>
+                    {isPreviewOpen && (
+                      <>
+                        {labels.length > 0 && (
+                          <div className="border-t border-[#e8e6e3] bg-white px-5 py-2">
+                            <p className="text-[10px] uppercase tracking-widest text-[#6b6b6b]">
+                              {labels.join(" · ")}
+                            </p>
+                          </div>
+                        )}
+                        {previewAnswers.length > 0 && (
+                          <div className="border-t border-[#e8e6e3] bg-white px-5 py-4">
+                            <div>
+                              {previewAnswers.map((answer, answerIdx) => (
+                                <div key={answerIdx}>
+                                  {answerIdx > 0 && (
+                                    <div
+                                      className="my-5 h-px w-full bg-[#e8e6e3]"
+                                      role="separator"
+                                      aria-hidden
+                                    />
+                                  )}
+                                  <RichText
+                                    html={answer}
+                                    className="text-sm leading-relaxed text-[#6b6b6b]"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 );

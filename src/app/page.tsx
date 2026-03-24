@@ -1,14 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { GlassHero, GlassFeatures } from "@/components/glass";
+import { GlassHero, GlassPlans } from "@/components/glass";
 
 export default function Home() {
   return (
     <main className="flex flex-1 flex-col gap-24 lg:gap-32">
       <GlassHero />
 
-      <GlassFeatures />
+      <GlassPlans />
 
       <section id="how-it-works" className="relative scroll-mt-28 bg-[#FDFDFB] px-6 pt-16">
         <motion.h2

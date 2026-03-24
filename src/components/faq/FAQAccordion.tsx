@@ -52,57 +52,69 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
 
   if (faqs.length === 0) return null;
 
-  const answerOnDarkClass =
-    "space-y-4 text-sm leading-relaxed [&_p]:text-neutral-300 [&_li]:text-neutral-300 [&_ul]:my-2 [&_ol]:my-2 [&_a]:text-white [&_a]:underline [&_strong]:text-white [&_em]:text-neutral-200 [&_h1]:text-white [&_h2]:text-white [&_h3]:text-white [&_code]:rounded [&_code]:bg-white/10 [&_code]:px-1 [&_code]:text-neutral-200";
-
   function renderList(list: FAQ[]) {
     return (
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-3">
         {list.map((faq) => {
           const isOpen = openId === faq.id;
+          const topicLine =
+            faq.topicLabels?.map((t) => t.title).join(" · ") ?? "";
           return (
             <div
               key={faq.id}
-              className={`overflow-hidden rounded-2xl border transition-[background-color,box-shadow,border-color] duration-300 ${
+              className={`overflow-hidden rounded-xl bg-white transition-[box-shadow,border-color] ${
                 isOpen
-                  ? "border-[#0a0a0a] bg-[#0a0a0a] text-white shadow-md shadow-black/25"
-                  : "border-[#e8e6e3] bg-white shadow-sm shadow-black/[0.07]"
+                  ? "border-2 border-[#0a0a0a] shadow-md shadow-black/15 ring-1 ring-[#0a0a0a]/10"
+                  : "border border-[#e8e6e3] shadow-sm shadow-black/[0.06]"
               }`}
             >
               <button
                 type="button"
                 aria-expanded={isOpen}
                 onClick={() => setOpenId(isOpen ? null : faq.id)}
-                className={`flex w-full items-start justify-between gap-6 px-6 py-7 text-left sm:px-8 sm:py-8 ${
-                  isOpen
-                    ? "hover:bg-white/[0.04]"
-                    : "hover:bg-[#fafaf9]/80"
-                } transition-colors`}
+                className={`flex w-full items-start justify-between gap-4 px-5 py-4 text-left transition-colors sm:px-6 ${
+                  isOpen ? "bg-white" : "hover:bg-[#fafaf9]/90"
+                }`}
               >
-                <span
-                  className={`min-w-0 flex-1 text-pretty text-lg font-medium leading-snug tracking-tight sm:text-xl ${
-                    isOpen ? "text-white" : "text-[#0a0a0a]"
-                  }`}
-                >
+                <span className="min-w-0 flex-1 text-pretty text-sm font-medium leading-snug text-[#0a0a0a] sm:text-base">
                   {faq.title}
                 </span>
                 <span
-                  className={`mt-0.5 shrink-0 text-xl font-light tabular-nums leading-none sm:text-2xl ${
-                    isOpen ? "text-white/70" : "text-[#6b6b6b]"
-                  }`}
+                  className="mt-0.5 shrink-0 text-lg font-light tabular-nums leading-none text-[#6b6b6b]"
                   aria-hidden
                 >
                   {isOpen ? "−" : "+"}
                 </span>
               </button>
               {isOpen && (
-                <div className="border-t border-white/15 px-6 pb-8 pt-2 sm:px-8 sm:pb-10">
-                  <div className={answerOnDarkClass}>
-                    {faq.answers.map((answer, i) => (
-                      <RichText key={i} html={answer} />
-                    ))}
+                <>
+                  {topicLine.length > 0 && (
+                    <div className="border-t border-[#e8e6e3] bg-white px-5 py-2 sm:px-6">
+                      <p className="text-[10px] uppercase tracking-widest text-[#6b6b6b]">
+                        {topicLine}
+                      </p>
+                    </div>
+                  )}
+                  <div className="border-t border-[#e8e6e3] bg-white px-5 py-4 sm:px-6 sm:py-5">
+                    <div>
+                      {faq.answers.map((answer, i) => (
+                        <div key={i}>
+                          {i > 0 && (
+                            <div
+                              className="my-5 h-px w-full bg-[#e8e6e3]"
+                              role="separator"
+                              aria-hidden
+                            />
+                          )}
+                          <RichText
+                            html={answer}
+                            className="text-sm leading-relaxed text-[#6b6b6b]"
+                          />
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                </>
               )}
             </div>
           );
