@@ -5,7 +5,7 @@ import { GlassHero, GlassPlans } from "@/components/glass";
 
 export default function Home() {
   return (
-    <main className="flex flex-1 flex-col gap-24 lg:gap-32">
+    <main className="flex min-h-0 flex-1 flex-col gap-16 lg:gap-24">
       <GlassHero />
 
       <GlassPlans />
