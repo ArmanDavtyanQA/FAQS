@@ -12,9 +12,6 @@ const publishedFaqUrl = hasLandingPublishedFaq
   ? `/faq/${landingPublishedUserId}`
   : null;
 
-const navLinkClass =
-  "interactive-smooth rounded-md px-2 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-slate-600 transition-colors hover:text-slate-900";
-
 const heroCtaPrimary =
   "interactive-smooth inline-flex h-12 items-center justify-center rounded-xl bg-slate-900 px-8 text-xs font-medium uppercase tracking-widest text-white shadow-md shadow-slate-900/15 transition-colors hover:bg-slate-800";
 
@@ -42,30 +39,12 @@ export default function GlassHero() {
         </div>
 
         <div className="relative z-10 px-5 pb-12 pt-8 sm:px-10 sm:pb-14 sm:pt-10">
-          <nav
-            className="mb-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 sm:mb-11"
-            aria-label="Section"
-          >
-            <Link href="/dashboard" className={navLinkClass}>
-              Dashboard
-            </Link>
-            <Link href="#plans" className={navLinkClass}>
-              Plans
-            </Link>
-            <Link href="#how-it-works" className={navLinkClass}>
-              How it works
-            </Link>
-            <Link href="/auth" className={navLinkClass}>
-              Sign in
-            </Link>
-          </nav>
-
-          <div className="mx-auto max-w-3xl text-center">
+          <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
             <motion.h1
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.75, delay: 0.06, ease: [0.22, 0.61, 0.36, 1] }}
-              className="text-balance text-4xl font-light leading-[1.1] tracking-[0.12em] text-slate-900 sm:text-5xl lg:text-6xl xl:text-[3.75rem]"
+              className="w-full text-balance text-center text-4xl font-light leading-[1.1] tracking-[0.12em] text-slate-900 sm:text-5xl lg:text-6xl xl:text-[3.75rem]"
             >
               QUANTUM
             </motion.h1>
@@ -74,13 +53,13 @@ export default function GlassHero() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.75, delay: 0.1, ease: [0.22, 0.61, 0.36, 1] }}
-              className="font-mono mt-5 max-w-[min(100%,42rem)] text-balance text-center sm:mt-6"
+              className="font-mono mt-5 flex w-full max-w-[min(100%,42rem)] flex-col items-center text-center sm:mt-6"
               aria-label="START SMALL BUILD BEYOND"
             >
-              <span className="block text-[clamp(1.5rem,2.2vw+0.75rem,2.4rem)] font-light uppercase leading-[1.1] tracking-[-0.02em] text-slate-800">
+              <span className="block w-full text-center text-[clamp(1.5rem,2.2vw+0.75rem,2.4rem)] font-light uppercase leading-[1.1] tracking-[-0.02em] text-slate-800">
                 START SMALL
               </span>
-              <span className="mt-1 block text-[clamp(1.5rem,2.2vw+0.75rem,2.4rem)] font-semibold uppercase leading-[1.1] tracking-[-0.02em] text-slate-900 sm:mt-1.5">
+              <span className="mt-1 block w-full text-center text-[clamp(1.5rem,2.2vw+0.75rem,2.4rem)] font-semibold uppercase leading-[1.1] tracking-[-0.02em] text-slate-900 sm:mt-1.5">
                 BUILD BEYOND
               </span>
             </motion.div>
@@ -89,7 +68,7 @@ export default function GlassHero() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.75, delay: 0.14, ease: [0.22, 0.61, 0.36, 1] }}
-              className="mx-auto mt-6 max-w-xl text-pretty text-base font-normal leading-relaxed text-slate-600 sm:mt-7 sm:text-lg"
+              className="mx-auto mt-6 max-w-xl text-pretty text-center text-base font-normal leading-relaxed text-slate-600 sm:mt-7 sm:text-lg"
             >
               From 3 topics to unlimited AI-driven design. Quantum scales your
               support from free to Pro in one click.
