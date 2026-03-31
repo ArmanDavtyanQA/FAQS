@@ -63,7 +63,7 @@ export default function RichTextEditor({
   if (!CKEditor || !ClassicEditor) {
     return (
       <div className="ck-matte">
-        <div className="rounded-xl border border-[#e8e6e3] bg-white px-4 py-3 text-sm text-[#6b6b6b] shadow-sm">
+        <div className="rounded-xl border border-black/5 bg-black/[0.03] px-4 py-3 text-sm text-[#4A4A4A] shadow-sm">
           Loading editor…
         </div>
       </div>

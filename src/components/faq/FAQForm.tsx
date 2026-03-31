@@ -51,6 +51,10 @@ export default function FAQForm({
   /** Question indices missing topics after failed save (highlights “Topics for this question”). */
   const [topicFieldHighlight, setTopicFieldHighlight] = useState<number[]>([]);
   const topicSectionRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  /** First question block to fix when “Add at least one question with an answer” fails. */
+  const [questionBlockHighlightIndex, setQuestionBlockHighlightIndex] =
+    useState<number | null>(null);
+  const questionBlockRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 
   useEffect(() => {
     if (topicFieldHighlight.length === 0) return;
@@ -61,6 +65,15 @@ export default function FAQForm({
       el.scrollIntoView({ behavior: "smooth", block: "center" });
     });
   }, [topicFieldHighlight]);
+
+  useEffect(() => {
+    if (questionBlockHighlightIndex === null) return;
+    const el = questionBlockRefs.current.get(questionBlockHighlightIndex);
+    if (!el) return;
+    requestAnimationFrame(() => {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  }, [questionBlockHighlightIndex]);
 
   useEffect(() => {
     let cancelled = false;
@@ -112,6 +125,16 @@ export default function FAQForm({
     return text.length > 0;
   }
 
+  /** Index of the first question missing a title or a non-empty answer (same rules as submit). */
+  function firstIncompleteQuestionIndex(qs: QuestionBlock[]) {
+    for (let i = 0; i < qs.length; i++) {
+      const title = qs[i].title.trim();
+      const answers = qs[i].answers.filter(hasMeaningfulText);
+      if (!title || answers.length === 0) return i;
+    }
+    return 0;
+  }
+
   async function handleAddTopic(e?: React.FormEvent) {
     e?.preventDefault();
     const title = newTopicTitle.trim();
@@ -154,6 +177,7 @@ export default function FAQForm({
   }
 
   function addQuestion() {
+    setQuestionBlockHighlightIndex(null);
     setQuestions((qs) => [
       ...qs,
       { title: "", answers: [""], topicIds: defaultTopicIds(topics) },
@@ -161,10 +185,14 @@ export default function FAQForm({
   }
 
   function removeQuestion(index: number) {
+    setQuestionBlockHighlightIndex(null);
     setQuestions((qs) => qs.filter((_, i) => i !== index));
   }
 
   function setTitleAt(index: number, value: string) {
+    setQuestionBlockHighlightIndex((prev) =>
+      prev === index ? null : prev,
+    );
     setQuestions((qs) => {
       const next = [...qs];
       next[index] = { ...next[index], title: value };
@@ -202,6 +230,9 @@ export default function FAQForm({
     answerIndex: number,
     value: string,
   ) {
+    setQuestionBlockHighlightIndex((prev) =>
+      prev === questionIndex ? null : prev,
+    );
     setQuestions((qs) => {
       const next = [...qs];
       const answers = [...next[questionIndex].answers];
@@ -268,6 +299,7 @@ export default function FAQForm({
     e.preventDefault();
     setError(null);
     setTopicFieldHighlight([]);
+    setQuestionBlockHighlightIndex(null);
     setSubmitting(true);
     try {
       if (topics.length === 0) {
@@ -287,6 +319,7 @@ export default function FAQForm({
         .filter((q) => q.title && q.answers.length > 0);
 
       if (prepared.length === 0) {
+        setQuestionBlockHighlightIndex(firstIncompleteQuestionIndex(questions));
         setError("Add at least one question with an answer.");
         return;
       }
@@ -325,7 +358,7 @@ export default function FAQForm({
   }
 
   const field =
-    "mt-2 w-full rounded-xl border border-[#e8e6e3] bg-white px-4 py-3 text-sm font-light tracking-widest text-[#0a0a0a] shadow-sm placeholder:text-[#6b6b6b] focus:border-[#0a0a0a] focus:outline-none focus:ring-1 focus:ring-[#0a0a0a]/15 transition-all duration-300";
+    "mt-2 w-full rounded-xl border border-black/5 bg-black/[0.03] px-4 py-3 text-sm font-light tracking-widest text-[#0a0a0a] shadow-sm placeholder:text-[#5A4A40] focus:border-[#0a0a0a] focus:outline-none focus:ring-1 focus:ring-[#0a0a0a]/15 transition-all duration-300";
 
   const btnSolid =
     "interactive-smooth inline-flex items-center justify-center rounded-xl border border-[#e8e6e3] bg-white text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9] disabled:opacity-50";
@@ -336,16 +369,16 @@ export default function FAQForm({
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
       <form
         onSubmit={handleSubmit}
-        className="space-y-8 rounded-2xl border border-[#e8e6e3] bg-white p-6 shadow-xl shadow-black/5 sm:p-8"
+        className="space-y-8 rounded-2xl border border-[#e8e6e3] border-t-white/80 bg-white/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl sm:p-8"
       >
         {/* Step 1 — Topics */}
         <section className="space-y-4">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
               <p className="label-caps text-[#0a0a0a]">
-                Step 1 — Topics <span className="text-[#6b6b6b]">*</span>
+                Step 1 — Topics <span className="text-[#5A4A40]">*</span>
               </p>
-              <p className="mt-1 text-xs text-[#9ca3af]">
+              <p className="mt-1 text-xs text-[#5A4A40]">
                 Create topics first. You can rename or delete them later from{" "}
                 <Link
                   href="/dashboard/faq/topics"
@@ -359,7 +392,7 @@ export default function FAQForm({
           </div>
 
           {topicsLoading ? (
-            <p className="text-sm text-[#6b6b6b]">Loading topics…</p>
+            <p className="text-sm text-[#5A4A40]">Loading topics…</p>
           ) : (
             <>
               {topics.length > 0 && (
@@ -367,7 +400,7 @@ export default function FAQForm({
                   {topics.map((t) => (
                     <li
                       key={t.id}
-                      className="rounded-full border border-[#e8e6e3] bg-[#fafaf9] px-3 py-1 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a]"
+                      className="rounded-full border border-[#e8e6e3] bg-[#fafaf9] px-3 py-1 text-[11px] font-mono font-light uppercase tracking-widest text-[#0a0a0a]"
                     >
                       {t.title}
                     </li>
@@ -402,9 +435,9 @@ export default function FAQForm({
         >
           <div>
             <label className="label-caps block">
-              Step 2 — Questions <span className="text-[#6b6b6b]">*</span>
+              Step 2 — Questions <span className="text-[#5A4A40]">*</span>
             </label>
-            <p className="mt-1 text-xs text-[#9ca3af]">
+            <p className="mt-1 text-xs text-[#5A4A40]">
               {!canEditQuestions
                 ? "Add at least one topic above before you can assign questions."
                 : "Each question becomes a separate FAQ item. Pick one or more topics per question (at least one required)."}
@@ -416,7 +449,16 @@ export default function FAQForm({
               return (
                 <div
                   key={questionIndex}
-                  className="rounded-2xl border border-[#e8e6e3] bg-[#fafaf9] p-4 shadow-sm"
+                  ref={(node) => {
+                    if (node)
+                      questionBlockRefs.current.set(questionIndex, node);
+                    else questionBlockRefs.current.delete(questionIndex);
+                  }}
+                  className={`scroll-mt-24 rounded-2xl border bg-[#fafaf9] p-4 shadow-sm transition-[background-color,box-shadow,border-color] ${
+                    questionBlockHighlightIndex === questionIndex
+                      ? "border-amber-300/90 bg-[#fffbeb] shadow-sm shadow-amber-900/5 ring-1 ring-amber-300/70"
+                      : "border-[#e8e6e3]"
+                  }`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1">
@@ -429,16 +471,23 @@ export default function FAQForm({
                         onChange={(e) =>
                           setTitleAt(questionIndex, e.target.value)
                         }
-                        className={field}
+                        className={`${field} ${
+                          questionBlockHighlightIndex === questionIndex
+                            ? "border-amber-400/80 ring-2 ring-amber-300/80 ring-offset-2 ring-offset-[#fffbeb]"
+                            : ""
+                        }`}
                         placeholder="e.g. What is your return policy?"
                         disabled={!canEditQuestions}
+                        aria-invalid={
+                          questionBlockHighlightIndex === questionIndex
+                        }
                       />
                     </div>
                     {questions.length > 1 && (
                       <button
                         type="button"
                         onClick={() => removeQuestion(questionIndex)}
-                        className="mt-7 shrink-0 rounded-xl border border-[#e8e6e3] bg-white px-3 py-2 text-[11px] uppercase tracking-widest text-[#6b6b6b] shadow-sm transition-colors hover:border-[#d6d3d1] hover:bg-[#fafaf9] hover:text-[#0a0a0a]"
+                        className="mt-7 shrink-0 rounded-xl border border-[#e8e6e3] bg-white px-3 py-2 text-[11px] uppercase tracking-widest text-[#5A4A40] shadow-sm transition-colors hover:border-[#d6d3d1] hover:bg-[#fafaf9] hover:text-[#0a0a0a]"
                       >
                         Remove
                       </button>
@@ -459,11 +508,11 @@ export default function FAQForm({
                   >
                     <p className="label-caps">
                       Topics for this question{" "}
-                      <span className="text-[#6b6b6b]">*</span>
+                      <span className="text-[#5A4A40]">*</span>
                     </p>
                     <div className="mt-2 flex flex-wrap gap-3">
                       {topics.length === 0 ? (
-                        <span className="text-xs text-[#9ca3af]">
+                        <span className="text-xs text-[#5A4A40]">
                           No topics yet.
                         </span>
                       ) : (
@@ -472,10 +521,10 @@ export default function FAQForm({
                           return (
                             <label
                               key={t.id}
-                              className={`inline-flex cursor-pointer items-center gap-2 rounded-full border px-3 py-2 text-[10px] font-medium uppercase tracking-widest transition-colors ${
+                              className={`inline-flex cursor-pointer items-center gap-2 rounded-full border px-3 py-2 text-[10px] font-mono font-medium uppercase tracking-widest transition-colors ${
                                 checked
                                   ? "border-[#0a0a0a] bg-[#f5f5f4] text-[#0a0a0a]"
-                                  : "border-[#e8e6e3] text-[#6b6b6b] hover:border-[#d6d3d1]"
+                                  : "border-[#e8e6e3] text-[#5A4A40] hover:border-[#d6d3d1]"
                               } ${!canEditQuestions ? "pointer-events-none opacity-50" : ""}`}
                             >
                               <input
@@ -497,7 +546,7 @@ export default function FAQForm({
 
                   <div className="mt-4">
                     <label className="label-caps block">
-                      Answers <span className="text-[#6b6b6b]">*</span>
+                      Answers <span className="text-[#5A4A40]">*</span>
                     </label>
                     <div className="mt-2 space-y-3">
                       {q.answers.map((a, answerIndex) => (
@@ -596,20 +645,24 @@ export default function FAQForm({
             >
               {aiLoading ? "Generating…" : "Generate FAQs with AI"}
             </button>
-            <p className="mt-2 text-[11px] text-[#6b6b6b]">
+            <p className="mt-2 text-[11px] text-[#5A4A40]">
               If URL is empty, default templates are used as suggestions.
             </p>
           </div>
         )}
 
         {!paidPlan && (
-          <p className="rounded-2xl border border-[#e8e6e3] bg-[#fafaf9] px-4 py-3 text-sm leading-relaxed text-[#6b6b6b] shadow-sm">
+          <p className="rounded-2xl border border-[#e8e6e3] bg-[#fafaf9] px-4 py-3 text-sm leading-relaxed text-[#5A4A40] shadow-sm">
             Free plan: enter question and answers manually. Upgrade to Paid for
             AI generation and template suggestions.
           </p>
         )}
 
-        {error && <p className="text-sm text-[#0a0a0a]">{error}</p>}
+        {error && (
+          <p role="alert" className="text-sm text-[#0a0a0a]">
+            {error}
+          </p>
+        )}
 
         <div className="flex flex-wrap gap-3">
           <button
@@ -629,9 +682,9 @@ export default function FAQForm({
         </div>
       </form>
 
-      <aside className="space-y-6 rounded-2xl border border-[#e8e6e3] bg-white p-6 shadow-xl shadow-black/5">
+      <aside className="space-y-6 rounded-2xl border border-[#e8e6e3] border-t-white/80 bg-white/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl antigravity-lift">
         <div>
-          <p className="label-caps mb-3 text-[#6b6b6b]">Live preview</p>
+          <p className="label-caps mb-3 text-[#5A4A40]">Live preview</p>
           <div className="space-y-3">
             {questions.some(
               (q) =>
@@ -653,7 +706,7 @@ export default function FAQForm({
                 return (
                   <div
                     key={idx}
-                    className={`overflow-hidden rounded-xl bg-white transition-[box-shadow,border-color] ${
+                    className={`overflow-hidden rounded-xl bg-white/60 backdrop-blur-md transition-all duration-500 blur-[0.5px] hover:blur-none ${
                       isPreviewOpen
                         ? "border-2 border-[#0a0a0a] shadow-md shadow-black/15 ring-1 ring-[#0a0a0a]/10"
                         : "border border-[#e8e6e3] shadow-sm shadow-black/[0.06]"
@@ -676,21 +729,21 @@ export default function FAQForm({
                       <span className="text-sm font-medium text-[#0a0a0a]">
                         {q.title.trim() || "Untitled question"}
                       </span>
-                      <span className="shrink-0 text-lg font-light leading-none text-[#6b6b6b] tabular-nums">
+                      <span className="shrink-0 text-lg font-light leading-none text-[#5A4A40] tabular-nums">
                         {isPreviewOpen ? "−" : "+"}
                       </span>
                     </button>
                     {isPreviewOpen && (
                       <>
                         {labels.length > 0 && (
-                          <div className="border-t border-[#e8e6e3] bg-white px-5 py-2">
-                            <p className="text-[10px] uppercase tracking-widest text-[#6b6b6b]">
+                          <div className="border-t border-[#e8e6e3] bg-transparent px-5 py-2">
+                            <p className="text-[10px] uppercase tracking-widest text-[#5A4A40] font-mono">
                               {labels.join(" · ")}
                             </p>
                           </div>
                         )}
                         {previewAnswers.length > 0 && (
-                          <div className="border-t border-[#e8e6e3] bg-white px-5 py-4">
+                          <div className="border-t border-[#e8e6e3] bg-transparent px-5 py-4">
                             <div>
                               {previewAnswers.map((answer, answerIdx) => (
                                 <div key={answerIdx}>
@@ -703,7 +756,7 @@ export default function FAQForm({
                                   )}
                                   <RichText
                                     html={answer}
-                                    className="text-sm leading-relaxed text-[#6b6b6b]"
+                                    className="text-sm leading-relaxed text-[#5A4A40]"
                                   />
                                 </div>
                               ))}
@@ -716,14 +769,14 @@ export default function FAQForm({
                 );
               })
             ) : (
-              <div className="rounded-2xl border border-[#e8e6e3] bg-white px-5 py-5 text-sm text-[#6b6b6b] shadow-sm">
+              <div className="rounded-2xl border border-[#e8e6e3] bg-black/[0.02] px-5 py-5 text-sm text-[#5A4A40] shadow-sm">
                 <p className="font-medium text-[#0a0a0a]">
                   Your questions will appear here as separate items.
                 </p>
                 <p className="mt-2 leading-relaxed">
                   Start with topics, then add questions and answers on the left.
                 </p>
-                <p className="mt-2 text-xs text-[#9ca3af]">
+                <p className="mt-2 text-xs text-[#5A4A40]">
                   Each question card is shown separately on your public FAQ page.
                 </p>
               </div>
@@ -733,7 +786,7 @@ export default function FAQForm({
 
         {paidPlan && (
           <div className="border-t border-[#e8e6e3] pt-5">
-            <p className="label-caps mb-3 text-[#6b6b6b]">Suggestions</p>
+            <p className="label-caps mb-3 text-[#5A4A40]">Suggestions</p>
             <FAQSuggestions
               templates={DEFAULT_FAQ_TEMPLATES}
               onSelect={applySuggestion}

@@ -12,7 +12,7 @@ import RichTextEditor from "@/components/RichTextEditor";
 import RichText from "@/components/RichText";
 
 const inputClass =
-  "mt-2 w-full rounded-xl border border-[#e8e6e3] bg-white px-4 py-3 text-sm text-[#0a0a0a] shadow-sm placeholder:text-[#6b6b6b] focus:border-[#0a0a0a] focus:shadow-md focus:outline-none";
+  "mt-2 w-full rounded-xl border border-black/5 bg-black/[0.03] px-4 py-3 text-sm text-[#0a0a0a] shadow-sm placeholder:text-[#5A4A40] focus:border-[#0a0a0a] focus:shadow-md focus:outline-none";
 
 export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
   const router = useRouter();
@@ -153,7 +153,7 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
       <form
         onSubmit={handleSave}
-        className="space-y-6 rounded-2xl border border-[#e8e6e3] bg-white p-6 shadow-xl shadow-black/5 sm:p-8"
+        className="space-y-6 rounded-2xl border border-[#e8e6e3] border-t-white/80 bg-white/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl antigravity-lift sm:p-8"
       >
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div
@@ -164,8 +164,8 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
                 : ""
             }`}
           >
-            <p className="label-caps text-[#6b6b6b]">Topics</p>
-            <p className="mt-1 text-xs text-[#9ca3af]">
+            <p className="label-caps text-[#5A4A40]">Topics</p>
+            <p className="mt-1 text-xs text-[#5A4A40]">
               At least one required.{" "}
               <Link
                 href="/dashboard/faq/topics"
@@ -175,9 +175,9 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
               </Link>
             </p>
             {topicsLoading ? (
-              <p className="mt-2 text-sm text-[#6b6b6b]">Loading topics…</p>
+              <p className="mt-2 text-sm text-[#5A4A40]">Loading topics…</p>
             ) : topics.length === 0 ? (
-              <p className="mt-2 text-sm text-[#6b6b6b]">
+              <p className="mt-2 text-sm text-[#5A4A40]">
                 No topics yet.{" "}
                 <Link
                   href="/dashboard/faq/create"
@@ -194,10 +194,10 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
                   return (
                     <label
                       key={t.id}
-                      className={`inline-flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-[11px] font-medium uppercase tracking-widest transition-colors ${
+                      className={`inline-flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-[11px] font-mono font-medium uppercase tracking-widest transition-colors ${
                         checked
                           ? "border-[#0a0a0a] bg-[#f9f9f7] text-[#0a0a0a]"
-                          : "border-[#e8e6e3] text-[#6b6b6b]"
+                          : "border-[#e8e6e3] text-[#5A4A40]"
                       }`}
                     >
                       <input
@@ -217,8 +217,8 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
             <span
               className={
                 status === "published"
-                  ? "text-[10px] font-medium uppercase tracking-widest text-[#0a0a0a]"
-                  : "text-[10px] font-medium uppercase tracking-widest text-[#6b6b6b]"
+                  ? "font-mono text-[10px] font-medium uppercase tracking-widest text-[#0a0a0a]"
+                  : "font-mono text-[10px] font-medium uppercase tracking-widest text-[#5A4A40]"
               }
             >
               {status}
@@ -235,7 +235,7 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
         </div>
 
         <div className="space-y-5">
-          <div className="rounded-2xl border border-[#e8e6e3] bg-[#f9f9f7] p-4 shadow-sm">
+          <div className="rounded-2xl border border-[#e8e6e3] bg-black/[0.02] p-4 shadow-sm">
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1">
                 <label className="label-caps block">Question</label>
@@ -250,7 +250,7 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
 
             <div className="mt-4">
               <label className="label-caps block">
-                Answers <span className="text-[#6b6b6b]">*</span>
+                Answers <span className="text-[#5A4A40]">*</span>
               </label>
               <div className="mt-2 space-y-3">
                 {answers.map((a, i) => (
@@ -267,7 +267,7 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
                       <button
                         type="button"
                         onClick={() => removeAnswer(i)}
-                        className="interactive-smooth mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#e8e6e3] bg-white text-[#6b6b6b] shadow-sm transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-700"
+                        className="interactive-smooth mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#e8e6e3] bg-white text-[#5A4A40] shadow-sm transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-700"
                         aria-label={`Remove answer ${i + 1}`}
                         title="Remove this answer"
                       >
@@ -313,12 +313,12 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
         </div>
       </form>
 
-      <aside className="space-y-6 rounded-2xl border border-[#e8e6e3] bg-white p-6 shadow-lg shadow-black/5">
+      <aside className="space-y-6 rounded-2xl border border-[#e8e6e3] border-t-white/80 bg-white/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl antigravity-lift">
         <div>
-          <p className="label-caps mb-3 text-[#6b6b6b]">Live preview</p>
+          <p className="label-caps mb-3 text-[#5A4A40]">Live preview</p>
           {hasPreviewContent ? (
             <div
-              className={`overflow-hidden rounded-2xl bg-white transition-[box-shadow,border-color] ${
+              className={`overflow-hidden rounded-xl bg-white/60 backdrop-blur-md transition-all duration-500 blur-[0.5px] hover:blur-none ${
                 previewOpen
                   ? "border-2 border-[#0a0a0a] shadow-md shadow-black/15 ring-1 ring-[#0a0a0a]/10"
                   : "border border-[#e8e6e3] shadow-sm shadow-black/[0.06]"
@@ -335,21 +335,21 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
                 <span className="text-sm font-medium text-[#0a0a0a]">
                   {title.trim() || "Untitled question"}
                 </span>
-                <span className="shrink-0 text-lg font-light leading-none text-[#6b6b6b] tabular-nums">
+                <span className="shrink-0 text-lg font-light leading-none text-[#5A4A40] tabular-nums">
                   {previewOpen ? "−" : "+"}
                 </span>
               </button>
               {previewOpen && (
                 <>
                   {topicLabels.length > 0 && (
-                    <div className="border-t border-[#e8e6e3] bg-white px-5 py-2">
-                      <p className="text-[10px] uppercase tracking-widest text-[#6b6b6b]">
+                    <div className="border-t border-[#e8e6e3] bg-transparent px-5 py-2">
+                      <p className="text-[10px] uppercase tracking-widest text-[#5A4A40] font-mono">
                         {topicLabels.map((t) => t.title).join(" · ")}
                       </p>
                     </div>
                   )}
                   {answers.some((a) => hasMeaningfulText(a)) && (
-                    <div className="border-t border-[#e8e6e3] bg-white px-5 py-4">
+                    <div className="border-t border-[#e8e6e3] bg-transparent px-5 py-4 sm:px-6 sm:py-5">
                       <div>
                         {answers
                           .filter((a) => hasMeaningfulText(a))
@@ -364,7 +364,7 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
                               )}
                               <RichText
                                 html={answer}
-                                className="text-sm leading-relaxed text-[#6b6b6b]"
+                                className="text-sm leading-relaxed text-[#5A4A40]"
                               />
                             </div>
                           ))}
@@ -375,7 +375,7 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
               )}
             </div>
           ) : (
-            <div className="rounded-2xl border border-[#e8e6e3] bg-white px-5 py-5 text-sm text-[#6b6b6b] shadow-sm shadow-black/[0.06]">
+            <div className="rounded-2xl border border-[#e8e6e3] bg-black/[0.02] px-5 py-5 text-sm text-[#5A4A40] shadow-sm shadow-black/[0.06]">
               <p className="font-medium text-[#0a0a0a]">
                 Your question will appear here as it looks on the public FAQ
                 page.

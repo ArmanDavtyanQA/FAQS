@@ -62,10 +62,10 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
           return (
             <div
               key={faq.id}
-              className={`overflow-hidden rounded-xl bg-white transition-[box-shadow,border-color] ${
+              className={`overflow-hidden rounded-xl bg-white/40 backdrop-blur-xl border-t-white/80 antigravity-lift transition-all duration-300 ${
                 isOpen
-                  ? "border-2 border-[#0a0a0a] shadow-md shadow-black/15 ring-1 ring-[#0a0a0a]/10"
-                  : "border border-[#e8e6e3] shadow-sm shadow-black/[0.06]"
+                  ? "border-b border-[#0a0a0a] border-l border-r shadow-[0_20px_50px_rgba(0,0,0,0.04)] ring-1 ring-[#0a0a0a]/10"
+                  : "border-b border-l border-r border-[#e8e6e3] shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-lg"
               }`}
             >
               <button
@@ -73,14 +73,14 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
                 aria-expanded={isOpen}
                 onClick={() => setOpenId(isOpen ? null : faq.id)}
                 className={`flex w-full items-start justify-between gap-4 px-5 py-4 text-left transition-colors sm:px-6 ${
-                  isOpen ? "bg-white" : "hover:bg-[#fafaf9]/90"
+                  isOpen ? "bg-transparent" : "hover:bg-white/20"
                 }`}
               >
                 <span className="min-w-0 flex-1 text-pretty text-sm font-medium leading-snug text-[#0a0a0a] sm:text-base">
                   {faq.title}
                 </span>
                 <span
-                  className="mt-0.5 shrink-0 text-lg font-light tabular-nums leading-none text-[#6b6b6b]"
+                  className="mt-0.5 shrink-0 text-lg font-light tabular-nums leading-none text-[#5A4A40]"
                   aria-hidden
                 >
                   {isOpen ? "−" : "+"}
@@ -89,13 +89,13 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
               {isOpen && (
                 <>
                   {topicLine.length > 0 && (
-                    <div className="border-t border-[#e8e6e3] bg-white px-5 py-2 sm:px-6">
-                      <p className="text-[10px] uppercase tracking-widest text-[#6b6b6b]">
+                    <div className="border-t border-[#e8e6e3] bg-transparent px-5 py-2 sm:px-6">
+                      <p className="text-[10px] uppercase tracking-widest text-[#5A4A40] font-mono">
                         {topicLine}
                       </p>
                     </div>
                   )}
-                  <div className="border-t border-[#e8e6e3] bg-white px-5 py-4 sm:px-6 sm:py-5">
+                  <div className="border-t border-[#e8e6e3] bg-transparent px-5 py-4 sm:px-6 sm:py-5">
                     <div>
                       {faq.answers.map((answer, i) => (
                         <div key={i}>
@@ -108,7 +108,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
                           )}
                           <RichText
                             html={answer}
-                            className="text-sm leading-relaxed text-[#6b6b6b]"
+                            className="text-sm leading-relaxed text-[#5A4A40]"
                           />
                         </div>
                       ))}
@@ -127,7 +127,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
     <div className="space-y-8">
       {topicOptions.length > 0 && (
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#6b6b6b]">
+          <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#5A4A40]">
             Topics
           </span>
           <button
@@ -136,7 +136,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
             className={`rounded-full border px-3 py-1.5 text-[10px] font-medium uppercase tracking-widest transition-colors ${
               topicFilter === "all"
                 ? "border-[#0a0a0a] bg-[#0a0a0a] text-white"
-                : "border-[#e8e6e3] bg-white text-[#6b6b6b] shadow-sm shadow-black/[0.04] hover:border-[#d6d3d1]"
+                : "border-[#e8e6e3] bg-white/40 backdrop-blur-sm text-[#5A4A40] shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:border-[#d6d3d1]"
             }`}
           >
             All
@@ -149,7 +149,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
               className={`rounded-full border px-3 py-1.5 text-[10px] font-medium uppercase tracking-widest transition-colors ${
                 topicFilter === t.id
                   ? "border-[#0a0a0a] bg-[#0a0a0a] text-white"
-                  : "border-[#e8e6e3] bg-white text-[#6b6b6b] shadow-sm shadow-black/[0.04] hover:border-[#d6d3d1]"
+                  : "border-[#e8e6e3] bg-white/40 backdrop-blur-sm text-[#5A4A40] shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:border-[#d6d3d1]"
               }`}
             >
               {t.title}
@@ -168,13 +168,13 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
           ))}
           {grouped.uncategorized.length > 0 && (
             <section>
-              <p className="label-caps mb-5 text-[#6b6b6b]">Other</p>
+              <p className="label-caps mb-5 text-[#5A4A40]">Other</p>
               {renderList(grouped.uncategorized)}
             </section>
           )}
         </div>
       ) : visibleFaqs.length === 0 ? (
-        <p className="text-sm text-[#6b6b6b]">No questions in this topic.</p>
+        <p className="text-sm text-[#5A4A40]">No questions in this topic.</p>
       ) : (
         renderList(visibleFaqs)
       )}

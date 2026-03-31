@@ -8,7 +8,7 @@ import { supabase } from "@/lib/supabaseClient";
 type FormState = "idle" | "sending" | "sent" | "error";
 
 const fieldClass =
-  "mt-2 w-full rounded-xl border border-[#e8e6e3] bg-white px-4 py-3 text-sm font-light tracking-widest text-[#0a0a0a] shadow-sm placeholder:text-[#6b6b6b] focus:border-[#0a0a0a] focus:outline-none focus:ring-1 focus:ring-[#0a0a0a]/15 transition-all duration-300";
+  "mt-2 w-full rounded-xl border border-black/5 bg-black/[0.03] px-4 py-3 text-sm font-light tracking-widest text-[#0a0a0a] shadow-sm placeholder:text-[#5A4A40] focus:border-[#0a0a0a] focus:outline-none focus:ring-1 focus:ring-[#0a0a0a]/15 transition-all duration-300";
 
 type Props = {
   defaultOpen?: boolean;
@@ -203,12 +203,12 @@ export default function ContactForm({
     "interactive-smooth inline-flex min-h-11 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-white px-8 py-3 text-center text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm shadow-black/[0.06] transition-all duration-300 hover:bg-[#fafaf9] hover:border-[#d6d3d1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a0a0a] active:scale-[0.98]";
 
   const successBlock = (
-    <div className="rounded-2xl border border-[#e8e6e3] bg-white p-6 shadow-xl shadow-black/5 sm:p-8">
-      <p className="label-caps text-[#6b6b6b]">Message sent</p>
+    <div className="rounded-2xl border border-[#e8e6e3] border-t-white/80 bg-white/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl antigravity-lift sm:p-8">
+      <p className="label-caps text-[#5A4A40]">Message sent</p>
       <h2 className="mt-3 text-xl font-semibold tracking-tight text-[#0a0a0a]">
         Thanks — we received your message.
       </h2>
-      <p className="mt-2 text-sm leading-relaxed text-[#6b6b6b]">
+      <p className="mt-2 text-sm leading-relaxed text-[#5A4A40]">
         Your form was sent successfully. A manager will contact you soon.
       </p>
       <div className="mt-6 flex flex-wrap gap-3">
@@ -242,13 +242,13 @@ export default function ContactForm({
       className={
         asModal
           ? "space-y-6"
-          : "space-y-6 rounded-2xl border border-[#e8e6e3] bg-white p-6 shadow-xl shadow-black/5 sm:p-8"
+          : "space-y-6 rounded-2xl border border-[#e8e6e3] border-t-white/80 bg-white/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl antigravity-lift sm:p-8"
       }
     >
-      <div className="rounded-2xl border border-[#e8e6e3] bg-[#fafaf9] p-4 shadow-sm">
+      <div className="rounded-2xl border border-[#e8e6e3] bg-black/[0.02] p-4 shadow-sm">
         <div>
           <label className="label-caps block">
-            Subject <span className="text-[#6b6b6b]">*</span>
+            Subject <span className="text-[#5A4A40]">*</span>
           </label>
           <input
             value={subject}
@@ -260,7 +260,7 @@ export default function ContactForm({
 
         <div className="mt-5">
           <label className="label-caps block">
-            Message <span className="text-[#6b6b6b]">*</span>
+            Message <span className="text-[#5A4A40]">*</span>
           </label>
           <textarea
             value={message}
@@ -299,7 +299,7 @@ export default function ContactForm({
   if (allowAnonymous && !authResolved) {
     return (
       <div className="inline-flex min-h-11 items-center">
-        <span className="text-[11px] uppercase tracking-widest text-[#6b6b6b]">
+        <span className="text-[11px] font-mono uppercase tracking-widest text-[#5A4A40]">
           Loading…
         </span>
       </div>
@@ -373,7 +373,7 @@ export default function ContactForm({
                   }
                   requestCloseModal();
                 }}
-                className="interactive-smooth flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[#6b6b6b] transition-colors hover:bg-[#fafaf9] hover:text-[#0a0a0a] disabled:opacity-45"
+                className="interactive-smooth flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[#5A4A40] transition-colors hover:bg-[#fafaf9] hover:text-[#0a0a0a] disabled:opacity-45"
                 aria-label="Close"
               >
                 <span className="text-2xl leading-none" aria-hidden>
@@ -385,7 +385,7 @@ export default function ContactForm({
             <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5 sm:px-6">
               {state === "sent" ? (
                 <div className="space-y-4">
-                  <p className="text-sm leading-relaxed text-[#6b6b6b]">
+                  <p className="text-sm leading-relaxed text-[#5A4A40]">
                     Thanks — we received your message. A manager will contact
                     you soon.
                   </p>
@@ -428,11 +428,11 @@ export default function ContactForm({
             />
             <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-[#e8e6e3] bg-white shadow-[0_20px_80px_rgba(0,0,0,0.12)]">
               <div className="p-6">
-                <p className="label-caps text-[#6b6b6b]">Confirm cancellation</p>
+                <p className="label-caps text-[#5A4A40]">Confirm cancellation</p>
                 <h3 className="mt-2 text-lg font-semibold tracking-tight text-[#0a0a0a]">
                   Discard this message?
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#6b6b6b]">
+                <p className="mt-2 text-sm leading-relaxed text-[#5A4A40]">
                   If you confirm, all entered data will be lost.
                 </p>
                 <div className="mt-6 flex flex-wrap justify-end gap-3">
@@ -472,11 +472,11 @@ export default function ContactForm({
           />
           <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-[#e8e6e3] bg-white shadow-[0_20px_80px_rgba(0,0,0,0.08)]">
             <div className="p-6">
-              <p className="label-caps text-[#6b6b6b]">Confirm cancellation</p>
+              <p className="label-caps text-[#5A4A40]">Confirm cancellation</p>
               <h3 className="mt-2 text-lg font-semibold tracking-tight text-[#0a0a0a]">
                 Discard this message?
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#6b6b6b]">
+              <p className="mt-2 text-sm leading-relaxed text-[#5A4A40]">
                 If you confirm, all entered data will be lost.
               </p>
               <div className="mt-6 flex flex-wrap justify-end gap-3">

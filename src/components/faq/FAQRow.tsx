@@ -23,7 +23,7 @@ export default function FAQRow({ faq }: { faq: FAQ }) {
         {faq.title}
       </span>
       <span
-        className="truncate text-[10px] font-light tracking-widest text-[#6b6b6b]"
+        className="truncate text-[10px] font-mono font-light tracking-widest text-[#4A4A4A]"
         title={topicDisplayText(faq)}
       >
         {topicDisplayText(faq)}
@@ -31,8 +31,8 @@ export default function FAQRow({ faq }: { faq: FAQ }) {
       <span
         className={
           faq.status === "published"
-            ? "text-[10px] font-light uppercase tracking-widest text-[#0a0a0a]"
-            : "text-[10px] font-light uppercase tracking-widest text-[#6b6b6b]"
+            ? "font-mono text-[10px] font-light uppercase tracking-widest text-[#0a0a0a]"
+            : "font-mono text-[10px] font-light uppercase tracking-widest text-[#4A4A4A]"
         }
       >
         {faq.status}

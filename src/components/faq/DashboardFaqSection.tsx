@@ -104,7 +104,7 @@ export default function DashboardFaqSection() {
   }
   if (!userId) {
     return (
-      <p className="text-sm text-[#6b6b6b]">Sign in to manage FAQs.</p>
+      <p className="text-sm text-[#4A4A4A]">Sign in to manage FAQs.</p>
     );
   }
 
@@ -118,7 +118,7 @@ export default function DashboardFaqSection() {
   return (
     <>
       {error && (
-        <p className="rounded-2xl border border-[#e8e6e3] bg-white px-4 py-3 text-sm leading-relaxed text-[#0a0a0a] shadow-sm">
+        <p className="rounded-2xl border border-[#e8e6e3] border-t-white/80 bg-white/40 px-4 py-3 text-sm leading-relaxed text-[#0a0a0a] shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl">
           {error}
         </p>
       )}

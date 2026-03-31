@@ -18,7 +18,7 @@ export default function FAQSuggestions({
       <h3 className="text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a]">
         Suggested templates
       </h3>
-      <p className="text-xs text-[#6b6b6b]">
+      <p className="text-xs text-[#4A4A4A]">
         Click to prefill. Edit before saving.
       </p>
       <div className="max-h-[420px] space-y-4 overflow-y-auto pr-1">
@@ -40,7 +40,7 @@ export default function FAQSuggestions({
                       {item.question}
                     </span>
                     {item.answers[0] && (
-                      <p className="mt-1 line-clamp-2 text-[#6b6b6b]">
+                      <p className="mt-1 line-clamp-2 text-[#4A4A4A]">
                         {item.answers[0]}
                       </p>
                     )}

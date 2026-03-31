@@ -2,18 +2,18 @@
 
 /* Apple Matte Glass: creamy white, black text, matte glass surfaces */
 :root {
-  --background: #FDFDFB;
+  --background: #FCFAF8; /* Warm Alabaster */
   --foreground: #0a0a0a;
-  --muted: #6b6b6b;
+  --muted: #5A4A40; /* Warm Taupe */
   --line: #e8e6e3;
   --accent: #0a0a0a;
-  /* Physical Glass — global constants (refraction + bevel; no solid gray fills) */
+  /* Physical Glass — global constants */
   --glass-blur-hero: 80px;
   --glass-blur-card: 30px;
-  --glass-highlight-t: rgba(255, 255, 255, 0.6);
-  --glass-highlight-l: rgba(255, 255, 255, 0.6);
-  --glass-shadow-br: rgba(0, 0, 0, 0.03);
-  --glass-float: 0 20px 50px rgba(0, 0, 0, 0.02);
+  --glass-highlight-t: rgba(255, 252, 248, 0.85);
+  --glass-highlight-l: rgba(255, 252, 248, 0.85);
+  --glass-shadow-br: rgba(100, 70, 40, 0.05); /* Umber tint shadow */
+  --glass-float: 0 20px 50px rgba(80, 50, 20, 0.05); /* Umber tint shadow */
 }
 
 /*
@@ -100,7 +100,7 @@
 }
 
 body {
-  background: radial-gradient(circle at top center, rgba(255, 255, 255, 1) 0%, transparent 60%), var(--background);
+  background: radial-gradient(circle at top center, rgba(255, 250, 242, 1) 0%, transparent 60%), var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -108,6 +108,7 @@ body {
 
 /* Luxury-style uppercase labels */
 .label-caps {
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 500;
   letter-spacing: 0.2em;
@@ -122,6 +123,15 @@ body {
     0 1px 2px rgba(10, 10, 10, 0.04),
     0 4px 12px rgba(10, 10, 10, 0.06),
     0 12px 32px rgba(10, 10, 10, 0.06);
+}
+
+/* Antigravity Utilities */
+.antigravity-lift {
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+.antigravity-lift:hover {
+  transform: translateY(-4px) scale(1.002);
+  box-shadow: 0 30px 60px rgba(120, 80, 40, 0.08), 0 10px 20px rgba(120, 80, 40, 0.04);
 }
 .surface-input {
   border-radius: 0.75rem;
