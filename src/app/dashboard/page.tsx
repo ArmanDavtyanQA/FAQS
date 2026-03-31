@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabaseClient";
+import DashboardAreaHeader from "@/components/DashboardAreaHeader";
 import DashboardSpinner from "@/components/DashboardSpinner";
 import DashboardFaqSection from "@/components/faq/DashboardFaqSection";
 
@@ -15,20 +16,18 @@ function getPlanLabel(): "free" | "paid" {
 
 function DashboardChrome({ children }: { children: ReactNode }) {
   return (
-    <div className="-mx-4 min-h-[calc(100dvh-6rem)] bg-[#fafaf9] text-[#0a0a0a] sm:-mx-6 lg:-mx-10">
-      <header className="border-b border-[#e8e6e3] bg-white shadow-md shadow-black/5">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-5">
-          <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#0a0a0a]">
-            Dashboard
-          </span>
-          <Link
-            href="/"
-            className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6b6b6b] hover:text-[#0a0a0a]"
-          >
-            Home
-          </Link>
-        </div>
-      </header>
+    <div className="-mx-4 min-h-[calc(100dvh-6rem)] bg-transparent text-[#0a0a0a] sm:-mx-6 lg:-mx-10">
+      <DashboardAreaHeader>
+        <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#0a0a0a]">
+          Dashboard
+        </span>
+        <Link
+          href="/"
+          className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6b6b6b] hover:text-[#0a0a0a]"
+        >
+          Home
+        </Link>
+      </DashboardAreaHeader>
       <main className="mx-auto max-w-5xl px-5 py-14">{children}</main>
     </div>
   );

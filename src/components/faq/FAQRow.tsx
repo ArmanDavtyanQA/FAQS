@@ -17,7 +17,7 @@ export default function FAQRow({ faq }: { faq: FAQ }) {
   return (
     <Link
       href={`/dashboard/faq/${faq.id}`}
-      className="grid grid-cols-[1fr_minmax(0,1.2fr)_auto] gap-4 px-4 py-3 text-sm transition-colors duration-300 hover:bg-[#fafaf9] md:grid-cols-[minmax(0,1.2fr)_minmax(0,1.4fr)_auto]"
+      className="grid grid-cols-[1fr_minmax(0,1.2fr)_auto] gap-4 px-4 py-3 text-sm transition-colors duration-300 hover:bg-surface-muted md:grid-cols-[minmax(0,1.2fr)_minmax(0,1.4fr)_auto]"
     >
       <span className="truncate font-light tracking-widest text-[#0a0a0a]">
         {faq.title}

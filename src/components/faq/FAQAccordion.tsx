@@ -62,10 +62,10 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
           return (
             <div
               key={faq.id}
-              className={`overflow-hidden rounded-xl bg-white/40 backdrop-blur-xl border-t-white/80 antigravity-lift transition-all duration-300 ${
+              className={`overflow-hidden rounded-xl border border-[#e8e6e3] bg-surface/40 backdrop-blur-xl antigravity-lift transition-all duration-300 ${
                 isOpen
-                  ? "border-b border-[#0a0a0a] border-l border-r shadow-[0_20px_50px_rgba(0,0,0,0.04)] ring-1 ring-[#0a0a0a]/10"
-                  : "border-b border-l border-r border-[#e8e6e3] shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-lg"
+                  ? "border-[#d6d3d1] bg-surface/70 shadow-md shadow-black/[0.07] ring-1 ring-[#e8e6e3]"
+                  : "shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:border-[#d6d3d1] hover:shadow-lg"
               }`}
             >
               <button
@@ -73,7 +73,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
                 aria-expanded={isOpen}
                 onClick={() => setOpenId(isOpen ? null : faq.id)}
                 className={`flex w-full items-start justify-between gap-4 px-5 py-4 text-left transition-colors sm:px-6 ${
-                  isOpen ? "bg-transparent" : "hover:bg-white/20"
+                  isOpen ? "bg-transparent" : "hover:bg-surface/20"
                 }`}
               >
                 <span className="min-w-0 flex-1 text-pretty text-sm font-medium leading-snug text-[#0a0a0a] sm:text-base">
@@ -136,7 +136,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
             className={`rounded-full border px-3 py-1.5 text-[10px] font-medium uppercase tracking-widest transition-colors ${
               topicFilter === "all"
                 ? "border-[#0a0a0a] bg-[#0a0a0a] text-white"
-                : "border-[#e8e6e3] bg-white/40 backdrop-blur-sm text-[#5A4A40] shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:border-[#d6d3d1]"
+                : "border-[#e8e6e3] bg-surface/40 backdrop-blur-sm text-[#5A4A40] shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:border-[#d6d3d1]"
             }`}
           >
             All
@@ -149,7 +149,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
               className={`rounded-full border px-3 py-1.5 text-[10px] font-medium uppercase tracking-widest transition-colors ${
                 topicFilter === t.id
                   ? "border-[#0a0a0a] bg-[#0a0a0a] text-white"
-                  : "border-[#e8e6e3] bg-white/40 backdrop-blur-sm text-[#5A4A40] shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:border-[#d6d3d1]"
+                  : "border-[#e8e6e3] bg-surface/40 backdrop-blur-sm text-[#5A4A40] shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:border-[#d6d3d1]"
               }`}
             >
               {t.title}

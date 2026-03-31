@@ -12,16 +12,17 @@ import {
   dbUpdateTopic,
 } from "@/lib/faq/supabase-topics";
 import type { FAQ, Topic } from "@/lib/faq/types";
+import DashboardAreaHeader from "@/components/DashboardAreaHeader";
 import DashboardSpinner from "@/components/DashboardSpinner";
 
 const field =
-  "w-full rounded-xl border border-[#e8e6e3] bg-white px-4 py-2.5 text-sm text-[#0a0a0a] shadow-sm placeholder:text-[#6b6b6b] focus:border-[#0a0a0a] focus:outline-none focus:ring-1 focus:ring-[#0a0a0a]/15";
+  "w-full rounded-xl border border-[#e8e6e3] bg-surface px-4 py-2.5 text-sm text-[#0a0a0a] shadow-sm placeholder:text-[#6b6b6b] focus:border-[#0a0a0a] focus:outline-none focus:ring-1 focus:ring-[#0a0a0a]/15";
 
 const btnSm =
-  "interactive-smooth rounded-xl border border-[#e8e6e3] bg-white px-3 py-1.5 text-[10px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-[#fafaf9] disabled:pointer-events-none disabled:opacity-45";
+  "interactive-smooth rounded-xl border border-[#e8e6e3] bg-surface px-3 py-1.5 text-[10px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-surface-muted disabled:pointer-events-none disabled:opacity-45";
 
 const btnDanger =
-  "interactive-smooth rounded-xl border border-red-200 bg-white px-3 py-1.5 text-[10px] font-medium uppercase tracking-widest text-red-800 shadow-sm transition-colors hover:bg-red-50 disabled:pointer-events-none disabled:opacity-45";
+  "interactive-smooth rounded-xl border border-red-200 bg-surface px-3 py-1.5 text-[10px] font-medium uppercase tracking-widest text-red-800 shadow-sm transition-colors hover:bg-red-50 disabled:pointer-events-none disabled:opacity-45";
 
 export default function ManageTopicsPage() {
   const router = useRouter();
@@ -243,31 +244,8 @@ export default function ManageTopicsPage() {
 
   if (loading) {
     return (
-      <div className="-mx-4 min-h-[calc(100dvh-6rem)] bg-[#fafaf9] text-[#0a0a0a] sm:-mx-6 lg:-mx-10">
-        <header className="border-b border-[#e8e6e3] bg-white shadow-md shadow-black/5">
-          <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-5">
-            <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#0a0a0a]">
-              Topics
-            </span>
-            <Link
-              href="/dashboard"
-              className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6b6b6b] hover:text-[#0a0a0a]"
-            >
-              ← Dashboard
-            </Link>
-          </div>
-        </header>
-        <main className="mx-auto flex max-w-5xl items-center justify-center px-5 py-24">
-          <DashboardSpinner label="Loading topics…" />
-        </main>
-      </div>
-    );
-  }
-
-  return (
-    <div className="-mx-4 min-h-[calc(100dvh-6rem)] bg-[#fafaf9] text-[#0a0a0a] sm:-mx-6 lg:-mx-10">
-      <header className="border-b border-[#e8e6e3] bg-white shadow-md shadow-black/5">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-5">
+      <div className="-mx-4 min-h-[calc(100dvh-6rem)] bg-transparent text-[#0a0a0a] sm:-mx-6 lg:-mx-10">
+        <DashboardAreaHeader>
           <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#0a0a0a]">
             Topics
           </span>
@@ -277,8 +255,27 @@ export default function ManageTopicsPage() {
           >
             ← Dashboard
           </Link>
-        </div>
-      </header>
+        </DashboardAreaHeader>
+        <main className="mx-auto flex max-w-5xl items-center justify-center px-5 py-24">
+          <DashboardSpinner label="Loading topics…" />
+        </main>
+      </div>
+    );
+  }
+
+  return (
+    <div className="-mx-4 min-h-[calc(100dvh-6rem)] bg-transparent text-[#0a0a0a] sm:-mx-6 lg:-mx-10">
+      <DashboardAreaHeader>
+        <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#0a0a0a]">
+          Topics
+        </span>
+        <Link
+          href="/dashboard"
+          className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6b6b6b] hover:text-[#0a0a0a]"
+        >
+          ← Dashboard
+        </Link>
+      </DashboardAreaHeader>
 
       <main className="mx-auto max-w-5xl px-5 py-14">
         <p className="label-caps mb-4">Organize</p>
@@ -299,7 +296,7 @@ export default function ManageTopicsPage() {
               setError(null);
               setCreateOpen(true);
             }}
-            className="interactive-smooth inline-flex h-10 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm shadow-black/[0.06] transition-colors hover:bg-[#fafaf9] hover:border-[#d6d3d1]"
+            className="interactive-smooth inline-flex h-10 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm shadow-black/[0.06] transition-colors hover:bg-surface-muted hover:border-[#d6d3d1]"
           >
             Add topic
           </button>
@@ -317,11 +314,11 @@ export default function ManageTopicsPage() {
           </p>
         )}
 
-        <div className="mt-6 overflow-hidden rounded-2xl border border-[#e8e6e3] bg-white shadow-sm">
+        <div className="mt-6 overflow-hidden rounded-2xl border border-[#e8e6e3] bg-surface shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px] border-collapse text-left text-sm">
               <thead>
-                <tr className="border-b border-[#e8e6e3] bg-[#fafaf9] text-[10px] font-medium uppercase tracking-widest text-[#6b6b6b]">
+                <tr className="border-b border-[#e8e6e3] bg-surface-muted text-[10px] font-medium uppercase tracking-widest text-[#6b6b6b]">
                   <th className="px-4 py-3 font-medium">Topic</th>
                   <th className="px-4 py-3 font-medium">Questions</th>
                   <th className="px-4 py-3 font-medium">Status</th>
@@ -356,7 +353,7 @@ export default function ManageTopicsPage() {
                             setEditingTopicId(topic.id);
                           }
                         }}
-                        className="cursor-pointer border-b border-[#e8e6e3] transition-colors last:border-b-0 hover:bg-[#fafaf9]/80"
+                        className="cursor-pointer border-b border-[#e8e6e3] transition-colors last:border-b-0 hover:bg-surface-muted/80"
                       >
                         <td className="px-4 py-3 font-medium text-[#0a0a0a]">
                           {topic.title}
@@ -450,7 +447,7 @@ export default function ManageTopicsPage() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="edit-topic-heading"
-            className="relative z-[1] flex max-h-[min(90dvh,760px)] w-full max-w-xl flex-col overflow-hidden rounded-3xl border border-[#e8e6e3] bg-white shadow-[0_20px_80px_rgba(0,0,0,0.1)]"
+            className="relative z-[1] flex max-h-[min(90dvh,760px)] w-full max-w-xl flex-col overflow-hidden rounded-3xl border border-[#e8e6e3] bg-surface shadow-[0_20px_80px_rgba(0,0,0,0.1)]"
           >
             <div className="flex shrink-0 items-start justify-between gap-4 border-b border-[#e8e6e3] px-6 py-4">
               <div className="min-w-0">
@@ -466,7 +463,7 @@ export default function ManageTopicsPage() {
                 type="button"
                 disabled={busyId === selectedTopic.id}
                 onClick={() => requestCloseEditModal()}
-                className="interactive-smooth -mr-1 -mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[#6b6b6b] transition-colors hover:bg-[#fafaf9] hover:text-[#0a0a0a] disabled:opacity-45"
+                className="interactive-smooth -mr-1 -mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[#6b6b6b] transition-colors hover:bg-surface-muted hover:text-[#0a0a0a] disabled:opacity-45"
                 aria-label="Close"
               >
                 <span className="text-xl leading-none" aria-hidden>
@@ -502,7 +499,7 @@ export default function ManageTopicsPage() {
                       editTitle.trim() === selectedTopic.title
                     }
                     onClick={() => void saveTitle()}
-                    className="interactive-smooth inline-flex h-10 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-[#fafaf9] disabled:opacity-45"
+                    className="interactive-smooth inline-flex h-10 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-surface-muted disabled:opacity-45"
                   >
                     Save name
                   </button>
@@ -559,7 +556,7 @@ export default function ManageTopicsPage() {
                   </div>
                   <Link
                     href={`/dashboard/faq/create?topic=${selectedTopic.id}`}
-                    className="interactive-smooth inline-flex h-10 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm shadow-black/[0.06] transition-colors hover:bg-[#fafaf9]"
+                    className="interactive-smooth inline-flex h-10 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm shadow-black/[0.06] transition-colors hover:bg-surface-muted"
                   >
                     Add question
                   </Link>
@@ -574,7 +571,7 @@ export default function ManageTopicsPage() {
                     {faqsForSelected.map((faq) => (
                       <li
                         key={faq.id}
-                        className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#e8e6e3] bg-[#fafaf9] px-4 py-3"
+                        className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#e8e6e3] bg-surface-muted px-4 py-3"
                       >
                         <span className="text-sm text-[#0a0a0a]">
                           {faq.title}
@@ -592,12 +589,12 @@ export default function ManageTopicsPage() {
               </div>
             </div>
 
-            <div className="shrink-0 border-t border-[#e8e6e3] bg-[#fafaf9] px-6 py-4">
+            <div className="shrink-0 border-t border-[#e8e6e3] bg-surface-muted px-6 py-4">
               <button
                 type="button"
                 disabled={busyId === selectedTopic.id}
                 onClick={() => requestCloseEditModal()}
-                className="interactive-smooth inline-flex h-10 w-full items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-4 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-white disabled:opacity-45 sm:w-auto"
+                className="interactive-smooth inline-flex h-10 w-full items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-4 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-surface disabled:opacity-45 sm:w-auto"
               >
                 Close
               </button>
@@ -618,7 +615,7 @@ export default function ManageTopicsPage() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="discard-edit-heading"
-            className="relative z-[1] w-full max-w-md overflow-hidden rounded-3xl border border-[#e8e6e3] bg-white shadow-[0_20px_80px_rgba(0,0,0,0.12)]"
+            className="relative z-[1] w-full max-w-md overflow-hidden rounded-3xl border border-[#e8e6e3] bg-surface shadow-[0_20px_80px_rgba(0,0,0,0.12)]"
           >
             <div className="p-6">
               <p className="label-caps text-[#6b6b6b]">Discard changes?</p>
@@ -636,14 +633,14 @@ export default function ManageTopicsPage() {
                 <button
                   type="button"
                   onClick={() => setConfirmDiscardEditOpen(false)}
-                  className="interactive-smooth inline-flex h-10 flex-1 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-4 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-[#fafaf9]"
+                  className="interactive-smooth inline-flex h-10 flex-1 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-4 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-surface-muted"
                 >
                   Keep editing
                 </button>
                 <button
                   type="button"
                   onClick={() => closeEditModal()}
-                  className="interactive-smooth inline-flex h-10 flex-1 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-4 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-[#fafaf9]"
+                  className="interactive-smooth inline-flex h-10 flex-1 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-4 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-surface-muted"
                 >
                   Discard
                 </button>
@@ -673,7 +670,7 @@ export default function ManageTopicsPage() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="create-topic-heading"
-            className="relative z-[1] w-full max-w-md overflow-hidden rounded-3xl border border-[#e8e6e3] bg-white shadow-[0_20px_80px_rgba(0,0,0,0.08)]"
+            className="relative z-[1] w-full max-w-md overflow-hidden rounded-3xl border border-[#e8e6e3] bg-surface shadow-[0_20px_80px_rgba(0,0,0,0.08)]"
           >
             <div className="border-b border-[#e8e6e3] px-6 py-4">
               <h2
@@ -711,7 +708,7 @@ export default function ManageTopicsPage() {
                 Link at least one question, then activate to show it on your public FAQ.
               </p>
             </div>
-            <div className="flex flex-wrap gap-3 border-t border-[#e8e6e3] bg-[#fafaf9] px-6 py-4">
+            <div className="flex flex-wrap gap-3 border-t border-[#e8e6e3] bg-surface-muted px-6 py-4">
               <button
                 type="button"
                 disabled={createSaving}
@@ -719,7 +716,7 @@ export default function ManageTopicsPage() {
                   if (createSaving) return;
                   requestCloseCreateModal();
                 }}
-                className="interactive-smooth inline-flex h-10 flex-1 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-4 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-white disabled:opacity-50"
+                className="interactive-smooth inline-flex h-10 flex-1 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-4 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-surface disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -748,7 +745,7 @@ export default function ManageTopicsPage() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="discard-create-heading"
-            className="relative z-[1] w-full max-w-md overflow-hidden rounded-3xl border border-[#e8e6e3] bg-white shadow-[0_20px_80px_rgba(0,0,0,0.12)]"
+            className="relative z-[1] w-full max-w-md overflow-hidden rounded-3xl border border-[#e8e6e3] bg-surface shadow-[0_20px_80px_rgba(0,0,0,0.12)]"
           >
             <div className="p-6">
               <p className="label-caps text-[#6b6b6b]">Discard changes?</p>
@@ -766,14 +763,14 @@ export default function ManageTopicsPage() {
                 <button
                   type="button"
                   onClick={() => setConfirmDiscardCreateOpen(false)}
-                  className="interactive-smooth inline-flex h-10 flex-1 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-4 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-[#fafaf9]"
+                  className="interactive-smooth inline-flex h-10 flex-1 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-4 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-surface-muted"
                 >
                   Keep editing
                 </button>
                 <button
                   type="button"
                   onClick={() => closeCreateModal()}
-                  className="interactive-smooth inline-flex h-10 flex-1 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-4 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-[#fafaf9]"
+                  className="interactive-smooth inline-flex h-10 flex-1 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-4 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-surface-muted"
                 >
                   Discard
                 </button>
@@ -795,7 +792,7 @@ export default function ManageTopicsPage() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="delete-topic-title"
-            className="relative w-full max-w-md overflow-hidden rounded-3xl border border-[#e8e6e3] bg-white shadow-[0_20px_80px_rgba(0,0,0,0.08)]"
+            className="relative w-full max-w-md overflow-hidden rounded-3xl border border-[#e8e6e3] bg-surface shadow-[0_20px_80px_rgba(0,0,0,0.08)]"
           >
             <div className="p-6">
               <p className="label-caps text-[#6b6b6b]">Delete topic</p>
@@ -814,7 +811,7 @@ export default function ManageTopicsPage() {
                   type="button"
                   disabled={deleteBusy}
                   onClick={() => setTopicPendingDelete(null)}
-                  className="interactive-smooth inline-flex h-10 flex-1 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-4 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-[#fafaf9] disabled:opacity-50"
+                  className="interactive-smooth inline-flex h-10 flex-1 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-4 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-surface-muted disabled:opacity-50"
                 >
                   Cancel
                 </button>

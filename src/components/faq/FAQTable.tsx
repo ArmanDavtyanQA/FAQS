@@ -30,7 +30,7 @@ export default function FAQTable({ faqs, topics }: Props) {
 
   if (faqs.length === 0) {
     return (
-      <div className="rounded-2xl border border-[#e8e6e3] border-t-white/80 bg-white/40 px-6 py-12 text-center text-sm text-[#4A4A4A] shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl">
+      <div className="rounded-2xl border border-[#e8e6e3] border-t-surface/75 bg-surface/40 px-6 py-12 text-center text-sm text-[#4A4A4A] shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl">
         No FAQs yet. Create your first one.
       </div>
     );
@@ -58,17 +58,17 @@ export default function FAQTable({ faqs, topics }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2.5">
         <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#4A4A4A]">
-          Filter
+          Topics
         </span>
         <button
           type="button"
           onClick={() => setTopicFilter("all")}
-          className={`rounded-full border px-3 py-1 text-[10px] font-medium uppercase tracking-widest transition-colors ${
+          className={`rounded-full border px-4 py-2 text-[11px] font-medium uppercase tracking-widest shadow-sm transition-all duration-300 ${
             topicFilter === "all"
-              ? "border-[#0a0a0a] bg-[#f5f5f4] text-[#0a0a0a]"
-              : "border-[#e8e6e3] text-[#4A4A4A] hover:border-[#d6d3d1]"
+              ? "border-[#0a0a0a] bg-surface text-[#0a0a0a] shadow-md shadow-black/[0.08] ring-2 ring-[#0a0a0a]/15"
+              : "border-[#e8e6e3] bg-surface-muted/90 text-[#0a0a0a] hover:border-[#d6d3d1] hover:bg-surface"
           }`}
         >
           All
@@ -78,10 +78,10 @@ export default function FAQTable({ faqs, topics }: Props) {
             key={t.id}
             type="button"
             onClick={() => setTopicFilter(t.id)}
-            className={`rounded-full border px-3 py-1 text-[10px] font-medium uppercase tracking-widest transition-colors ${
+            className={`max-w-[min(100%,14rem)] truncate rounded-full border px-4 py-2 text-[11px] font-medium uppercase tracking-widest shadow-sm transition-all duration-300 ${
               topicFilter === t.id
-                ? "border-[#0a0a0a] bg-[#f5f5f4] text-[#0a0a0a]"
-                : "border-[#e8e6e3] text-[#4A4A4A] hover:border-[#d6d3d1]"
+                ? "border-[#0a0a0a] bg-surface text-[#0a0a0a] shadow-md shadow-black/[0.08] ring-2 ring-[#0a0a0a]/15"
+                : "border-[#e8e6e3] bg-surface-muted/90 text-[#0a0a0a] hover:border-[#d6d3d1] hover:bg-surface"
             }`}
           >
             {t.title}
@@ -96,7 +96,7 @@ export default function FAQTable({ faqs, topics }: Props) {
               <h3 className="label-caps mb-3 ml-1 text-[#0a0a0a]">
                 {topic.title}
               </h3>
-              <div className="overflow-hidden rounded-2xl border border-[#e8e6e3] border-t-white/80 bg-white/40 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl">
+              <div className="overflow-hidden rounded-2xl border border-[#e8e6e3] border-t-surface/75 bg-surface/40 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl">
                 <TableHeader />
                 <TableBody list={items} />
               </div>
@@ -107,7 +107,7 @@ export default function FAQTable({ faqs, topics }: Props) {
               <h3 className="label-caps mb-3 ml-1 text-[#4A4A4A]">
                 Uncategorized
               </h3>
-              <div className="overflow-hidden rounded-2xl border border-[#e8e6e3] border-t-white/80 bg-white/40 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl">
+              <div className="overflow-hidden rounded-2xl border border-[#e8e6e3] border-t-surface/75 bg-surface/40 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl">
                 <TableHeader />
                 <TableBody list={grouped.uncategorized} />
               </div>
@@ -115,7 +115,7 @@ export default function FAQTable({ faqs, topics }: Props) {
           )}
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-[#e8e6e3] border-t-white/80 bg-white/40 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl">
+        <div className="overflow-hidden rounded-2xl border border-[#e8e6e3] border-t-surface/75 bg-surface/40 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl">
           <TableHeader />
           {filteredFaqs.length === 0 ? (
             <div className="px-4 py-10 text-center text-sm text-[#4A4A4A]">

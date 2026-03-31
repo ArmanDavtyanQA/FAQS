@@ -39,10 +39,10 @@ export default function DashboardSpinner({
 export function DashboardTableSkeleton({ rows = 4 }: { rows?: number }) {
   return (
     <div
-      className="overflow-hidden rounded-2xl border border-[#e8e6e3] bg-white shadow-xl shadow-black/5"
+      className="overflow-hidden rounded-2xl border border-[#e8e6e3] bg-surface shadow-xl shadow-black/5"
       aria-hidden
     >
-      <div className="border-b border-[#e8e6e3] bg-[#fafaf9] px-4 py-3">
+      <div className="border-b border-[#e8e6e3] bg-surface-muted px-4 py-3">
         <div className="h-3 w-32 animate-pulse rounded bg-[#e8e6e3]" />
       </div>
       <div className="divide-y divide-[#e8e6e3]">

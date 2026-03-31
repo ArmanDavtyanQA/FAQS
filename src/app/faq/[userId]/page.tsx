@@ -21,7 +21,7 @@ export default async function PublicFaqPage({ params }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-[#fafaf9] text-[#0a0a0a]">
+    <div className="min-h-screen bg-transparent text-[#0a0a0a]">
       <PublicFaqDashboardLink ownerUserId={userId} />
 
       {/* Full-width hero — desktop edge-to-edge */}
@@ -37,14 +37,14 @@ export default async function PublicFaqPage({ params }: Props) {
       </section>
 
       <main className="mx-auto max-w-2xl px-5 py-12 sm:py-16 lg:max-w-3xl lg:px-8 lg:py-20">
-        <section className="rounded-2xl border border-[#e8e6e3] bg-white px-5 py-8 shadow-sm shadow-black/[0.06] sm:px-8 sm:py-10 lg:px-10 lg:py-12">
+        <section className="rounded-2xl border border-[#e8e6e3] bg-surface px-5 py-8 shadow-sm shadow-black/[0.06] sm:px-8 sm:py-10 lg:px-10 lg:py-12">
           <p className="label-caps mb-5 text-[#6b6b6b]">Browse answers</p>
           <h2 className="text-4xl font-normal tracking-tight text-[#0a0a0a] sm:text-5xl lg:text-[3.5rem] lg:leading-[1.08]">
             Questions
           </h2>
 
           {faqs.length === 0 ? (
-            <div className="mt-10 rounded-xl border border-dashed border-[#e8e6e3] bg-[#fafaf9] px-6 py-12 text-center text-sm text-[#6b6b6b]">
+            <div className="mt-10 rounded-xl border border-dashed border-[#e8e6e3] bg-surface-muted px-6 py-12 text-center text-sm text-[#6b6b6b]">
               No published FAQs yet.
               <Link
                 href="/dashboard"

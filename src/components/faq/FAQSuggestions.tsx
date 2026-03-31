@@ -34,7 +34,7 @@ export default function FAQSuggestions({
                     type="button"
                     disabled={disabled}
                     onClick={() => onSelect(item)}
-                    className="interactive-smooth w-full rounded-xl border border-[#e8e6e3] bg-white px-3 py-2 text-left text-xs text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9] hover:border-[#d6d3d1] disabled:opacity-50"
+                    className="interactive-smooth w-full rounded-xl border border-[#e8e6e3] bg-surface px-3 py-2 text-left text-xs text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-surface-muted hover:border-[#d6d3d1] disabled:opacity-50"
                   >
                     <span className="font-medium text-[#0a0a0a]">
                       {item.question}

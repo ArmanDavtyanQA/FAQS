@@ -15,7 +15,7 @@ export default function GlassLogo() {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="relative flex h-8 w-8 items-center justify-center rounded-xl">
-        <div className="absolute inset-0 rounded-xl border border-white/40 bg-white/[0.03] shadow-sm backdrop-blur-md" />
+        <div className="absolute inset-0 rounded-xl border border-surface/50 bg-black/[0.03] shadow-sm backdrop-blur-md" />
 
         <motion.span
           initial={{ filter: "blur(3px)", opacity: 0.15 }}

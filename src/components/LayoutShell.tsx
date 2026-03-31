@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Header from "@/components/Header";
+import AmbientColorBubbles from "@/components/AmbientColorBubbles";
 
 /** Matches public FAQ chrome: no site header, normal top padding */
 function isPublishedStyleDashboardPage(pathname: string | null): boolean {
@@ -24,7 +25,10 @@ export default function LayoutShell({
 
   if (isPublicFaq) {
     return (
-      <div className="min-h-screen bg-transparent text-[#0a0a0a]">{children}</div>
+      <div className="relative min-h-screen bg-transparent text-[#0a0a0a]">
+        <AmbientColorBubbles />
+        {children}
+      </div>
     );
   }
 
@@ -34,10 +38,11 @@ export default function LayoutShell({
   const mainPadNoHeader = "pt-6 lg:pt-10";
 
   return (
-    <div className="min-h-screen bg-transparent text-[#0a0a0a]">
+    <div className="relative min-h-screen bg-transparent text-[#0a0a0a]">
+      <AmbientColorBubbles />
       {!publishedStyleDash && <Header />}
       <div
-        className={`mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 pb-20 sm:px-6 lg:px-10 lg:pb-24 ${
+        className={`relative z-0 mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 pb-20 sm:px-6 lg:px-10 lg:pb-24 ${
           publishedStyleDash ? mainPadNoHeader : mainTop
         }`}
       >

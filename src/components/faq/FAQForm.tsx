@@ -360,8 +360,14 @@ export default function FAQForm({
   const field =
     "mt-2 w-full rounded-xl border border-black/5 bg-black/[0.03] px-4 py-3 text-sm font-light tracking-widest text-[#0a0a0a] shadow-sm placeholder:text-[#5A4A40] focus:border-[#0a0a0a] focus:outline-none focus:ring-1 focus:ring-[#0a0a0a]/15 transition-all duration-300";
 
+  const newTopicInputClass =
+    "h-12 w-full min-w-[12rem] max-w-md flex-1 rounded-xl border border-[#e8e6e3] bg-surface px-4 text-sm font-light tracking-widest text-[#0a0a0a] shadow-sm placeholder:text-[#5A4A40] transition-all duration-300 focus:border-[#0a0a0a] focus:outline-none focus:ring-1 focus:ring-[#0a0a0a]/15 hover:border-[#d6d3d1]";
+
+  const statusSelectClass =
+    "interactive-smooth mt-2 h-12 w-full max-w-xs cursor-pointer appearance-none rounded-2xl border border-[#e8e6e3] bg-surface bg-[length:1rem] bg-[right_0.75rem_center] bg-no-repeat px-4 py-2.5 pr-11 text-sm font-light tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:border-[#d6d3d1] focus:border-[#0a0a0a] focus:outline-none focus:ring-1 focus:ring-[#0a0a0a]/15 disabled:opacity-50 [&>option]:bg-surface [&>option]:text-[#0a0a0a] [background-image:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20fill%3D%27none%27%20viewBox%3D%270%200%2024%2024%27%20stroke%3D%27%230a0a0a%27%20stroke-width%3D%272%27%3E%3Cpath%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%20d%3D%27M19%209l-7%207-7-7%27%2F%3E%3C%2Fsvg%3E')]";
+
   const btnSolid =
-    "interactive-smooth inline-flex items-center justify-center rounded-xl border border-[#e8e6e3] bg-white text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9] disabled:opacity-50";
+    "interactive-smooth inline-flex items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-surface-muted disabled:opacity-50";
 
   const canEditQuestions = topics.length >= 1;
 
@@ -369,7 +375,7 @@ export default function FAQForm({
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
       <form
         onSubmit={handleSubmit}
-        className="space-y-8 rounded-2xl border border-[#e8e6e3] border-t-white/80 bg-white/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl sm:p-8"
+        className="space-y-8 rounded-2xl border border-[#e8e6e3] border-t-surface/75 bg-surface/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl sm:p-8"
       >
         {/* Step 1 — Topics */}
         <section className="space-y-4">
@@ -400,7 +406,7 @@ export default function FAQForm({
                   {topics.map((t) => (
                     <li
                       key={t.id}
-                      className="rounded-full border border-[#e8e6e3] bg-[#fafaf9] px-3 py-1 text-[11px] font-mono font-light uppercase tracking-widest text-[#0a0a0a]"
+                      className="rounded-full border border-[#e8e6e3] bg-surface-muted px-3 py-1 text-[11px] font-mono font-light uppercase tracking-widest text-[#0a0a0a]"
                     >
                       {t.title}
                     </li>
@@ -408,12 +414,12 @@ export default function FAQForm({
                 </ul>
               )}
 
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap items-end gap-2">
                 <input
                   value={newTopicTitle}
                   onChange={(e) => setNewTopicTitle(e.target.value)}
                   placeholder="New topic name"
-                  className={`${field} mt-0 max-w-md flex-1 min-w-[10rem]`}
+                  className={newTopicInputClass}
                   disabled={addingTopic}
                 />
                 <button
@@ -454,7 +460,7 @@ export default function FAQForm({
                       questionBlockRefs.current.set(questionIndex, node);
                     else questionBlockRefs.current.delete(questionIndex);
                   }}
-                  className={`scroll-mt-24 rounded-2xl border bg-[#fafaf9] p-4 shadow-sm transition-[background-color,box-shadow,border-color] ${
+                  className={`scroll-mt-24 rounded-2xl border bg-surface-muted p-4 shadow-sm transition-[background-color,box-shadow,border-color] ${
                     questionBlockHighlightIndex === questionIndex
                       ? "border-amber-300/90 bg-[#fffbeb] shadow-sm shadow-amber-900/5 ring-1 ring-amber-300/70"
                       : "border-[#e8e6e3]"
@@ -487,7 +493,7 @@ export default function FAQForm({
                       <button
                         type="button"
                         onClick={() => removeQuestion(questionIndex)}
-                        className="mt-7 shrink-0 rounded-xl border border-[#e8e6e3] bg-white px-3 py-2 text-[11px] uppercase tracking-widest text-[#5A4A40] shadow-sm transition-colors hover:border-[#d6d3d1] hover:bg-[#fafaf9] hover:text-[#0a0a0a]"
+                        className="mt-7 shrink-0 rounded-xl border border-[#e8e6e3] bg-surface px-3 py-2 text-[11px] uppercase tracking-widest text-[#5A4A40] shadow-sm transition-colors hover:border-[#d6d3d1] hover:bg-surface-muted hover:text-[#0a0a0a]"
                       >
                         Remove
                       </button>
@@ -574,7 +580,7 @@ export default function FAQForm({
                               onClick={() =>
                                 removeAnswer(questionIndex, answerIndex)
                               }
-                              className="interactive-smooth mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#e8e6e3] bg-white text-[#6b6b6b] shadow-sm transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-700"
+                              className="interactive-smooth mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#e8e6e3] bg-surface text-[#6b6b6b] shadow-sm transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-700"
                               aria-label={`Remove answer ${answerIndex + 1}`}
                               title="Remove this answer"
                             >
@@ -614,13 +620,16 @@ export default function FAQForm({
         </section>
 
         <div>
-          <label className="label-caps block">Status</label>
+          <label className="label-caps block" htmlFor="faq-create-status">
+            Status
+          </label>
           <select
+            id="faq-create-status"
             value={status}
             onChange={(e) =>
               setStatus(e.target.value as "draft" | "published")
             }
-            className={field}
+            className={statusSelectClass}
           >
             <option value="draft">Draft</option>
             <option value="published">Published</option>
@@ -628,7 +637,7 @@ export default function FAQForm({
         </div>
 
         {paidPlan && (
-          <div className="rounded-2xl border border-[#e8e6e3] bg-[#fafaf9] p-4 shadow-sm">
+          <div className="rounded-2xl border border-[#e8e6e3] bg-surface-muted p-4 shadow-sm">
             <p className="label-caps">Paid plan: Generate with AI</p>
             <input
               type="url"
@@ -652,7 +661,7 @@ export default function FAQForm({
         )}
 
         {!paidPlan && (
-          <p className="rounded-2xl border border-[#e8e6e3] bg-[#fafaf9] px-4 py-3 text-sm leading-relaxed text-[#5A4A40] shadow-sm">
+          <p className="rounded-2xl border border-[#e8e6e3] bg-surface-muted px-4 py-3 text-sm leading-relaxed text-[#5A4A40] shadow-sm">
             Free plan: enter question and answers manually. Upgrade to Paid for
             AI generation and template suggestions.
           </p>
@@ -682,7 +691,7 @@ export default function FAQForm({
         </div>
       </form>
 
-      <aside className="space-y-6 rounded-2xl border border-[#e8e6e3] border-t-white/80 bg-white/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl antigravity-lift">
+      <aside className="space-y-6 rounded-2xl border border-[#e8e6e3] border-t-surface/75 bg-surface/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl antigravity-lift">
         <div>
           <p className="label-caps mb-3 text-[#5A4A40]">Live preview</p>
           <div className="space-y-3">
@@ -706,7 +715,7 @@ export default function FAQForm({
                 return (
                   <div
                     key={idx}
-                    className={`overflow-hidden rounded-xl bg-white/60 backdrop-blur-md transition-all duration-500 blur-[0.5px] hover:blur-none ${
+                    className={`overflow-hidden rounded-xl bg-surface/60 backdrop-blur-md transition-all duration-500 blur-[0.5px] hover:blur-none ${
                       isPreviewOpen
                         ? "border-2 border-[#0a0a0a] shadow-md shadow-black/15 ring-1 ring-[#0a0a0a]/10"
                         : "border border-[#e8e6e3] shadow-sm shadow-black/[0.06]"
@@ -722,8 +731,8 @@ export default function FAQForm({
                       }
                       className={`flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors ${
                         isPreviewOpen
-                          ? "bg-white"
-                          : "hover:bg-[#fafaf9]/90"
+                          ? "bg-surface"
+                          : "hover:bg-surface-muted/90"
                       }`}
                     >
                       <span className="text-sm font-medium text-[#0a0a0a]">

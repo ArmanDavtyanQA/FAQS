@@ -70,13 +70,13 @@ const plans = [
 ];
 
 /**
- * Pricing / plans — replaces former feature grid on the same canvas (#FDFDFB).
+ * Pricing / plans — transparent canvas so global body gradient + grid show through.
  */
 export default function GlassPlans() {
   return (
     <section
       id="plans"
-      className="relative scroll-mt-28 bg-[#FDFDFB] px-6 py-24"
+      className="relative scroll-mt-28 bg-transparent px-6 py-24"
     >
       <div className="mx-auto max-w-7xl">
         <motion.div
@@ -86,10 +86,10 @@ export default function GlassPlans() {
           transition={{ duration: 0.6, ease: [0.22, 0.61, 0.36, 1] }}
           className="mb-4"
         >
-          <h2 className="text-3xl font-extralight tracking-[0.2em] text-black sm:text-4xl">
+          <h2 className="text-3xl font-extralight tracking-[0.2em] text-foreground sm:text-4xl">
             PLANS
           </h2>
-          <p className="mt-4 max-w-2xl text-sm font-light leading-relaxed tracking-wide text-black/55">
+          <p className="mt-4 max-w-2xl text-sm font-light leading-relaxed tracking-wide text-foreground/55">
             Pick a tier that matches your topics, questions, and how you want
             your public FAQ to look. Every workspace gets a shareable FAQ page;
             higher tiers unlock preview, QR, domains, AI, and custom design.
@@ -111,39 +111,39 @@ export default function GlassPlans() {
               whileHover={{ y: -6, scale: 1.01 }}
               className={`glass-feature-card group relative flex flex-col rounded-[2rem] p-7 transition-all duration-500 ${
                 plan.emphasized
-                  ? "ring-1 ring-black/10 shadow-lg shadow-black/[0.08]"
+                  ? "ring-1 ring-slate-400/40 shadow-lg shadow-slate-900/10"
                   : ""
               }`}
             >
-              <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-white/25 to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+              <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-surface/35 to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
 
               <div className="relative z-10 flex flex-1 flex-col">
-                <h3 className="text-[11px] font-bold tracking-[0.2em] text-black">
+                <h3 className="text-[11px] font-bold tracking-[0.2em] text-foreground">
                   {plan.name}
                 </h3>
                 <p className="mt-4 flex items-baseline gap-1.5">
-                  <span className="text-3xl font-extralight tracking-tight text-black">
+                  <span className="text-3xl font-extralight tracking-tight text-foreground">
                     {plan.price}
                   </span>
                   {plan.subtitle && (
-                    <span className="text-xs font-light tracking-widest text-black/45">
+                    <span className="text-xs font-light tracking-widest text-foreground/45">
                       {plan.subtitle}
                     </span>
                   )}
                 </p>
 
-                <ul className="mt-6 flex flex-1 flex-col gap-2.5 border-t border-black/[0.06] pt-6">
+                <ul className="mt-6 flex flex-1 flex-col gap-2.5 border-t border-foreground/[0.08] pt-6">
                   {plan.features.map((line) => (
                     <li
                       key={line}
-                      className="text-[13px] font-light leading-snug text-black/55 transition-colors group-hover:text-black/75"
+                      className="text-[13px] font-light leading-snug text-foreground/55 transition-colors group-hover:text-foreground/75"
                     >
                       {line}
                     </li>
                   ))}
                 </ul>
 
-                <p className="mt-8 text-[10px] font-medium uppercase tracking-widest text-black/35">
+                <p className="mt-8 text-[10px] font-medium uppercase tracking-widest text-foreground/35">
                   {plan.cta}
                 </p>
               </div>
@@ -152,7 +152,7 @@ export default function GlassPlans() {
         </div>
       </div>
 
-      <div className="pointer-events-none absolute left-0 top-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-black/[0.02] blur-[80px]" />
+      <div className="pointer-events-none absolute left-0 top-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-slate-400/[0.07] blur-[80px]" />
     </section>
   );
 }

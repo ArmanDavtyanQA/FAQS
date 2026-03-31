@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import DashboardAreaHeader from "@/components/DashboardAreaHeader";
 import FAQForm from "@/components/faq/FAQForm";
 
 export default function CreateFaqPageClient({ paidPlan }: { paidPlan: boolean }) {
@@ -9,20 +10,18 @@ export default function CreateFaqPageClient({ paidPlan }: { paidPlan: boolean })
   const initialTopicId = searchParams.get("topic");
 
   return (
-    <div className="-mx-4 min-h-[calc(100dvh-6rem)] bg-[#fafaf9] text-[#0a0a0a] sm:-mx-6 lg:-mx-10">
-      <header className="border-b border-[#e8e6e3] bg-white shadow-md shadow-black/5">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-5">
-          <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#0a0a0a]">
-            Create
-          </span>
-          <Link
-            href="/dashboard"
-            className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6b6b6b] hover:text-[#0a0a0a]"
-          >
-            ← Dashboard
-          </Link>
-        </div>
-      </header>
+    <div className="-mx-4 min-h-[calc(100dvh-6rem)] bg-transparent text-[#0a0a0a] sm:-mx-6 lg:-mx-10">
+      <DashboardAreaHeader>
+        <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#0a0a0a]">
+          Create
+        </span>
+        <Link
+          href="/dashboard"
+          className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6b6b6b] hover:text-[#0a0a0a]"
+        >
+          ← Dashboard
+        </Link>
+      </DashboardAreaHeader>
 
       <main className="mx-auto max-w-5xl px-5 py-14">
         <p className="label-caps mb-4">Editor</p>

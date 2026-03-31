@@ -200,10 +200,10 @@ export default function ContactForm({
   }
 
   const askQuestionBtnClass =
-    "interactive-smooth inline-flex min-h-11 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-white px-8 py-3 text-center text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm shadow-black/[0.06] transition-all duration-300 hover:bg-[#fafaf9] hover:border-[#d6d3d1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a0a0a] active:scale-[0.98]";
+    "interactive-smooth inline-flex min-h-11 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-surface px-8 py-3 text-center text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm shadow-black/[0.06] transition-all duration-300 hover:bg-surface-muted hover:border-[#d6d3d1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a0a0a] active:scale-[0.98]";
 
   const successBlock = (
-    <div className="rounded-2xl border border-[#e8e6e3] border-t-white/80 bg-white/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl antigravity-lift sm:p-8">
+    <div className="rounded-2xl border border-[#e8e6e3] border-t-surface/75 bg-surface/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl antigravity-lift sm:p-8">
       <p className="label-caps text-[#5A4A40]">Message sent</p>
       <h2 className="mt-3 text-xl font-semibold tracking-tight text-[#0a0a0a]">
         Thanks — we received your message.
@@ -215,7 +215,7 @@ export default function ContactForm({
         <button
           type="button"
           onClick={() => router.push("/dashboard")}
-          className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9]"
+          className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-surface-muted"
         >
           Back to dashboard
         </button>
@@ -228,7 +228,7 @@ export default function ContactForm({
             setState("idle");
             setOpen(true);
           }}
-          className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9]"
+          className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-surface-muted"
         >
           Send another message
         </button>
@@ -242,7 +242,7 @@ export default function ContactForm({
       className={
         asModal
           ? "space-y-6"
-          : "space-y-6 rounded-2xl border border-[#e8e6e3] border-t-white/80 bg-white/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl antigravity-lift sm:p-8"
+          : "space-y-6 rounded-2xl border border-[#e8e6e3] border-t-surface/75 bg-surface/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl antigravity-lift sm:p-8"
       }
     >
       <div className="rounded-2xl border border-[#e8e6e3] bg-black/[0.02] p-4 shadow-sm">
@@ -278,7 +278,7 @@ export default function ContactForm({
         <button
           type="submit"
           disabled={!canSubmit}
-          className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9] disabled:opacity-50"
+          className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-surface-muted disabled:opacity-50"
         >
           {state === "sending" ? "Sending…" : "Send"}
         </button>
@@ -286,7 +286,7 @@ export default function ContactForm({
           type="button"
           onClick={handleCancelClick}
           disabled={state === "sending"}
-          className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9] disabled:opacity-50"
+          className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-surface-muted disabled:opacity-50"
         >
           Cancel
         </button>
@@ -348,7 +348,7 @@ export default function ContactForm({
             role="dialog"
             aria-modal="true"
             aria-labelledby="contact-form-title"
-            className="relative z-[1] flex max-h-[min(90dvh,640px)] w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-[#e8e6e3] bg-white shadow-[0_20px_80px_rgba(0,0,0,0.12)]"
+            className="relative z-[1] flex max-h-[min(90dvh,640px)] w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-[#e8e6e3] bg-surface shadow-[0_20px_80px_rgba(0,0,0,0.12)]"
           >
             <div className="flex shrink-0 items-center justify-between gap-4 border-b border-[#e8e6e3] px-5 py-4 sm:px-6">
               <div className="min-w-0">
@@ -373,7 +373,7 @@ export default function ContactForm({
                   }
                   requestCloseModal();
                 }}
-                className="interactive-smooth flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[#5A4A40] transition-colors hover:bg-[#fafaf9] hover:text-[#0a0a0a] disabled:opacity-45"
+                className="interactive-smooth flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[#5A4A40] transition-colors hover:bg-surface-muted hover:text-[#0a0a0a] disabled:opacity-45"
                 aria-label="Close"
               >
                 <span className="text-2xl leading-none" aria-hidden>
@@ -393,7 +393,7 @@ export default function ContactForm({
                     <button
                       type="button"
                       onClick={() => router.push("/dashboard")}
-                      className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9]"
+                      className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-surface-muted"
                     >
                       Back to dashboard
                     </button>
@@ -426,7 +426,7 @@ export default function ContactForm({
               onClick={() => setConfirmCancelOpen(false)}
               className="absolute inset-0 bg-black/35 backdrop-blur-sm"
             />
-            <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-[#e8e6e3] bg-white shadow-[0_20px_80px_rgba(0,0,0,0.12)]">
+            <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-[#e8e6e3] bg-surface shadow-[0_20px_80px_rgba(0,0,0,0.12)]">
               <div className="p-6">
                 <p className="label-caps text-[#5A4A40]">Confirm cancellation</p>
                 <h3 className="mt-2 text-lg font-semibold tracking-tight text-[#0a0a0a]">
@@ -439,14 +439,14 @@ export default function ContactForm({
                   <button
                     type="button"
                     onClick={() => setConfirmCancelOpen(false)}
-                    className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9]"
+                    className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-surface-muted"
                   >
                     Keep editing
                   </button>
                   <button
                     type="button"
                     onClick={resetAndClose}
-                    className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9]"
+                    className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-surface-muted"
                   >
                     Discard
                   </button>
@@ -470,7 +470,7 @@ export default function ContactForm({
             onClick={() => setConfirmCancelOpen(false)}
             className="absolute inset-0 bg-black/20 backdrop-blur-sm"
           />
-          <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-[#e8e6e3] bg-white shadow-[0_20px_80px_rgba(0,0,0,0.08)]">
+          <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-[#e8e6e3] bg-surface shadow-[0_20px_80px_rgba(0,0,0,0.08)]">
             <div className="p-6">
               <p className="label-caps text-[#5A4A40]">Confirm cancellation</p>
               <h3 className="mt-2 text-lg font-semibold tracking-tight text-[#0a0a0a]">
@@ -483,14 +483,14 @@ export default function ContactForm({
                 <button
                   type="button"
                   onClick={() => setConfirmCancelOpen(false)}
-                  className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9]"
+                  className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-surface-muted"
                 >
                   Keep editing
                 </button>
                 <button
                   type="button"
                   onClick={resetAndClose}
-                  className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9]"
+                  className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-surface-muted"
                 >
                   Discard
                 </button>

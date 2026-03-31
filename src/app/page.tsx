@@ -10,7 +10,7 @@ export default function Home() {
 
       <GlassPlans />
 
-      <section id="how-it-works" className="relative scroll-mt-28 bg-[#FDFDFB] px-6 pt-16">
+      <section id="how-it-works" className="relative scroll-mt-28 bg-transparent px-6 pt-16">
         <motion.h2
           initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -47,15 +47,15 @@ export default function Home() {
               whileHover={{ y: -8, scale: 1.02 }}
               className="glass-feature-card group relative rounded-[2rem] p-8 transition-all duration-500"
             >
-              <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-white/20 to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+              <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-surface/30 to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
               <div className="relative z-10">
-                <span className="text-[11px] font-bold tracking-[0.2em] text-black">
+                <span className="text-[11px] font-bold tracking-[0.2em] text-foreground">
                   {item.n}
                 </span>
-                <p className="mt-6 text-sm font-light tracking-widest text-black">
+                <p className="mt-6 text-sm font-light tracking-widest text-foreground">
                   {item.t}
                 </p>
-                <p className="mt-3 text-sm font-light leading-relaxed text-black/50 transition-colors group-hover:text-black/80">
+                <p className="mt-3 text-sm font-light leading-relaxed text-foreground/50 transition-colors group-hover:text-foreground/80">
                   {item.d}
                 </p>
               </div>

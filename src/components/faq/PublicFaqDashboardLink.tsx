@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import DashboardAreaHeader from "@/components/DashboardAreaHeader";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -31,15 +32,13 @@ export default function PublicFaqDashboardLink({
   if (!isOwner) return null;
 
   return (
-    <header className="border-b border-[#e8e6e3] bg-white shadow-md shadow-black/5">
-      <div className="mx-auto flex max-w-2xl items-center justify-end px-5 py-5">
-        <Link
-          href="/dashboard"
-          className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6b6b6b] hover:text-[#0a0a0a]"
-        >
-          ← Dashboard
-        </Link>
-      </div>
-    </header>
+    <DashboardAreaHeader innerClassName="mx-auto flex max-w-2xl items-center justify-end px-5 py-5">
+      <Link
+        href="/dashboard"
+        className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6b6b6b] hover:text-[#0a0a0a]"
+      >
+        ← Dashboard
+      </Link>
+    </DashboardAreaHeader>
   );
 }

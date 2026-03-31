@@ -153,7 +153,7 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
       <form
         onSubmit={handleSave}
-        className="space-y-6 rounded-2xl border border-[#e8e6e3] border-t-white/80 bg-white/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl antigravity-lift sm:p-8"
+        className="space-y-6 rounded-2xl border border-[#e8e6e3] border-t-surface/75 bg-surface/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl antigravity-lift sm:p-8"
       >
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div
@@ -227,7 +227,7 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
               type="button"
               disabled={saving}
               onClick={togglePublish}
-              className="btn-shadow-smooth btn-ghost-edge interactive-smooth rounded-lg bg-white px-4 py-2 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] disabled:opacity-50"
+              className="btn-shadow-smooth btn-ghost-edge interactive-smooth rounded-lg bg-surface px-4 py-2 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] disabled:opacity-50"
             >
               {status === "published" ? "Unpublish" : "Publish"}
             </button>
@@ -267,7 +267,7 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
                       <button
                         type="button"
                         onClick={() => removeAnswer(i)}
-                        className="interactive-smooth mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#e8e6e3] bg-white text-[#5A4A40] shadow-sm transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-700"
+                        className="interactive-smooth mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#e8e6e3] bg-surface text-[#5A4A40] shadow-sm transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-700"
                         aria-label={`Remove answer ${i + 1}`}
                         title="Remove this answer"
                       >
@@ -285,7 +285,7 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
                 type="button"
                 onClick={addAnswer}
                 disabled={saving}
-                className="interactive-smooth mt-4 inline-flex h-8 items-center justify-center rounded-xl border border-[#e8e6e3] bg-white px-3 text-[10px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-[#fafaf9] disabled:opacity-50"
+                className="interactive-smooth mt-4 inline-flex h-8 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-3 text-[10px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-surface-muted disabled:opacity-50"
               >
                 + Add answer
               </button>
@@ -306,19 +306,19 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
           <button
             type="button"
             onClick={() => router.push("/dashboard")}
-            className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 items-center justify-center rounded-xl bg-white px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a]"
+            className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 items-center justify-center rounded-xl bg-surface px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a]"
           >
             Back to list
           </button>
         </div>
       </form>
 
-      <aside className="space-y-6 rounded-2xl border border-[#e8e6e3] border-t-white/80 bg-white/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl antigravity-lift">
+      <aside className="space-y-6 rounded-2xl border border-[#e8e6e3] border-t-surface/75 bg-surface/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl antigravity-lift">
         <div>
           <p className="label-caps mb-3 text-[#5A4A40]">Live preview</p>
           {hasPreviewContent ? (
             <div
-              className={`overflow-hidden rounded-xl bg-white/60 backdrop-blur-md transition-all duration-500 blur-[0.5px] hover:blur-none ${
+              className={`overflow-hidden rounded-xl bg-surface/60 backdrop-blur-md transition-all duration-500 blur-[0.5px] hover:blur-none ${
                 previewOpen
                   ? "border-2 border-[#0a0a0a] shadow-md shadow-black/15 ring-1 ring-[#0a0a0a]/10"
                   : "border border-[#e8e6e3] shadow-sm shadow-black/[0.06]"
@@ -329,7 +329,7 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
                 aria-expanded={previewOpen}
                 onClick={() => setPreviewOpen((o) => !o)}
                 className={`flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors ${
-                  previewOpen ? "bg-white" : "hover:bg-[#fafaf9]/90"
+                  previewOpen ? "bg-surface" : "hover:bg-surface-muted/90"
                 }`}
               >
                 <span className="text-sm font-medium text-[#0a0a0a]">

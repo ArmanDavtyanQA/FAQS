@@ -12,107 +12,128 @@ const publishedFaqUrl = hasLandingPublishedFaq
   ? `/faq/${landingPublishedUserId}`
   : null;
 
-/** Shared hero CTA look (Dashboard + conditional 2nd action). */
-const heroCtaClassName =
-  "glass-cta-primary interactive-smooth inline-flex h-12 items-center justify-center rounded-2xl px-8 text-xs font-light uppercase tracking-widest text-black";
+const navLinkClass =
+  "interactive-smooth rounded-md px-2 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-slate-600 transition-colors hover:text-slate-900";
+
+const heroCtaPrimary =
+  "interactive-smooth inline-flex h-12 items-center justify-center rounded-xl bg-slate-900 px-8 text-xs font-medium uppercase tracking-widest text-white shadow-md shadow-slate-900/15 transition-colors hover:bg-slate-800";
+
+const heroCtaSecondary =
+  "interactive-smooth inline-flex h-12 items-center justify-center rounded-xl border border-slate-300 bg-white px-8 text-xs font-medium uppercase tracking-widest text-slate-800 shadow-sm transition-colors hover:border-slate-400 hover:bg-slate-50";
 
 /**
- * Physical Glass — hero
- * - Fills viewport below fixed header (LayoutShell pt) and centers content vertically
- * - Primary title: QUANTUM — responsive scale, not full 4.5rem on laptop
- * - Mono block: clamp() so START SMALL / BUILD BEYOND fit ~13–16" screens
- * - Panel: .glass-hero-panel — specular bevel; depth ? motif behind
+ * High-contrast hero: light card, dark type, minimal cool accent (readability first).
  */
 export default function GlassHero() {
   return (
-    <section className="relative mt-0 flex min-h-[calc(100dvh-7.5rem)] flex-col justify-center overflow-hidden rounded-[3rem] bg-[#FDFDFB] px-4 py-8 sm:px-6 sm:py-10 lg:min-h-[calc(100dvh-8.5rem)] lg:px-10 lg:py-12">
-      {/* Studio depth: 3D ? motif — low opacity, blurred, behind glass */}
+    <section className="relative mt-0 flex min-h-[calc(100dvh-7.5rem)] flex-col justify-center px-4 py-8 sm:px-6 sm:py-10 lg:min-h-[calc(100dvh-8.5rem)] lg:px-10 lg:py-12">
       <motion.div
-        initial={{ opacity: 0, scale: 0.92, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 1.2, ease: [0.22, 0.61, 0.36, 1] }}
-        className="pointer-events-none absolute inset-0 flex items-center justify-center"
-      >
-        <motion.span
-          aria-hidden
-          initial={{ filter: "blur(8px)" }}
-          animate={{ filter: "blur(4px)" }}
-          transition={{ duration: 1.4, ease: [0.22, 0.61, 0.36, 1] }}
-          className="text-[clamp(10rem,32vw,18rem)] font-extralight leading-none tracking-widest text-black/[0.1]"
-          style={{ WebkitTextStroke: "1px rgba(255,255,255,0.45)" }}
-        >
-          ?
-        </motion.span>
-      </motion.div>
-
-      {/* Floating depth blob (refractive field, not solid gray) */}
-      <div className="pointer-events-none absolute -right-20 top-1/4 h-72 w-72 rounded-full bg-white/[0.04] blur-[80px]" />
-      <div className="pointer-events-none absolute -left-16 bottom-1/4 h-56 w-56 rounded-full bg-black/[0.02] blur-[80px]" />
-
-      {/* Large glass panel — extreme blur + specular bevel */}
-      <motion.div
-        initial={{ opacity: 0, y: 28, filter: "blur(6px)" }}
+        initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        transition={{ duration: 0.95, ease: [0.22, 0.61, 0.36, 1] }}
-        whileHover={{ y: -4 }}
-        className="glass-hero-panel group relative z-10 mx-auto flex max-w-5xl flex-col items-center rounded-[2rem] px-5 py-8 text-center transition-all duration-500 sm:px-8 sm:py-10 lg:px-10 lg:py-12"
+        transition={{ duration: 0.85, ease: [0.22, 0.61, 0.36, 1] }}
+        className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-2xl border border-slate-200/90 bg-white/95 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:rounded-3xl"
       >
-        <motion.h1
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.06, ease: [0.22, 0.61, 0.36, 1] }}
-          className="max-w-3xl text-balance text-4xl font-extralight leading-[1.1] tracking-widest text-black sm:text-5xl lg:text-6xl xl:text-[4rem]"
+        <div
+          className="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]"
+          aria-hidden
         >
-          QUANTUM
-        </motion.h1>
+          {/* Single restrained cool wash — no pink / orange */}
+          <div className="absolute -left-[20%] bottom-[-35%] h-[min(24rem,70vw)] w-[min(36rem,95vw)] rounded-full bg-gradient-to-tr from-slate-400/10 via-indigo-500/8 to-transparent blur-[80px]" />
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.12, ease: [0.22, 0.61, 0.36, 1] }}
-          className="font-mono mt-4 max-w-[min(100%,42rem)] text-balance text-center sm:mt-5"
-          aria-label="START SMALL BUILD BEYOND"
-        >
-          <span className="block text-[clamp(1.75rem,2.75vw+0.75rem,2.75rem)] font-extralight uppercase leading-[1.08] tracking-[-0.02em] text-black">
-            START SMALL
-          </span>
-          <span className="mt-1 block text-[clamp(1.75rem,2.75vw+0.75rem,2.75rem)] font-medium uppercase leading-[1.08] tracking-[-0.02em] text-black sm:mt-1.5">
-            BUILD BEYOND
-          </span>
-        </motion.div>
-
-        <p className="mt-5 max-w-xl font-sans text-sm font-light leading-relaxed text-black/60 sm:mt-6 sm:text-base lg:text-lg">
-          From 3 topics to unlimited AI-driven design. Quantum scales your
-          support from free to Pro in one click.
-        </p>
-        <div className="mt-6 flex w-full max-w-xl flex-wrap items-center justify-center gap-3 sm:mt-8 sm:gap-4">
-          <motion.div
-            whileHover={{ y: -6, scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 380, damping: 28 }}
+        <div className="relative z-10 px-5 pb-12 pt-8 sm:px-10 sm:pb-14 sm:pt-10">
+          <nav
+            className="mb-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 sm:mb-11"
+            aria-label="Section"
           >
-            <Link href="/dashboard" className={heroCtaClassName}>
+            <Link href="/dashboard" className={navLinkClass}>
               Dashboard
             </Link>
-          </motion.div>
-          <motion.div
-            whileHover={{ y: -6, scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 380, damping: 28 }}
-          >
-            {hasLandingPublishedFaq && publishedFaqUrl ? (
-              <Link
-                href={publishedFaqUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={heroCtaClassName}
+            <Link href="#plans" className={navLinkClass}>
+              Plans
+            </Link>
+            <Link href="#how-it-works" className={navLinkClass}>
+              How it works
+            </Link>
+            <Link href="/auth" className={navLinkClass}>
+              Sign in
+            </Link>
+          </nav>
+
+          <div className="mx-auto max-w-3xl text-center">
+            <motion.h1
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, delay: 0.06, ease: [0.22, 0.61, 0.36, 1] }}
+              className="text-balance text-4xl font-light leading-[1.1] tracking-[0.12em] text-slate-900 sm:text-5xl lg:text-6xl xl:text-[3.75rem]"
+            >
+              QUANTUM
+            </motion.h1>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, delay: 0.1, ease: [0.22, 0.61, 0.36, 1] }}
+              className="font-mono mt-5 max-w-[min(100%,42rem)] text-balance text-center sm:mt-6"
+              aria-label="START SMALL BUILD BEYOND"
+            >
+              <span className="block text-[clamp(1.5rem,2.2vw+0.75rem,2.4rem)] font-light uppercase leading-[1.1] tracking-[-0.02em] text-slate-800">
+                START SMALL
+              </span>
+              <span className="mt-1 block text-[clamp(1.5rem,2.2vw+0.75rem,2.4rem)] font-semibold uppercase leading-[1.1] tracking-[-0.02em] text-slate-900 sm:mt-1.5">
+                BUILD BEYOND
+              </span>
+            </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, delay: 0.14, ease: [0.22, 0.61, 0.36, 1] }}
+              className="mx-auto mt-6 max-w-xl text-pretty text-base font-normal leading-relaxed text-slate-600 sm:mt-7 sm:text-lg"
+            >
+              From 3 topics to unlimited AI-driven design. Quantum scales your
+              support from free to Pro in one click.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, delay: 0.18, ease: [0.22, 0.61, 0.36, 1] }}
+              className="mt-8 flex w-full flex-wrap items-center justify-center gap-3 sm:mt-10 sm:gap-4"
+            >
+              <motion.div
+                whileHover={{ y: -2 }}
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
               >
-                View published FAQs
-              </Link>
-            ) : (
-              <Link href="/dashboard/faq/create" className={heroCtaClassName}>
-                Create FAQ
-              </Link>
-            )}
-          </motion.div>
+                <Link href="/dashboard/faq/create" className={heroCtaPrimary}>
+                  Create FAQ
+                </Link>
+              </motion.div>
+              <motion.div
+                whileHover={{ y: -2 }}
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              >
+                <Link href="/dashboard" className={heroCtaSecondary}>
+                  Dashboard
+                </Link>
+              </motion.div>
+              {hasLandingPublishedFaq && publishedFaqUrl ? (
+                <motion.div
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                >
+                  <Link
+                    href={publishedFaqUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={heroCtaSecondary}
+                  >
+                    View published FAQs
+                  </Link>
+                </motion.div>
+              ) : null}
+            </motion.div>
+          </div>
         </div>
       </motion.div>
     </section>

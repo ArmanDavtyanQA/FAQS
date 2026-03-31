@@ -57,8 +57,8 @@ export default function AuthCallbackPage() {
 
   if (status === "error") {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#f7f6f3] text-[#0a0a0a]">
-        <div className="rounded-2xl border border-[#e8e6e3] bg-white px-10 py-12 text-center shadow-2xl shadow-black/10">
+      <div className="flex min-h-screen items-center justify-center bg-transparent text-[#0a0a0a]">
+        <div className="rounded-2xl border border-[#e8e6e3] bg-surface px-10 py-12 text-center shadow-2xl shadow-black/10">
           <p className="text-sm text-[#6b6b6b]">
             Sign-in could not be completed.
           </p>
@@ -74,8 +74,8 @@ export default function AuthCallbackPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#f7f6f3] text-[#0a0a0a]">
-      <div className="rounded-2xl border border-[#e8e6e3] bg-white px-10 py-8 shadow-xl shadow-black/5">
+    <div className="flex min-h-screen items-center justify-center bg-transparent text-[#0a0a0a]">
+      <div className="rounded-2xl border border-[#e8e6e3] bg-surface px-10 py-8 shadow-xl shadow-black/5">
         <p className="text-sm text-[#6b6b6b]">Signing you in…</p>
       </div>
     </div>

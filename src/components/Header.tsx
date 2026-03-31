@@ -8,15 +8,15 @@ import { supabase } from "@/lib/supabaseClient";
 import GlassLogo from "@/components/GlassLogo";
 
 const navLink =
-  "interactive-smooth rounded-md px-1 py-0.5 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a]/70 hover:bg-white/[0.05] hover:text-[#0a0a0a] transition-all";
+  "interactive-smooth rounded-md px-1 py-0.5 text-[11px] font-medium uppercase tracking-widest text-slate-600 hover:bg-slate-200/60 hover:text-slate-900 transition-all";
 
 const btnBase =
-  "btn-shadow-smooth interactive-smooth inline-flex h-9 items-center justify-center rounded-lg px-4 text-[11px] font-light uppercase tracking-widest bg-white/[0.01] backdrop-blur-[30px] border-t border-l border-white/60 border-b border-r border-black/[0.03] text-black/80 transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-0.5";
+  "btn-shadow-smooth interactive-smooth inline-flex h-9 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-[11px] font-medium uppercase tracking-widest text-slate-800 shadow-sm transition-all duration-300 hover:border-slate-400 hover:bg-slate-50 hover:-translate-y-0.5";
 const btnGhost = `${btnBase}`;
 const btnSolid = `${btnBase} font-light`;
 
 const headerBar =
-  "fixed inset-x-0 top-0 z-50 border-b border-[#e8e6e3]/70 bg-[#FDFDFB]/68 shadow-[0_1px_0_rgba(255,255,255,0.45)] backdrop-blur-xl backdrop-saturate-150";
+  "fixed inset-x-0 top-0 z-50 border-b border-slate-200/90 bg-white/90 shadow-[0_1px_0_rgba(15,23,42,0.04)] backdrop-blur-xl backdrop-saturate-150";
 
 const headerInner =
   "mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-4 px-4 pt-6 pb-4 sm:px-6 lg:px-10";

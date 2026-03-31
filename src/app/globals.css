@@ -1,19 +1,26 @@
 @import "tailwindcss";
 
-/* Apple Matte Glass: creamy white, black text, matte glass surfaces */
+/* Neutral studio UI — readable contrast, calm greys, restrained accent */
 :root {
-  --background: #FCFAF8; /* Warm Alabaster */
-  --foreground: #0a0a0a;
-  --muted: #5A4A40; /* Warm Taupe */
-  --line: #e8e6e3;
-  --accent: #0a0a0a;
+  --background: #f1f3f5;
+  --surface: #ffffff;
+  --surface-muted: #e8ecf0;
+  --foreground: #111827;
+  --muted: #4b5563;
+  --line: #d1d5db;
+  --accent: #3730a3;
   /* Physical Glass — global constants */
   --glass-blur-hero: 80px;
   --glass-blur-card: 30px;
-  --glass-highlight-t: rgba(255, 252, 248, 0.85);
-  --glass-highlight-l: rgba(255, 252, 248, 0.85);
-  --glass-shadow-br: rgba(100, 70, 40, 0.05); /* Umber tint shadow */
-  --glass-float: 0 20px 50px rgba(80, 50, 20, 0.05); /* Umber tint shadow */
+  --glass-highlight-t: rgba(255, 255, 255, 0.95);
+  --glass-highlight-l: rgba(255, 255, 255, 0.9);
+  --glass-shadow-br: rgba(15, 23, 42, 0.06);
+  --glass-float: 0 20px 50px rgba(15, 23, 42, 0.06);
+  /* Page canvas: subtle grid + single cool wash (no saturated candy colors) */
+  --bg-grid-size: 22px;
+  --bg-dot: rgba(15, 23, 42, 0.06);
+  --bg-wash-soft: color-mix(in srgb, var(--background) 88%, rgb(71 85 105));
+  --page-canvas: var(--background);
 }
 
 /*
@@ -25,7 +32,7 @@
  * 5) Type: font-extralight (200) / font-light (300) + tracking-widest on hero headings.
  */
 .glass-hero-panel {
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: color-mix(in srgb, var(--surface) 88%, transparent);
   backdrop-filter: blur(var(--glass-blur-hero));
   -webkit-backdrop-filter: blur(var(--glass-blur-hero));
   border-top: 1px solid var(--glass-highlight-t);
@@ -40,7 +47,7 @@
 }
 
 .glass-feature-card {
-  background-color: rgba(255, 255, 255, 0.01);
+  background-color: color-mix(in srgb, var(--surface) 10%, transparent);
   backdrop-filter: blur(var(--glass-blur-card));
   -webkit-backdrop-filter: blur(var(--glass-blur-card));
   border-top: 1px solid var(--glass-highlight-t);
@@ -51,7 +58,7 @@
 }
 
 .glass-cta-primary {
-  background-color: rgba(255, 255, 255, 0.02);
+  background-color: color-mix(in srgb, var(--surface) 14%, transparent);
   backdrop-filter: blur(var(--glass-blur-card));
   -webkit-backdrop-filter: blur(var(--glass-blur-card));
   border-top: 1px solid var(--glass-highlight-t);
@@ -66,13 +73,13 @@
     transform 0.5s ease;
 }
 .glass-cta-primary:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: color-mix(in srgb, var(--surface) 26%, transparent);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
 }
 
 .glass-cta-secondary {
-  background-color: rgba(255, 255, 255, 0.01);
+  background-color: color-mix(in srgb, var(--surface) 10%, transparent);
   backdrop-filter: blur(var(--glass-blur-card));
   -webkit-backdrop-filter: blur(var(--glass-blur-card));
   border-top: 1px solid var(--glass-highlight-t);
@@ -87,7 +94,7 @@
     transform 0.5s ease;
 }
 .glass-cta-secondary:hover {
-  background-color: rgba(255, 255, 255, 0.04);
+  background-color: color-mix(in srgb, var(--surface) 18%, transparent);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
 }
@@ -95,15 +102,49 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-accent: var(--accent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
+html {
+  background-color: var(--page-canvas);
+}
+
 body {
-  background: radial-gradient(circle at top center, rgba(255, 250, 242, 1) 0%, transparent 60%), var(--background);
+  min-height: 100dvh;
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  background-color: var(--page-canvas);
+  /* Dot grid + one low-contrast slate wash */
+  background-image:
+    radial-gradient(
+      circle at center,
+      var(--bg-dot) 0.8px,
+      transparent 0.85px
+    ),
+    radial-gradient(
+      ellipse 100% 80% at 50% 100%,
+      rgba(71, 85, 105, 0.07) 0%,
+      transparent 55%
+    ),
+    linear-gradient(
+      180deg,
+      var(--page-canvas) 0%,
+      var(--bg-wash-soft) 100%
+    );
+  background-size:
+    var(--bg-grid-size) var(--bg-grid-size),
+    auto,
+    auto;
+  background-position:
+    0 0,
+    center,
+    center;
+  background-repeat: repeat, no-repeat, no-repeat;
 }
 
 /* Luxury-style uppercase labels */
@@ -131,7 +172,7 @@ body {
 }
 .antigravity-lift:hover {
   transform: translateY(-4px) scale(1.002);
-  box-shadow: 0 30px 60px rgba(120, 80, 40, 0.08), 0 10px 20px rgba(120, 80, 40, 0.04);
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.08), 0 8px 16px rgba(15, 23, 42, 0.04);
 }
 .surface-input {
   border-radius: 0.75rem;
@@ -221,7 +262,7 @@ body {
   min-height: 72px;
   border-radius: 0.75rem;
   border: 1px solid var(--line);
-  background: #fff;
+  background: var(--surface);
   color: var(--foreground);
   box-shadow: 0 1px 3px rgba(10, 10, 10, 0.05);
   padding: 0.75rem 1rem;
@@ -229,7 +270,7 @@ body {
 .ck-matte .ck.ck-toolbar {
   border-radius: 0.75rem;
   border: 1px solid var(--line);
-  background: #fff;
+  background: var(--surface);
   box-shadow: 0 1px 2px rgba(10, 10, 10, 0.04);
 }
 .ck-matte .ck.ck-editor__main > .ck-editor__editable:focus {

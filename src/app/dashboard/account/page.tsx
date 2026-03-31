@@ -85,7 +85,7 @@ export default function AccountPage() {
         </Link>
         <p className="label-caps mt-6">Account</p>
       </div>
-      <section className="rounded-2xl border border-[#e8e6e3] bg-white p-8 shadow-xl shadow-black/5">
+      <section className="rounded-2xl border border-[#e8e6e3] bg-surface p-8 shadow-xl shadow-black/5">
         <div className="flex flex-wrap items-center gap-8">
           {avatarUrl ? (
             <img
@@ -94,7 +94,7 @@ export default function AccountPage() {
               className="btn-shadow-smooth h-20 w-20 rounded-2xl border border-[#e8e6e3] object-cover"
             />
           ) : (
-            <div className="btn-shadow-smooth flex h-20 w-20 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-[#fafaf9] text-2xl font-light text-[#6b6b6b]">
+            <div className="btn-shadow-smooth flex h-20 w-20 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-surface-muted text-2xl font-light text-[#6b6b6b]">
               {displayName.charAt(0).toUpperCase()}
             </div>
           )}
@@ -113,7 +113,7 @@ export default function AccountPage() {
           <button
             type="button"
             onClick={handleLogout}
-            className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.12em] text-[#0a0a0a]"
+            className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex items-center gap-2 rounded-lg bg-surface px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.12em] text-[#0a0a0a]"
           >
             <PowerOffIcon className="shrink-0 opacity-80" />
             Log out
