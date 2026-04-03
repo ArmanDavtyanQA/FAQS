@@ -85,6 +85,11 @@ export default function Header() {
           </span>
         ) : user ? (
           <div className="flex min-w-0 flex-wrap items-center gap-2">
+            {!pathname?.startsWith("/studio") && (
+              <Link href="/studio/faq" className={btnGhost}>
+                Studio
+              </Link>
+            )}
             {pathname !== "/dashboard" && (
               <Link href="/dashboard" className={btnGhost}>
                 Dashboard

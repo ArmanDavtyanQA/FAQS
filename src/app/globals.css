@@ -97,6 +97,16 @@
   -webkit-backdrop-filter: blur(24px);
 }
 
+/* Quantum slab — navigation & dense panels (high contrast vs canvas) */
+.glass-slab {
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(var(--glass-blur-card));
+  -webkit-backdrop-filter: blur(var(--glass-blur-card));
+  border-top: 1px solid var(--glass-highlight-t);
+  border-left: 1px solid var(--glass-highlight-l);
+  border-bottom: 1px solid var(--glass-shadow-br);
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

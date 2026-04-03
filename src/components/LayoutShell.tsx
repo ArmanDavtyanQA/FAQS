@@ -14,6 +14,10 @@ function isPublishedStyleDashboardPage(pathname: string | null): boolean {
   );
 }
 
+function isStudioPath(pathname: string | null): boolean {
+  return pathname?.startsWith("/studio") ?? false;
+}
+
 export default function LayoutShell({
   children,
 }: {
@@ -29,6 +33,12 @@ export default function LayoutShell({
         <AmbientColorBubbles />
         {children}
       </div>
+    );
+  }
+
+  if (isStudioPath(pathname)) {
+    return (
+      <div className="relative min-h-screen text-[#0a0a0a]">{children}</div>
     );
   }
 
