@@ -198,7 +198,8 @@ export default function AnalyticsView({
                   minTickGap={28}
                   tick={{
                     fontSize: 10,
-                    fontFamily: "var(--font-geist-mono), ui-monospace, monospace",
+                    fontFamily:
+                      "var(--font-jetbrains-mono), ui-monospace, monospace",
                     fill: "#6B7280",
                     fontWeight: 500,
                   }}

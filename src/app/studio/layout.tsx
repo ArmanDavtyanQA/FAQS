@@ -1,9 +1,9 @@
-import StudioLayoutClient from "@/components/studio/StudioLayoutClient";
+import StudioHubLayoutClient from "@/components/studio/StudioHubLayoutClient";
 
 export default function StudioLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <StudioLayoutClient>{children}</StudioLayoutClient>;
+  return <StudioHubLayoutClient>{children}</StudioHubLayoutClient>;
 }

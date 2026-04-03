@@ -15,7 +15,8 @@ function isPublishedStyleDashboardPage(pathname: string | null): boolean {
 }
 
 function isStudioPath(pathname: string | null): boolean {
-  return pathname?.startsWith("/studio") ?? false;
+  if (!pathname) return false;
+  return pathname.startsWith("/studio") || pathname.startsWith("/project");
 }
 
 export default function LayoutShell({

@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import StudioProjectsHub from "@/components/studio/StudioProjectsHub";
 
 export default function StudioIndexPage() {
-  redirect("/studio/faq");
+  return <StudioProjectsHub />;
 }

@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
-import { getStudioPageMeta } from "@/lib/studio/navigation";
+import {
+  getStudioPageMeta,
+  parseProjectIdFromPath,
+} from "@/lib/studio/navigation";
+import { useProjects } from "@/components/providers/ProjectsProvider";
 import DashboardSpinner from "@/components/DashboardSpinner";
 import Layout from "@/components/Layout";
 import StudioMainHeader from "@/components/studio/StudioMainHeader";
@@ -16,6 +20,7 @@ export default function StudioLayoutClient({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { getProject } = useProjects();
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -23,7 +28,7 @@ export default function StudioLayoutClient({
     void supabase.auth.getSession().then(({ data: { session } }) => {
       if (cancelled) return;
       if (!session) {
-        const next = pathname || "/studio/faq";
+        const next = pathname || "/studio";
         router.replace(
           `/auth?redirectTo=${encodeURIComponent(next)}`,
         );
@@ -36,7 +41,11 @@ export default function StudioLayoutClient({
     };
   }, [router, pathname]);
 
-  const meta = getStudioPageMeta(pathname);
+  const pid = parseProjectIdFromPath(pathname);
+  const meta = getStudioPageMeta(
+    pathname,
+    pid ? getProject(pid)?.name : null,
+  );
 
   if (!ready) {
     return (

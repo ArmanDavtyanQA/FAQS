@@ -1,11 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { LayoutGroup, motion } from "framer-motion";
+import { useParams } from "next/navigation";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useActivePath } from "@/hooks/useActivePath";
-import { STUDIO_NAV } from "@/lib/studio/navigation";
+import {
+  getProjectStudioNav,
+  parseProjectIdFromPath,
+} from "@/lib/studio/navigation";
+import { useProject } from "@/components/providers/ProjectsProvider";
 
 const ACTIVE_BAR =
   "absolute left-0 top-1/2 h-9 w-[2px] -translate-y-1/2 rounded-full bg-yellow-500 shadow-[4px_0_15px_rgba(234,179,8,0.4)]";
@@ -13,13 +18,42 @@ const ACTIVE_BAR =
 const navLabel =
   "font-mono text-[13px] font-medium uppercase tracking-[0.15em]";
 
+/** Studio hub nav when not inside `/project/[id]/…`. */
+const HUB_NAV: { id: string; href: string; label: string }[] = [
+  { id: "projects", href: "/studio", label: "Projects" },
+];
+
+function projectIdFromParams(
+  params: ReturnType<typeof useParams> | null,
+): string | null {
+  const raw = params?.id;
+  if (typeof raw === "string" && raw.length > 0) return raw;
+  if (Array.isArray(raw) && raw[0]) return raw[0];
+  return null;
+}
+
 export default function Sidebar() {
+  const params = useParams();
   const { pathname, isActive } = useActivePath();
   const [sheetOpen, setSheetOpen] = useState(false);
+
+  const projectId = useMemo(
+    () => projectIdFromParams(params) ?? parseProjectIdFromPath(pathname),
+    [params, pathname],
+  );
+
+  const activeProject = useProject(projectId);
+  const inProjectContext = Boolean(projectId);
+  const navItems = inProjectContext
+    ? getProjectStudioNav(projectId!)
+    : HUB_NAV;
+  const layoutGroupId = `sidebar-nav-${projectId ?? "hub"}`;
 
   useEffect(() => {
     setSheetOpen(false);
   }, [pathname]);
+
+  const projectLabel = activeProject?.name ?? "Active project";
 
   return (
     <>
@@ -50,14 +84,54 @@ export default function Sidebar() {
         } md:translate-x-0`}
         aria-label="Primary navigation"
       >
-        <div className="flex items-center justify-between gap-3 border-b border-black/[0.06] px-5 py-5">
-          <Link
-            href="/studio/faq"
-            className={`${navLabel} text-[#4B5563] transition-colors hover:text-[#0A0A0A]`}
-            onClick={() => setSheetOpen(false)}
-          >
-            Quantum Studio
-          </Link>
+        <div className="flex items-start justify-between gap-2 px-5 py-5">
+          <div className="min-w-0 flex-1">
+            {inProjectContext ? (
+              <div className="border-b border-black/[0.03] pb-4 mb-4">
+                <Link
+                  href="/studio"
+                  className="inline-block font-mono text-[10px] text-[#4B5563] transition-colors hover:text-black"
+                  onClick={() => setSheetOpen(false)}
+                >
+                  ← All Projects
+                </Link>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={projectId}
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -5 }}
+                    transition={{
+                      duration: 0.32,
+                      ease: [0.22, 0.61, 0.36, 1],
+                    }}
+                    className="mt-3 flex items-start gap-2"
+                  >
+                    <span
+                      className="mt-[6px] inline-block shrink-0 rounded-full bg-yellow-500 shadow-sm"
+                      style={{ width: 4, height: 4 }}
+                      aria-hidden
+                    />
+                    <Link
+                      href={`/project/${projectId}/dashboard`}
+                      className="line-clamp-2 min-w-0 font-mono text-[10px] font-bold uppercase leading-snug tracking-[0.2em] text-[#0A0A0A] transition-colors hover:text-[#0A0A0A]/85"
+                      onClick={() => setSheetOpen(false)}
+                    >
+                      {projectLabel}
+                    </Link>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            ) : (
+              <Link
+                href="/studio"
+                className={`${navLabel} inline-block min-w-0 text-[#4B5563] transition-colors hover:text-[#0A0A0A]`}
+                onClick={() => setSheetOpen(false)}
+              >
+                Quantum Studio
+              </Link>
+            )}
+          </div>
           <button
             type="button"
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-black/[0.06] bg-black/[0.02] text-[#4B5563] transition-colors hover:bg-black/[0.04] hover:text-[#0A0A0A] md:hidden"
@@ -68,9 +142,9 @@ export default function Sidebar() {
           </button>
         </div>
 
-        <LayoutGroup id="sidebar-nav-indicator">
+        <LayoutGroup id={layoutGroupId}>
           <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-4">
-            {STUDIO_NAV.map((item) => {
+            {navItems.map((item) => {
               const active = isActive(item.href);
               return (
                 <Link
