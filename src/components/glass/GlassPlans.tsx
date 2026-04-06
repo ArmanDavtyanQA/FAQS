@@ -152,7 +152,7 @@ export default function GlassPlans() {
                   ))}
                 </ul>
 
-                <p className="mt-8 text-[10px] font-medium uppercase tracking-widest text-slate-400">
+              <p className="label-caps mt-8 text-ui-subtle">
                   {plan.cta}
                 </p>
               </div>

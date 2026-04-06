@@ -14,10 +14,10 @@ const pan = {
 };
 
 const labelCls =
-  "mb-1.5 block font-mono text-[10px] font-medium uppercase tracking-widest text-[#4B5563]";
+  "label-caps mb-1.5 block text-ui-muted";
 
 const fieldCls =
-  "w-full rounded-xl border border-black/[0.05] bg-black/[0.03] px-3.5 py-2.5 text-sm text-[#0A0A0A] outline-none transition-[border-color,box-shadow] focus:border-yellow-500/50 focus:shadow-sm";
+  "w-full rounded-xl border border-black/[0.08] bg-white/70 px-3.5 py-2.5 text-sm text-ui-strong outline-none transition-[border-color,box-shadow] focus:border-yellow-500/50 focus:shadow-sm";
 
 type Props = {
   open: boolean;
@@ -113,13 +113,13 @@ export default function ProjectFormModal({
             initial={false}
             animate={open ? "open" : "closed"}
             transition={panelSpring}
-            className="glass-slab pointer-events-auto w-full max-w-lg rounded-2xl border border-b border-r border-black/[0.1] border-l border-t border-l-white/80 border-t-white/80 p-6 shadow-[0_100px_200px_-50px_rgba(0,0,0,0.12)] backdrop-blur-3xl sm:p-8"
+            className="panel-base glass-slab pointer-events-auto w-full max-w-lg rounded-2xl p-6 shadow-[0_100px_200px_-50px_rgba(0,0,0,0.12)] backdrop-blur-3xl sm:p-8"
             onPointerDown={(e) => e.stopPropagation()}
           >
-            <Dialog.Title className="text-xl font-semibold tracking-tight text-[#0A0A0A]">
+            <Dialog.Title className="text-xl font-semibold tracking-tight text-ui-strong">
               {mode === "create" ? "New project" : "Edit project"}
             </Dialog.Title>
-            <Dialog.Description className="mt-1 text-sm text-[#4B5563]">
+            <Dialog.Description className="mt-1 text-sm text-ui-muted">
               {mode === "create"
                 ? "Create a workspace for a site or brand. You can open it from the hub anytime."
                 : "Update this project’s details."}
@@ -168,13 +168,13 @@ export default function ProjectFormModal({
                 <button
                   type="button"
                   onClick={() => tryClose(false)}
-                  className="h-11 rounded-2xl px-5 text-sm font-medium text-[#4B5563] transition-colors hover:bg-black/[0.04]"
+                  className="btn-ui btn-ui-ghost h-11 rounded-2xl px-5 text-sm"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="h-11 rounded-2xl bg-[#0A0A0A] px-6 text-sm font-medium text-white transition-[transform,box-shadow] hover:scale-[1.02] hover:shadow-[0_0_24px_-6px_rgba(234,179,8,0.4)]"
+                  className="btn-ui btn-ui-primary h-11 rounded-2xl px-6 text-sm transition-[transform,box-shadow] hover:scale-[1.02]"
                 >
                   {mode === "create" ? "Create project" : "Save changes"}
                 </button>

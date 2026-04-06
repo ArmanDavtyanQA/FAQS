@@ -6,10 +6,10 @@ import { motion } from "framer-motion";
 import type { OrderRow, OrderStatus } from "@/components/orders/types";
 
 const labelCls =
-  "mb-2 block font-mono text-[10px] font-medium uppercase tracking-widest text-[#4B5563]";
+  "label-caps mb-2 block text-ui-muted";
 
 const fieldCls =
-  "h-11 w-full rounded-xl border border-black/[0.05] bg-black/[0.03] px-3.5 text-sm font-medium text-[#0A0A0A] shadow-none outline-none transition-[border-color,box-shadow] placeholder:text-[#9CA3AF] focus:border-yellow-500/50 focus:shadow-sm";
+  "h-11 w-full rounded-xl border border-black/[0.08] bg-white/70 px-3.5 text-sm font-medium text-ui-strong shadow-none outline-none transition-[border-color,box-shadow] placeholder:text-[#9CA3AF] focus:border-yellow-500/50 focus:shadow-sm";
 
 const overlaySpring = {
   type: "spring" as const,
@@ -114,13 +114,13 @@ export default function OrderCreateModal({
             initial={false}
             animate={open ? "open" : "closed"}
             transition={panelSpring}
-            className="glass-slab pointer-events-auto w-full max-w-[500px] rounded-2xl border border-b border-r border-black/[0.08] border-l border-t border-l-white/80 border-t-white/80 p-6 shadow-[0_100px_200px_-50px_rgba(0,0,0,0.1)] backdrop-blur-3xl sm:p-8"
+            className="panel-base glass-slab pointer-events-auto w-full max-w-[500px] rounded-2xl p-6 shadow-[0_100px_200px_-50px_rgba(0,0,0,0.1)] backdrop-blur-3xl sm:p-8"
             onPointerDown={(e) => e.stopPropagation()}
           >
-            <Dialog.Title className="text-xl font-semibold tracking-tight text-[#0A0A0A]">
+            <Dialog.Title className="text-xl font-semibold tracking-tight text-ui-strong">
               Create order
             </Dialog.Title>
-            <Dialog.Description className="mt-1 text-sm leading-relaxed text-[#6B7280]">
+            <Dialog.Description className="mt-1 text-sm leading-relaxed text-ui-muted">
               Add a new entry to your ledger. All fields inform how this row
               appears in the grid.
             </Dialog.Description>
@@ -198,14 +198,14 @@ export default function OrderCreateModal({
                 <Dialog.Close asChild>
                   <button
                     type="button"
-                    className="h-11 rounded-2xl px-5 text-sm font-medium text-[#4B5563] outline-none transition-colors hover:bg-black/[0.04] hover:text-[#0A0A0A] focus-visible:ring-2 focus-visible:ring-yellow-500/35"
+                    className="btn-ui btn-ui-ghost h-11 rounded-2xl px-5 text-sm"
                   >
                     Cancel
                   </button>
                 </Dialog.Close>
                 <button
                   type="submit"
-                  className="h-11 rounded-2xl bg-[#0A0A0A] px-6 text-sm font-medium text-white outline-none transition-[transform,box-shadow] hover:scale-[1.02] hover:shadow-[0_0_28px_-6px_rgba(234,179,8,0.45),0_10px_28px_rgba(0,0,0,0.15)] focus-visible:ring-2 focus-visible:ring-yellow-500/40 active:scale-[0.99]"
+                  className="btn-ui btn-ui-primary h-11 rounded-2xl px-6 text-sm transition-[transform,box-shadow] hover:scale-[1.02] active:scale-[0.99]"
                 >
                   Create order
                 </button>

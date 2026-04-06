@@ -8,7 +8,7 @@ import { supabase } from "@/lib/supabaseClient";
 type FormState = "idle" | "sending" | "sent" | "error";
 
 const fieldClass =
-  "mt-2 w-full rounded-xl border border-black/5 bg-black/[0.03] px-4 py-3 text-sm font-light tracking-widest text-[#0a0a0a] shadow-sm placeholder:text-[#5A4A40] focus:border-[#0a0a0a] focus:outline-none focus:ring-1 focus:ring-[#0a0a0a]/15 transition-all duration-300";
+  "mt-2 w-full rounded-xl border border-black/[0.08] bg-white/75 px-4 py-3 text-sm font-light tracking-[0.06em] text-ui-strong shadow-sm placeholder:text-ui-muted focus:border-[#0a0a0a] focus:outline-none focus:ring-1 focus:ring-[#0a0a0a]/15 transition-all duration-300";
 
 type Props = {
   defaultOpen?: boolean;
@@ -200,7 +200,7 @@ export default function ContactForm({
   }
 
   const askQuestionBtnClass =
-    "interactive-smooth inline-flex min-h-11 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-surface px-8 py-3 text-center text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm shadow-black/[0.06] transition-all duration-300 hover:bg-surface-muted hover:border-[#d6d3d1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a0a0a] active:scale-[0.98]";
+    "btn-ui btn-ui-secondary inline-flex min-h-11 rounded-2xl px-8 py-3 text-center text-[11px] active:scale-[0.98]";
 
   const successBlock = (
     <div className="rounded-2xl border border-[#e8e6e3] border-t-surface/75 bg-surface/40 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl antigravity-lift sm:p-8">

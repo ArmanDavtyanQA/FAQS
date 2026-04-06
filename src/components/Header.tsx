@@ -8,15 +8,14 @@ import { supabase } from "@/lib/supabaseClient";
 import GlassLogo from "@/components/GlassLogo";
 
 const navLink =
-  "interactive-smooth rounded-md px-1 py-0.5 text-[11px] font-medium uppercase tracking-widest text-slate-600 hover:bg-slate-200/60 hover:text-slate-900 transition-all";
+  "label-caps rounded-md px-2 py-1 text-ui-muted transition-colors hover:bg-black/[0.04] hover:text-ui-strong";
 
-const btnBase =
-  "btn-shadow-smooth interactive-smooth inline-flex h-9 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-[11px] font-medium uppercase tracking-widest text-slate-800 shadow-sm transition-all duration-300 hover:border-slate-400 hover:bg-slate-50 hover:-translate-y-0.5";
-const btnGhost = `${btnBase}`;
-const btnSolid = `${btnBase} font-light`;
+const btnBase = "btn-ui px-4";
+const btnGhost = `${btnBase} btn-ui-secondary`;
+const btnSolid = `${btnBase} btn-ui-primary`;
 
 const headerBar =
-  "fixed inset-x-0 top-0 z-50 border-b border-slate-200/90 bg-white/90 shadow-[0_1px_0_rgba(15,23,42,0.04)] backdrop-blur-xl backdrop-saturate-150";
+  "fixed inset-x-0 top-0 z-50 border-b border-black/[0.08] bg-white/90 shadow-[0_1px_0_rgba(15,23,42,0.04)] backdrop-blur-xl backdrop-saturate-150";
 
 const headerInner =
   "mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-4 px-4 pt-6 pb-4 sm:px-6 lg:px-10";
@@ -70,17 +69,17 @@ export default function Header() {
 
         {!user && (
           <nav className="hidden items-center gap-6 md:flex">
-            <a href="/#how-it-works" className={navLink}>
+            <Link href="/#how-it-works" className={navLink}>
               How it works
-            </a>
-            <a href="/auth?redirectTo=/dashboard" className={navLink}>
+            </Link>
+            <Link href="/auth?redirectTo=/dashboard" className={navLink}>
               Sign in
-            </a>
+            </Link>
           </nav>
         )}
 
         {loading ? (
-          <span className="text-[11px] uppercase tracking-widest text-[#6b6b6b]">
+          <span className="label-caps text-ui-subtle">
             …
           </span>
         ) : user ? (

@@ -17,7 +17,7 @@ export type OrdersGridProps = {
 };
 
 const headerCell =
-  "px-4 pb-3 pt-4 text-left font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-[#4B5563]";
+  "px-4 pb-3 pt-4 text-left font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-ui-muted";
 
 const pillBase =
   "inline-flex items-center rounded-full border px-2.5 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.12em] backdrop-blur-md";
@@ -162,13 +162,13 @@ function RowActionsMenu({ orderId, onEdit, onDelete }: RowMenuProps) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -6, scale: 0.96 }}
               transition={{ duration: 0.18, ease: [0.22, 0.61, 0.36, 1] }}
-              className="fixed z-[70] min-w-[168px] overflow-hidden rounded-xl border border-b border-l border-r border-t border-b-black/[0.12] border-l-white/75 border-r-black/[0.10] border-t-white/90 bg-white/55 shadow-[0_20px_50px_rgba(0,0,0,0.12)] backdrop-blur-2xl"
+              className="panel-base fixed z-[70] min-w-[168px] overflow-hidden rounded-xl bg-white/80 shadow-[0_20px_50px_rgba(0,0,0,0.12)] backdrop-blur-2xl"
               style={{ top: coords.top, left: coords.left }}
             >
               <button
                 type="button"
                 role="menuitem"
-                className="flex w-full px-3 py-2.5 text-left font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#0A0A0A] transition-colors hover:bg-white/50"
+                className="flex w-full px-3 py-2.5 text-left font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-ui-strong transition-colors hover:bg-white/50"
                 onClick={() => {
                   setOpen(false);
                   onEdit?.(orderId);
@@ -246,14 +246,14 @@ export default function OrdersGrid({
         <button
           type="button"
           onClick={() => setCreateOpen(true)}
-          className="inline-flex items-center gap-2 rounded-2xl bg-[#0A0A0A] px-5 py-2.5 text-sm font-medium text-white shadow-sm outline-none transition-[box-shadow,transform] hover:shadow-[0_0_28px_-6px_rgba(234,179,8,0.55),0_8px_24px_rgba(0,0,0,0.12)] focus-visible:ring-2 focus-visible:ring-yellow-500/40 active:scale-[0.99]"
+          className="btn-ui btn-ui-primary px-5 text-sm shadow-sm transition-[box-shadow,transform] active:scale-[0.99]"
         >
           <Plus className="h-4 w-4" strokeWidth={2} aria-hidden />
           Add Order
         </button>
       </div>
 
-      <div className="glass-slab overflow-hidden rounded-2xl border-r border-black/[0.03] shadow-[20px_0_50px_rgba(0,0,0,0.02)]">
+      <div className="panel-base glass-slab overflow-hidden rounded-2xl shadow-[20px_0_50px_rgba(0,0,0,0.02)]">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[640px] border-collapse">
             <thead>
@@ -273,16 +273,16 @@ export default function OrdersGrid({
                   key={row.id}
                   className="antigravity-lift group relative z-0 border-b border-black/[0.04] transition-colors last:border-b-0 hover:z-10 hover:bg-white/40"
                 >
-                  <td className="px-4 py-3.5 text-sm font-medium text-[#0A0A0A]">
+                  <td className="px-4 py-3.5 text-sm font-medium text-ui-strong">
                     {row.name}
                   </td>
-                  <td className="px-4 py-3.5 font-mono text-sm tabular-nums text-[#4B5563]">
+                  <td className="px-4 py-3.5 font-mono text-sm tabular-nums text-ui-muted">
                     {row.date}
                   </td>
                   <td className="px-4 py-3.5">
                     <StatusPill status={row.status} />
                   </td>
-                  <td className="px-4 py-3.5 text-sm font-medium text-[#0A0A0A]">
+                  <td className="px-4 py-3.5 text-sm font-medium text-ui-strong">
                     {row.payment}
                   </td>
                   <td className="px-4 py-3.5 text-right align-middle">

@@ -12,9 +12,9 @@ import DashboardSpinner, {
 import FAQTable from "./FAQTable";
 
 const actionBtn =
-  "interactive-smooth inline-flex h-10 min-w-[10rem] flex-1 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-surface px-4 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm shadow-black/[0.06] transition-all duration-300 hover:bg-surface-muted hover:border-[#d6d3d1] sm:flex-none sm:min-w-[11rem]";
+  "btn-ui btn-ui-secondary h-10 min-w-[10rem] flex-1 rounded-2xl px-4 text-ui-strong sm:flex-none sm:min-w-[11rem]";
 const actionBtnPrimary =
-  "interactive-smooth inline-flex h-10 min-w-[10rem] flex-1 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-surface px-4 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm shadow-black/[0.06] transition-all duration-300 hover:bg-surface-muted hover:border-[#d6d3d1] sm:flex-none sm:min-w-[11rem]";
+  "btn-ui btn-ui-primary h-10 min-w-[10rem] flex-1 rounded-2xl px-4 sm:flex-none sm:min-w-[11rem]";
 
 const actionDisabled =
   "pointer-events-none cursor-not-allowed opacity-45 hover:translate-y-0";
@@ -104,7 +104,7 @@ export default function DashboardFaqSection() {
   }
   if (!userId) {
     return (
-      <p className="text-sm text-[#4A4A4A]">Sign in to manage FAQs.</p>
+      <p className="text-sm text-ui-muted">Sign in to manage FAQs.</p>
     );
   }
 
@@ -118,7 +118,7 @@ export default function DashboardFaqSection() {
   return (
     <>
       {error && (
-        <p className="rounded-2xl border border-[#e8e6e3] border-t-surface/75 bg-surface/40 px-4 py-3 text-sm leading-relaxed text-[#0a0a0a] shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl">
+        <p className="panel-base rounded-2xl px-4 py-3 text-sm leading-relaxed text-ui-strong shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-xl">
           {error}
         </p>
       )}

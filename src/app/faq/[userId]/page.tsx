@@ -8,7 +8,7 @@ import ContactForm from "@/components/ContactForm";
 
 /** Label caps — charcoal for comfortable contrast on cream */
 const faqBrowseLabelClass =
-  "mb-5 font-mono text-[0.6875rem] font-medium uppercase tracking-[0.3em] text-[#4B5563]";
+  "label-caps mb-5 text-ui-muted";
 
 type Props = { params: Promise<{ userId: string }> };
 
@@ -25,7 +25,7 @@ export default async function PublicFaqPage({ params }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-[#FDFCF6] text-[#1F1F1F]">
+    <div className="min-h-screen bg-[#FDFCF6] text-ui-strong">
       {/* FAQ hero — low-glare ivory + soft top veil */}
       <section
         className="relative w-full overflow-hidden bg-[#FDFCF6] text-[#1F1F1F]"
@@ -81,7 +81,7 @@ export default async function PublicFaqPage({ params }: Props) {
       </section>
 
       <main className="mx-auto max-w-2xl px-5 py-12 sm:py-16 lg:max-w-3xl lg:px-8 lg:py-20">
-        <section className="rounded-2xl border border-t-white/70 border-l-white/70 border-b-black/[0.08] border-r-black/[0.08] bg-white/40 px-5 py-8 shadow-[0_40px_100px_rgba(0,0,0,0.04)] backdrop-blur-xl sm:rounded-3xl sm:px-8 sm:py-10 lg:px-10 lg:py-12">
+        <section className="panel-base rounded-2xl px-5 py-8 shadow-[0_40px_100px_rgba(0,0,0,0.04)] backdrop-blur-xl sm:rounded-3xl sm:px-8 sm:py-10 lg:px-10 lg:py-12">
           <div className="flex items-start justify-between gap-x-4 sm:gap-x-6">
             <div className="min-w-0 flex-1">
               <p className={faqBrowseLabelClass}>Browse answers</p>
@@ -97,7 +97,7 @@ export default async function PublicFaqPage({ params }: Props) {
               No published FAQs yet.
               <Link
                 href="/dashboard"
-                className="mt-4 block text-[11px] font-medium uppercase tracking-widest text-[#0A0A0A] underline underline-offset-4"
+                  className="label-caps mt-4 block text-ui-strong underline underline-offset-4"
               >
                 Dashboard
               </Link>
@@ -110,10 +110,10 @@ export default async function PublicFaqPage({ params }: Props) {
         </section>
 
         <div className="mt-10 border-t border-black/[0.06] pt-10">
-          <h2 className="text-xl font-normal tracking-tight text-[#0A0A0A]">
+          <h2 className="text-xl font-normal tracking-tight text-ui-strong">
             Still need help?
           </h2>
-          <p className="mt-2 text-sm leading-relaxed text-[#6B7280]">
+          <p className="mt-2 text-sm leading-relaxed text-ui-muted">
             Send a message and we’ll get back to you soon.
           </p>
           <div className="mt-6">

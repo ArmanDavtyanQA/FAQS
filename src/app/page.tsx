@@ -19,7 +19,7 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: [0.22, 0.61, 0.36, 1] }}
-          className="mb-4 text-3xl font-extralight tracking-[0.2em] text-slate-900 sm:text-4xl"
+          className="mb-4 text-3xl font-semibold tracking-[0.08em] text-ui-strong sm:text-4xl"
         >
           HOW IT WORKS
         </motion.h2>
@@ -28,7 +28,7 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true }}
           transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 0.61, 0.36, 1] }}
-          className="mb-12 max-w-2xl text-sm font-light leading-relaxed tracking-wide text-slate-600"
+          className="mb-12 max-w-2xl text-sm leading-relaxed tracking-wide text-ui-muted"
         >
           Three steps from your dashboard to a live FAQ your visitors can use.
         </motion.p>

@@ -13,10 +13,10 @@ const publishedFaqUrl = hasLandingPublishedFaq
   : null;
 
 const heroCtaPrimary =
-  "interactive-smooth inline-flex h-12 items-center justify-center rounded-xl bg-slate-900 px-8 text-xs font-medium uppercase tracking-widest text-white shadow-md shadow-slate-900/15 transition-colors hover:bg-slate-800";
+  "btn-ui btn-ui-primary inline-flex h-12 rounded-xl px-8 text-xs";
 
 const heroCtaSecondary =
-  "interactive-smooth inline-flex h-12 items-center justify-center rounded-xl border border-slate-300 bg-white px-8 text-xs font-medium uppercase tracking-widest text-slate-800 shadow-sm transition-colors hover:border-slate-400 hover:bg-slate-50";
+  "btn-ui btn-ui-secondary inline-flex h-12 rounded-xl px-8 text-xs";
 
 /**
  * High-contrast hero: light card, dark type, minimal cool accent (readability first).

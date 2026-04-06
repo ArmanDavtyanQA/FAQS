@@ -79,10 +79,10 @@ export default function StudioProjectsHub() {
 
       <header className="flex max-w-6xl flex-col gap-6 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
         <div className="max-w-2xl">
-          <h1 className="text-3xl font-semibold tracking-tight text-[#0A0A0A] sm:text-4xl">
+          <h1 className="text-3xl font-semibold tracking-tight text-ui-strong sm:text-4xl">
             Project Studio
           </h1>
-          <p className="mt-2 text-sm leading-relaxed text-[#4B5563] sm:text-base">
+          <p className="mt-2 text-sm leading-relaxed text-ui-muted sm:text-base">
             Open a workspace to manage FAQs, analytics, templates, and orders
             for each site.
           </p>
@@ -91,7 +91,7 @@ export default function StudioProjectsHub() {
           <Link
             href="/"
             prefetch
-            className="font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#4B5563] underline-offset-4 transition-colors hover:text-[#0A0A0A] hover:underline"
+            className="label-caps text-ui-muted underline-offset-4 transition-colors hover:text-ui-strong hover:underline"
           >
             Site home
           </Link>
@@ -101,7 +101,7 @@ export default function StudioProjectsHub() {
           <button
             type="button"
             onClick={openCreate}
-            className="interactive-smooth rounded-xl border border-black/[0.08] bg-[#0A0A0A] px-4 py-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-white shadow-sm transition-[transform,box-shadow] hover:scale-[1.02] hover:shadow-[0_0_24px_-8px_rgba(234,179,8,0.45)] focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500/40"
+            className="btn-ui btn-ui-primary rounded-xl px-4 py-2.5 shadow-sm transition-[transform,box-shadow] hover:scale-[1.02]"
           >
             New project
           </button>
@@ -109,17 +109,17 @@ export default function StudioProjectsHub() {
       </header>
 
       {projects.length === 0 ? (
-        <div className="mt-14 rounded-2xl border border-dashed border-black/[0.12] bg-black/[0.02] px-6 py-14 text-center sm:py-20">
-          <p className="font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-[#6B7280]">
+        <div className="panel-base mt-14 rounded-2xl border border-dashed border-black/[0.12] bg-black/[0.02] px-6 py-14 text-center sm:py-20">
+          <p className="label-caps text-ui-subtle">
             No projects yet
           </p>
-          <p className="mt-3 text-sm text-[#4B5563]">
+          <p className="mt-3 text-sm text-ui-muted">
             Create a workspace to manage FAQs and templates for a site.
           </p>
           <button
             type="button"
             onClick={openCreate}
-            className="interactive-smooth mt-8 inline-flex h-11 items-center justify-center rounded-xl bg-[#0A0A0A] px-8 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-white transition-[transform,box-shadow] hover:scale-[1.02] hover:shadow-[0_0_28px_-6px_rgba(234,179,8,0.4)] focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500/40"
+            className="btn-ui btn-ui-primary mt-8 inline-flex h-11 rounded-xl px-8 transition-[transform,box-shadow] hover:scale-[1.02]"
           >
             Create project
           </button>
@@ -148,21 +148,21 @@ export default function StudioProjectsHub() {
               />
               <div className="pointer-events-none relative z-[1] border-b border-black/[0.06] px-5 pb-4 pt-5 pr-14">
                 <div className="min-w-0 flex-1">
-                  <h2 className="text-xl font-semibold tracking-tight text-[#0A0A0A]">
+                  <h2 className="text-xl font-semibold tracking-tight text-ui-strong">
                     {p.name}
                   </h2>
-                  <p className="mt-1 font-mono text-xs tracking-[0.08em] text-[#4B5563]">
+                  <p className="mt-1 font-mono text-xs tracking-[0.08em] text-ui-muted">
                     {p.domain}
                   </p>
                 </div>
                 {p.description ? (
-                  <p className="mt-3 line-clamp-2 text-xs leading-relaxed text-[#6B7280]">
+                  <p className="mt-3 line-clamp-2 text-xs leading-relaxed text-ui-subtle">
                     {p.description}
                   </p>
                 ) : null}
               </div>
               <div className="pointer-events-none relative z-[1] flex items-center justify-between gap-3 px-5 py-3">
-                <span className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-[#9CA3AF]">
+                <span className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-ui-subtle">
                   Updated {timeFormat(p.updatedAt)}
                 </span>
                 <span className="inline-flex items-center gap-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.15em] text-[#B45309] group-hover/card:text-[#92400E]">
@@ -190,7 +190,7 @@ export default function StudioProjectsHub() {
                     key={href}
                     href={href}
                     prefetch
-                    className="rounded-lg px-3 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[#4B5563] transition-colors hover:bg-white/55 hover:text-[#0A0A0A]"
+                    className="rounded-lg px-3 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-ui-muted transition-colors hover:bg-white/55 hover:text-ui-strong"
                     onClick={(e) => e.stopPropagation()}
                   >
                     {label}
@@ -200,7 +200,7 @@ export default function StudioProjectsHub() {
             </div>
             <button
               type="button"
-              className="absolute right-4 top-4 z-30 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-black/[0.06] bg-white/80 text-[#4B5563] shadow-sm backdrop-blur-sm transition-colors hover:bg-white hover:text-[#0A0A0A]"
+              className="absolute right-4 top-4 z-30 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-black/[0.08] bg-white/80 text-ui-muted shadow-sm backdrop-blur-sm transition-colors hover:bg-white hover:text-ui-strong"
               aria-label={`More actions for ${p.name}`}
               onPointerDown={(e) => e.stopPropagation()}
               onClick={(e) => {
@@ -236,7 +236,7 @@ export default function StudioProjectsHub() {
                     <div key={p.id}>
                       <button
                         type="button"
-                        className="flex w-full px-3 py-2.5 text-left font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#0A0A0A] hover:bg-white/60"
+                        className="flex w-full px-3 py-2.5 text-left font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-ui-strong hover:bg-white/60"
                         onClick={() => openEdit(p)}
                       >
                         Edit
@@ -263,7 +263,7 @@ export default function StudioProjectsHub() {
       <button
         type="button"
         onClick={openCreate}
-        className="fixed bottom-10 right-10 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#0A0A0A] text-white shadow-lg outline-none transition-[box-shadow,transform] hover:scale-[1.04] hover:shadow-[0_0_32px_-4px_rgba(234,179,8,0.55),0_12px_32px_rgba(0,0,0,0.15)] focus-visible:ring-2 focus-visible:ring-yellow-500/45 active:scale-[0.98]"
+        className="btn-ui btn-ui-primary fixed bottom-10 right-10 z-40 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg outline-none transition-[box-shadow,transform] hover:scale-[1.04] active:scale-[0.98]"
         aria-label="New project"
       >
         <Plus className="h-6 w-6" strokeWidth={2} />

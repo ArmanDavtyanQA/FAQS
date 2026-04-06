@@ -94,7 +94,7 @@ export const MOCK_PERFORMANCE_DATA: AnalyticsPerformancePoint[] =
   buildMockPerformanceSeries();
 
 const labelMono =
-  "font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-[#4B5563]";
+  "font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-ui-muted";
 
 type TooltipPayload = { value?: number; dataKey?: string };
 
@@ -112,9 +112,9 @@ function PerformanceTooltip({
   const v = row?.value;
   if (v === undefined) return null;
   return (
-    <div className="glass-slab rounded-xl border-r border-black/[0.04] px-3.5 py-2.5 shadow-[0_12px_40px_rgba(0,0,0,0.08)]">
-      <p className={`${labelMono} text-[#6B7280]`}>{label}</p>
-      <p className="mt-1 font-mono text-sm font-semibold tabular-nums text-[#0A0A0A]">
+    <div className="panel-base glass-slab rounded-xl px-3.5 py-2.5 shadow-[0_12px_40px_rgba(0,0,0,0.08)]">
+      <p className={`${labelMono} text-ui-subtle`}>{label}</p>
+      <p className="mt-1 font-mono text-sm font-semibold tabular-nums text-ui-strong">
         {v.toLocaleString()} orders
       </p>
     </div>
@@ -139,7 +139,7 @@ export default function AnalyticsView({
         {metrics.map((m) => (
           <div
             key={m.id}
-            className="glass-slab relative overflow-hidden rounded-2xl border-r border-black/[0.03] p-6 shadow-[20px_0_50px_rgba(0,0,0,0.02)]"
+            className="panel-base glass-slab relative overflow-hidden rounded-2xl p-6 shadow-[20px_0_50px_rgba(0,0,0,0.02)]"
           >
             <p className={labelMono}>{m.label}</p>
             <div className="relative mt-4 min-h-[4.5rem] sm:min-h-[5.5rem]">
@@ -147,7 +147,7 @@ export default function AnalyticsView({
                 className={`pointer-events-none absolute inset-0 -translate-y-1 scale-110 ${GLOW_STYLES[m.glow]}`}
                 aria-hidden
               />
-              <p className="relative font-mono text-5xl font-bold leading-[0.95] tracking-tight text-[#0A0A0A] sm:text-6xl lg:text-[72px] lg:leading-[0.9]">
+              <p className="relative font-mono text-5xl font-bold leading-[0.95] tracking-tight text-ui-strong sm:text-6xl lg:text-[72px] lg:leading-[0.9]">
                 {m.valueFormatted}
               </p>
             </div>
@@ -159,16 +159,16 @@ export default function AnalyticsView({
         <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className={labelMono}>Performance</p>
-            <h2 className="mt-1 text-lg font-semibold tracking-tight text-[#0A0A0A] sm:text-xl">
+            <h2 className="mt-1 text-lg font-semibold tracking-tight text-ui-strong sm:text-xl">
               Order trends
             </h2>
           </div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#6B7280]">
+          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-ui-subtle">
             Last 28 days
           </p>
         </div>
 
-        <div className="glass-slab rounded-2xl border-r border-black/[0.03] p-4 shadow-[20px_0_50px_rgba(0,0,0,0.02)] sm:p-6">
+        <div className="panel-base glass-slab rounded-2xl p-4 shadow-[20px_0_50px_rgba(0,0,0,0.02)] sm:p-6">
           <div className="h-[min(420px,55vh)] w-full min-h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart

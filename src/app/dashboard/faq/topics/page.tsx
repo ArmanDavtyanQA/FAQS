@@ -16,13 +16,13 @@ import DashboardAreaHeader from "@/components/DashboardAreaHeader";
 import DashboardSpinner from "@/components/DashboardSpinner";
 
 const field =
-  "w-full rounded-xl border border-[#e8e6e3] bg-surface px-4 py-2.5 text-sm text-[#0a0a0a] shadow-sm placeholder:text-[#6b6b6b] focus:border-[#0a0a0a] focus:outline-none focus:ring-1 focus:ring-[#0a0a0a]/15";
+  "w-full rounded-xl border border-black/[0.08] bg-white/75 px-4 py-2.5 text-sm text-ui-strong shadow-sm placeholder:text-ui-subtle focus:border-[#0a0a0a] focus:outline-none focus:ring-1 focus:ring-[#0a0a0a]/15";
 
 const btnSm =
-  "interactive-smooth rounded-xl border border-[#e8e6e3] bg-surface px-3 py-1.5 text-[10px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-surface-muted disabled:pointer-events-none disabled:opacity-45";
+  "btn-ui btn-ui-secondary rounded-xl px-3 py-1.5 text-[10px] disabled:pointer-events-none disabled:opacity-45";
 
 const btnDanger =
-  "interactive-smooth rounded-xl border border-red-200 bg-surface px-3 py-1.5 text-[10px] font-medium uppercase tracking-widest text-red-800 shadow-sm transition-colors hover:bg-red-50 disabled:pointer-events-none disabled:opacity-45";
+  "btn-ui btn-ui-danger rounded-xl px-3 py-1.5 text-[10px] disabled:pointer-events-none disabled:opacity-45";
 
 export default function ManageTopicsPage() {
   const router = useRouter();

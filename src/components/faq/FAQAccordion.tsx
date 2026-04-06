@@ -6,7 +6,7 @@ import RichText from "@/components/RichText";
 
 /** Group / section labels — charcoal, readable on cream */
 const faqLabelClass =
-  "mb-5 font-mono text-[0.6875rem] font-medium uppercase tracking-[0.3em] text-[#4B5563]";
+  "label-caps mb-5 text-ui-muted";
 
 function topicOptionsFromFaqs(faqs: FAQ[]) {
   const map = new Map<string, string>();
@@ -57,7 +57,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
   if (faqs.length === 0) return null;
 
   const pillBase =
-    "rounded-full border px-3 py-1.5 text-[10px] font-medium uppercase tracking-widest transition-all duration-300";
+    "rounded-full border px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.14em] transition-all duration-300";
   const pillInactive = `${pillBase} border-yellow-600/30 bg-white/20 text-[#4B5563] shadow-[0_8px_32px_-12px_rgba(0,0,0,0.05)] backdrop-blur-md hover:border-yellow-600/45 hover:bg-white/35`;
   const pillActive = `${pillBase} border-yellow-600/50 bg-white/45 text-[#0A0A0A] shadow-[0_12px_40px_-14px_rgba(234,179,8,0.12)] backdrop-blur-md`;
 
@@ -97,7 +97,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
                 <div className="bg-yellow-100/30">
                   {topicLine.length > 0 && (
                     <div className="border-t border-black/[0.06] px-5 py-2 sm:px-6">
-                      <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#6B7280]">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-ui-subtle">
                         {topicLine}
                       </p>
                     </div>
@@ -119,7 +119,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
                           )}
                           <RichText
                             html={answer}
-                            className="text-sm leading-relaxed text-[#6B7280]"
+                    className="text-sm leading-relaxed text-ui-muted"
                           />
                         </div>
                       ))}
@@ -138,7 +138,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
     <div className="space-y-8">
       {topicOptions.length > 0 && (
         <div className="flex flex-wrap items-center gap-2">
-          <span className="font-mono text-[10px] font-medium uppercase tracking-[0.3em] text-[#4B5563]">
+          <span className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-ui-muted">
             Topics
           </span>
           <button
@@ -177,7 +177,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
           )}
         </div>
       ) : visibleFaqs.length === 0 ? (
-        <p className="text-sm text-[#6B7280]">No questions in this topic.</p>
+        <p className="text-sm text-ui-muted">No questions in this topic.</p>
       ) : (
         renderList(visibleFaqs)
       )}

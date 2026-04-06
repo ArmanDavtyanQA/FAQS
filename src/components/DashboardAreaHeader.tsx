@@ -18,7 +18,7 @@ export default function DashboardAreaHeader({
 }: Props) {
   return (
     <div className="px-4 pt-3 sm:px-6 sm:pt-4 lg:px-10 lg:pt-5">
-      <header className="rounded-2xl border border-slate-200/90 bg-gradient-to-br from-white via-slate-50/80 to-slate-100/60 shadow-md shadow-slate-900/[0.05]">
+      <header className="panel-base rounded-2xl border-black/[0.08] bg-gradient-to-br from-white via-slate-50/75 to-slate-100/60 shadow-md shadow-slate-900/[0.05]">
         <div className={innerClassName}>{children}</div>
       </header>
     </div>

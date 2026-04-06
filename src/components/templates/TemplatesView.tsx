@@ -477,16 +477,16 @@ function ProPricingModal({
             initial={false}
             animate={open ? "open" : "closed"}
             transition={panelSpring}
-            className="glass-slab pointer-events-auto w-full max-w-md rounded-2xl border border-b border-r border-black/[0.1] border-l border-t border-l-white/80 border-t-white/80 p-6 shadow-[0_100px_200px_-50px_rgba(0,0,0,0.12)] backdrop-blur-3xl sm:p-8"
+            className="panel-base glass-slab pointer-events-auto w-full max-w-md rounded-2xl p-6 shadow-[0_100px_200px_-50px_rgba(0,0,0,0.12)] backdrop-blur-3xl sm:p-8"
             onPointerDown={(e) => e.stopPropagation()}
           >
             <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-700">
               <Sparkles className="h-5 w-5" strokeWidth={1.5} aria-hidden />
             </div>
-            <Dialog.Title className="text-xl font-semibold tracking-tight text-[#0A0A0A]">
+            <Dialog.Title className="text-xl font-semibold tracking-tight text-ui-strong">
               Unlock Pro templates
             </Dialog.Title>
-            <Dialog.Description className="mt-2 text-sm leading-relaxed text-[#4B5563]">
+            <Dialog.Description className="mt-2 text-sm leading-relaxed text-ui-muted">
               Custom branding, hero layouts, and AI-assisted sync are included
               on the Paid plan. Upgrade to activate these layouts on your public
               FAQ.
@@ -495,7 +495,7 @@ function ProPricingModal({
               <Dialog.Close asChild>
                 <button
                   type="button"
-                  className="h-11 rounded-2xl px-5 text-sm font-medium text-[#4B5563] transition-colors hover:bg-black/[0.04] hover:text-[#0A0A0A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500/35"
+                  className="btn-ui btn-ui-ghost h-11 rounded-2xl px-5 text-sm"
                 >
                   Not now
                 </button>
@@ -503,7 +503,7 @@ function ProPricingModal({
               <Dialog.Close asChild>
                 <Link
                   href="/billing"
-                  className="inline-flex h-11 items-center justify-center rounded-2xl bg-[#0A0A0A] px-6 text-sm font-medium text-white transition-[transform,box-shadow] hover:scale-[1.02] hover:shadow-[0_0_28px_-6px_rgba(234,179,8,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500/40"
+                  className="btn-ui btn-ui-primary inline-flex h-11 items-center justify-center rounded-2xl px-6 text-sm transition-[transform,box-shadow] hover:scale-[1.02]"
                 >
                   Continue to billing
                 </Link>

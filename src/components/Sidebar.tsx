@@ -16,7 +16,7 @@ const ACTIVE_BAR =
   "absolute left-0 top-1/2 h-9 w-[2px] -translate-y-1/2 rounded-full bg-yellow-500 shadow-[4px_0_15px_rgba(234,179,8,0.4)]";
 
 const navLabel =
-  "font-mono text-[13px] font-medium uppercase tracking-[0.15em]";
+  "font-mono text-[12px] font-medium uppercase tracking-[0.14em]";
 
 /** Studio hub nav when not inside `/project/[id]/…`. */
 const HUB_NAV: { id: string; href: string; label: string }[] = [
@@ -90,7 +90,7 @@ export default function Sidebar() {
               <div className="border-b border-black/[0.03] pb-4 mb-4">
                 <Link
                   href="/studio"
-                  className="inline-block font-mono text-[10px] text-[#4B5563] transition-colors hover:text-black"
+                  className="label-caps inline-block text-ui-muted transition-colors hover:text-ui-strong"
                   onClick={() => setSheetOpen(false)}
                 >
                   ← All Projects
@@ -114,7 +114,7 @@ export default function Sidebar() {
                     />
                     <Link
                       href={`/project/${projectId}/dashboard`}
-                      className="line-clamp-2 min-w-0 font-mono text-[10px] font-bold uppercase leading-snug tracking-[0.2em] text-[#0A0A0A] transition-colors hover:text-[#0A0A0A]/85"
+                      className="line-clamp-2 min-w-0 font-mono text-[10px] font-bold uppercase leading-snug tracking-[0.16em] text-ui-strong transition-colors hover:text-ui-strong/85"
                       onClick={() => setSheetOpen(false)}
                     >
                       {projectLabel}
@@ -168,7 +168,7 @@ export default function Sidebar() {
                   ) : null}
                   <motion.span
                     className={`relative pl-3 ${navLabel} ${
-                      active ? "text-[#0A0A0A]" : "text-[#4B5563]"
+                      active ? "text-ui-strong" : "text-ui-muted"
                     }`}
                     whileHover={{ x: 4 }}
                     transition={{

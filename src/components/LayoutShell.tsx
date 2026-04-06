@@ -7,11 +7,7 @@ import AmbientColorBubbles from "@/components/AmbientColorBubbles";
 /** Matches public FAQ chrome: no site header, normal top padding */
 function isPublishedStyleDashboardPage(pathname: string | null): boolean {
   if (!pathname) return false;
-  return (
-    pathname === "/dashboard" ||
-    pathname === "/dashboard/faq/create" ||
-    pathname === "/dashboard/faq/topics"
-  );
+  return pathname.startsWith("/dashboard");
 }
 
 function isStudioPath(pathname: string | null): boolean {
@@ -30,7 +26,7 @@ export default function LayoutShell({
 
   if (isPublicFaq) {
     return (
-      <div className="relative min-h-screen bg-transparent text-[#0a0a0a]">
+      <div className="relative min-h-screen bg-transparent text-ui-strong">
         <AmbientColorBubbles />
         {children}
       </div>
@@ -38,9 +34,7 @@ export default function LayoutShell({
   }
 
   if (isStudioPath(pathname)) {
-    return (
-      <div className="relative min-h-screen text-[#0a0a0a]">{children}</div>
-    );
+    return <div className="relative min-h-screen text-ui-strong">{children}</div>;
   }
 
   // Clears fixed header: page top inset + bar row + header bottom pad + former mb-8 gap
@@ -49,7 +43,7 @@ export default function LayoutShell({
   const mainPadNoHeader = "pt-6 lg:pt-10";
 
   return (
-    <div className="relative min-h-screen bg-transparent text-[#0a0a0a]">
+    <div className="relative min-h-screen bg-transparent text-ui-strong">
       <AmbientColorBubbles />
       {!publishedStyleDash && <Header />}
       <div

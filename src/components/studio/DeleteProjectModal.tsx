@@ -42,13 +42,13 @@ export default function DeleteProjectModal({
             initial={false}
             animate={open ? "open" : "closed"}
             transition={overlaySpring}
-            className="glass-slab pointer-events-auto w-full max-w-md rounded-2xl border border-l border-t border-l-white/80 border-t-white/90 border-b border-r border-black/[0.12] p-6 shadow-[0_40px_100px_rgba(0,0,0,0.12)] backdrop-blur-2xl sm:p-8"
+            className="panel-base glass-slab pointer-events-auto w-full max-w-md rounded-2xl p-6 shadow-[0_40px_100px_rgba(0,0,0,0.12)] backdrop-blur-2xl sm:p-8"
             onPointerDown={(e) => e.stopPropagation()}
           >
-            <Dialog.Title className="text-lg font-semibold text-[#0A0A0A]">
+            <Dialog.Title className="text-lg font-semibold text-ui-strong">
               Delete project?
             </Dialog.Title>
-            <Dialog.Description className="mt-2 text-sm leading-relaxed text-[#4B5563]">
+            <Dialog.Description className="mt-2 text-sm leading-relaxed text-ui-muted">
               {project
                 ? `“${project.name}” and its studio shortcuts will be removed from this device. This cannot be undone.`
                 : "This project will be removed."}
@@ -57,7 +57,7 @@ export default function DeleteProjectModal({
               <Dialog.Close asChild>
                 <button
                   type="button"
-                  className="h-11 rounded-2xl px-5 text-sm font-medium text-[#4B5563] hover:bg-black/[0.04]"
+                  className="btn-ui btn-ui-ghost h-11 rounded-2xl px-5 text-sm"
                 >
                   Cancel
                 </button>
@@ -68,7 +68,7 @@ export default function DeleteProjectModal({
                   onConfirm();
                   onOpenChange(false);
                 }}
-                className="h-11 rounded-2xl bg-red-600 px-6 text-sm font-medium text-white shadow-sm transition hover:bg-red-700"
+                className="btn-ui btn-ui-danger h-11 rounded-2xl px-6 text-sm shadow-sm"
               >
                 Delete project
               </button>

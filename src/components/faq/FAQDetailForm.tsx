@@ -12,7 +12,7 @@ import RichTextEditor from "@/components/RichTextEditor";
 import RichText from "@/components/RichText";
 
 const inputClass =
-  "mt-2 w-full rounded-xl border border-black/5 bg-black/[0.03] px-4 py-3 text-sm text-[#0a0a0a] shadow-sm placeholder:text-[#5A4A40] focus:border-[#0a0a0a] focus:shadow-md focus:outline-none";
+  "mt-2 w-full rounded-xl border border-black/[0.08] bg-white/75 px-4 py-3 text-sm text-ui-strong shadow-sm placeholder:text-ui-muted focus:border-[#0a0a0a] focus:shadow-md focus:outline-none";
 
 export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
   const router = useRouter();

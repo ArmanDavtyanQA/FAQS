@@ -7,6 +7,8 @@ import { supabase } from "@/lib/supabaseClient";
 import { dbGetFaqById } from "@/lib/faq/supabase-faq";
 import type { FAQ } from "@/lib/faq/types";
 import FAQDetailForm from "@/components/faq/FAQDetailForm";
+import DashboardAreaHeader from "@/components/DashboardAreaHeader";
+import DashboardSpinner from "@/components/DashboardSpinner";
 
 export default function FaqDetailPage() {
   const params = useParams();
@@ -52,7 +54,7 @@ export default function FaqDetailPage() {
   if (loading) {
     return (
       <main className="mt-8 flex min-h-[40vh] items-center justify-center">
-        <p className="text-sm text-[#6b6b6b]">Loading…</p>
+        <DashboardSpinner label="Loading FAQ…" />
       </main>
     );
   }
@@ -60,34 +62,38 @@ export default function FaqDetailPage() {
   if (error || !faq) {
     return (
       <main className="flex flex-1 flex-col gap-6">
-        <Link
-          href="/dashboard"
-          className="text-[11px] font-medium uppercase tracking-widest text-[#6b6b6b] hover:text-[#0a0a0a]"
-        >
-          ← Dashboard
-        </Link>
-        <p className="text-sm text-[#0a0a0a]">{error ?? "Not found"}</p>
+        <DashboardAreaHeader innerClassName="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-4">
+          <Link href="/dashboard" className="btn-ui btn-ui-ghost h-10 px-3">
+            ← Dashboard
+          </Link>
+        </DashboardAreaHeader>
+        <div className="mx-auto w-full max-w-5xl">
+          <p className="panel-base rounded-2xl px-4 py-3 text-sm text-ui-strong">
+            {error ?? "Not found"}
+          </p>
+        </div>
       </main>
     );
   }
 
   return (
     <main className="flex flex-1 flex-col gap-6">
-      <div>
-        <Link
-          href="/dashboard"
-          className="text-[11px] font-medium uppercase tracking-widest text-[#6b6b6b] hover:text-[#0a0a0a]"
-        >
+      <DashboardAreaHeader innerClassName="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-4">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight text-ui-strong">
+            Edit FAQ
+          </h1>
+          <p className="mt-1 text-sm text-ui-muted">
+            Edit question, answers, and publish status.
+          </p>
+        </div>
+        <Link href="/dashboard" className="btn-ui btn-ui-ghost h-10 px-3">
           ← Dashboard
         </Link>
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-[#0a0a0a]">
-          Edit FAQ
-        </h1>
-        <p className="mt-1 text-sm text-[#6b6b6b]">
-          Edit question, answers, and publish status.
-        </p>
+      </DashboardAreaHeader>
+      <div className="mx-auto w-full max-w-5xl">
+        <FAQDetailForm faq={faq} />
       </div>
-      <FAQDetailForm faq={faq} />
     </main>
   );
 }
