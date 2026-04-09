@@ -4,6 +4,7 @@ import type { Topic } from "./types";
 export interface TopicRow {
   id: string;
   user_id: string;
+  project_id?: string | null;
   title: string;
   created_at: string;
   updated_at?: string;
@@ -15,28 +16,52 @@ export function rowToTopic(row: TopicRow): Topic {
     id: row.id,
     title: row.title,
     userId: row.user_id,
+    projectId: row.project_id ?? null,
     createdAt: row.created_at,
     isActive: row.is_active !== false,
   };
 }
 
+function isMissingTopicProjectIdColumn(error: { message?: string } | null): boolean {
+  const msg = (error?.message ?? "").toLowerCase();
+  return (
+    msg.includes("column faq_topics.project_id does not exist") ||
+    msg.includes("column \"project_id\" does not exist") ||
+    (msg.includes("project_id") &&
+      msg.includes("faq_topics") &&
+      msg.includes("schema cache"))
+  );
+}
+
 export async function dbListTopicsByUserId(
   client: SupabaseClient,
   userId: string,
+  projectId?: string,
 ): Promise<Topic[]> {
-  const { data, error } = await client
+  let query = client
     .from("faq_topics")
-    .select("id,user_id,title,created_at,is_active")
+    .select("id,user_id,project_id,title,created_at,is_active")
     .eq("user_id", userId)
     .order("title", { ascending: true });
+  if (projectId) query = query.eq("project_id", projectId);
+  const { data, error } = await query;
 
+  if (error && isMissingTopicProjectIdColumn(error)) {
+    const { data: legacyData, error: legacyError } = await client
+      .from("faq_topics")
+      .select("id,user_id,title,created_at,is_active")
+      .eq("user_id", userId)
+      .order("title", { ascending: true });
+    if (legacyError) throw new Error(legacyError.message);
+    return (legacyData as TopicRow[]).map(rowToTopic);
+  }
   if (error) throw new Error(error.message);
   return (data as TopicRow[]).map(rowToTopic);
 }
 
 export async function dbInsertTopic(
   client: SupabaseClient,
-  input: { userId: string; title: string; isActive?: boolean },
+  input: { userId: string; projectId?: string | null; title: string; isActive?: boolean },
 ): Promise<Topic> {
   const title = input.title.trim();
   if (!title) throw new Error("Topic title is required");
@@ -45,10 +70,24 @@ export async function dbInsertTopic(
 
   const { data, error } = await client
     .from("faq_topics")
-    .insert({ user_id: input.userId, title, is_active })
-    .select("id,user_id,title,created_at,is_active")
+    .insert({
+      user_id: input.userId,
+      project_id: input.projectId ?? null,
+      title,
+      is_active,
+    })
+    .select("id,user_id,project_id,title,created_at,is_active")
     .single();
 
+  if (error && isMissingTopicProjectIdColumn(error)) {
+    const { data: legacyData, error: legacyError } = await client
+      .from("faq_topics")
+      .insert({ user_id: input.userId, title, is_active })
+      .select("id,user_id,title,created_at,is_active")
+      .single();
+    if (legacyError) throw new Error(legacyError.message);
+    return rowToTopic(legacyData as TopicRow);
+  }
   if (error) throw new Error(error.message);
   return rowToTopic(data as TopicRow);
 }
@@ -70,9 +109,18 @@ export async function dbUpdateTopic(
   if (Object.keys(updates).length === 0) {
     const { data, error } = await client
       .from("faq_topics")
-      .select("id,user_id,title,created_at,is_active")
+      .select("id,user_id,project_id,title,created_at,is_active")
       .eq("id", id)
       .single();
+    if (error && isMissingTopicProjectIdColumn(error)) {
+      const { data: legacyData, error: legacyError } = await client
+        .from("faq_topics")
+        .select("id,user_id,title,created_at,is_active")
+        .eq("id", id)
+        .single();
+      if (legacyError) throw new Error(legacyError.message);
+      return rowToTopic(legacyData as TopicRow);
+    }
     if (error) throw new Error(error.message);
     return rowToTopic(data as TopicRow);
   }
@@ -81,9 +129,19 @@ export async function dbUpdateTopic(
     .from("faq_topics")
     .update(updates)
     .eq("id", id)
-    .select("id,user_id,title,created_at,is_active")
+    .select("id,user_id,project_id,title,created_at,is_active")
     .single();
 
+  if (error && isMissingTopicProjectIdColumn(error)) {
+    const { data: legacyData, error: legacyError } = await client
+      .from("faq_topics")
+      .update(updates)
+      .eq("id", id)
+      .select("id,user_id,title,created_at,is_active")
+      .single();
+    if (legacyError) throw new Error(legacyError.message);
+    return rowToTopic(legacyData as TopicRow);
+  }
   if (error) throw new Error(error.message);
   return rowToTopic(data as TopicRow);
 }

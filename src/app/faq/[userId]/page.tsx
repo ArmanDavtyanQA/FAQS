@@ -10,16 +10,21 @@ import ContactForm from "@/components/ContactForm";
 const faqBrowseLabelClass =
   "label-caps mb-5 text-ui-muted";
 
-type Props = { params: Promise<{ userId: string }> };
+type Props = {
+  params: Promise<{ userId: string }>;
+  searchParams?: Promise<{ projectId?: string }>;
+};
 
-export default async function PublicFaqPage({ params }: Props) {
+export default async function PublicFaqPage({ params, searchParams }: Props) {
   const { userId } = await params;
+  const scoped = searchParams ? await searchParams : undefined;
+  const projectId = scoped?.projectId?.trim() || undefined;
   if (!userId || userId.length < 10) notFound();
 
   let faqs: Awaited<ReturnType<typeof dbListPublishedByUserId>> = [];
   try {
     const supabase = createSupabaseServerAnon();
-    faqs = await dbListPublishedByUserId(supabase, userId);
+    faqs = await dbListPublishedByUserId(supabase, userId, projectId);
   } catch {
     faqs = [];
   }
@@ -89,17 +94,17 @@ export default async function PublicFaqPage({ params }: Props) {
                 Questions
               </h2>
             </div>
-            <PublicFaqDashboardLink ownerUserId={userId} />
+            <PublicFaqDashboardLink ownerUserId={userId} projectId={projectId} />
           </div>
 
           {faqs.length === 0 ? (
             <div className="mt-10 rounded-xl border border-t-white/60 border-l-white/60 border-b-black/[0.06] border-r-black/[0.06] bg-white/25 px-6 py-12 text-center text-sm text-[#6B7280] shadow-[0_24px_60px_-16px_rgba(0,0,0,0.04)] backdrop-blur-xl">
               No published FAQs yet.
               <Link
-                href="/dashboard"
-                  className="label-caps mt-4 block text-ui-strong underline underline-offset-4"
+                href={projectId ? `/project/${projectId}/dashboard` : "/studio"}
+                className="label-caps mt-4 block text-ui-strong underline underline-offset-4"
               >
-                Dashboard
+                {projectId ? "Project dashboard" : "Studio"}
               </Link>
             </div>
           ) : (
@@ -118,7 +123,7 @@ export default async function PublicFaqPage({ params }: Props) {
           </p>
           <div className="mt-6">
             <ContactForm
-              redirectTo={`/faq/${userId}`}
+              redirectTo={`/faq/${userId}${projectId ? `?projectId=${encodeURIComponent(projectId)}` : ""}`}
               asModal
               allowAnonymous
             />

@@ -25,19 +25,11 @@ export default function GlassHero() {
   return (
     <section className="relative mt-0 flex min-h-[calc(100dvh-7.5rem)] flex-col justify-center px-4 py-8 sm:px-6 sm:py-10 lg:min-h-[calc(100dvh-8.5rem)] lg:px-10 lg:py-12">
       <motion.div
-        initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
-        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.85, ease: [0.22, 0.61, 0.36, 1] }}
-        className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-2xl border border-slate-200/90 bg-white/95 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:rounded-3xl"
+        className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:rounded-3xl"
       >
-        <div
-          className="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]"
-          aria-hidden
-        >
-          {/* Single restrained cool wash — no pink / orange */}
-          <div className="absolute -left-[20%] bottom-[-35%] h-[min(24rem,70vw)] w-[min(36rem,95vw)] rounded-full bg-gradient-to-tr from-slate-400/10 via-indigo-500/8 to-transparent blur-[80px]" />
-        </div>
-
         <div className="relative z-10 px-5 pb-12 pt-8 sm:px-10 sm:pb-14 sm:pt-10">
           <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
             <motion.h1
@@ -92,8 +84,8 @@ export default function GlassHero() {
                 whileHover={{ y: -2 }}
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
               >
-                <Link href="/dashboard" className={heroCtaSecondary}>
-                  Dashboard
+                <Link href="/studio" className={heroCtaSecondary}>
+                  Studio
                 </Link>
               </motion.div>
               {hasLandingPublishedFaq && publishedFaqUrl ? (

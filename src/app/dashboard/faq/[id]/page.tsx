@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { dbGetFaqById } from "@/lib/faq/supabase-faq";
 import type { FAQ } from "@/lib/faq/types";
@@ -13,7 +13,9 @@ import DashboardSpinner from "@/components/DashboardSpinner";
 export default function FaqDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const id = typeof params.id === "string" ? params.id : null;
+  const projectId = searchParams.get("projectId")?.trim() || null;
   const [faq, setFaq] = useState<FAQ | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,10 +30,13 @@ export default function FaqDetailPage() {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
-          router.replace("/auth?redirectTo=/dashboard");
+          const backTo = projectId
+            ? `/dashboard/faq/${id}?projectId=${encodeURIComponent(projectId)}`
+            : `/dashboard/faq/${id}`;
+          router.replace(`/auth?redirectTo=${encodeURIComponent(backTo)}`);
           return;
         }
-        const row = await dbGetFaqById(supabase, id);
+        const row = await dbGetFaqById(supabase, id, projectId ?? undefined);
         if (cancelled) return;
         if (!row || row.userId !== user.id) {
           setError("FAQ not found or access denied.");
@@ -49,7 +54,7 @@ export default function FaqDetailPage() {
     return () => {
       cancelled = true;
     };
-  }, [id, router]);
+  }, [id, projectId, router]);
 
   if (loading) {
     return (
@@ -63,7 +68,10 @@ export default function FaqDetailPage() {
     return (
       <main className="flex flex-1 flex-col gap-6">
         <DashboardAreaHeader innerClassName="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-4">
-          <Link href="/dashboard" className="btn-ui btn-ui-ghost h-10 px-3">
+          <Link
+            href={projectId ? `/project/${projectId}/dashboard` : "/studio"}
+            className="btn-ui btn-ui-ghost h-10 px-3"
+          >
             ← Dashboard
           </Link>
         </DashboardAreaHeader>
@@ -87,7 +95,10 @@ export default function FaqDetailPage() {
             Edit question, answers, and publish status.
           </p>
         </div>
-        <Link href="/dashboard" className="btn-ui btn-ui-ghost h-10 px-3">
+        <Link
+          href={projectId ? `/project/${projectId}/dashboard` : "/studio"}
+          className="btn-ui btn-ui-ghost h-10 px-3"
+        >
           ← Dashboard
         </Link>
       </DashboardAreaHeader>

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { dbListFaqsByUserIdLight } from "@/lib/faq/supabase-faq";
 import {
@@ -27,6 +27,8 @@ const btnDanger =
 export default function ManageTopicsPage() {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const projectId = searchParams.get("projectId")?.trim() || null;
   const prevPathRef = useRef<string | null>(null);
   const [topics, setTopics] = useState<Topic[]>([]);
   const [faqs, setFaqs] = useState<FAQ[]>([]);
@@ -86,14 +88,17 @@ export default function ManageTopicsPage() {
       data: { user },
     } = await supabase.auth.getUser();
     if (!user) {
-      router.replace("/auth?redirectTo=/dashboard/faq/topics");
+      const scopedRedirect = projectId
+        ? `/dashboard/faq/topics?projectId=${encodeURIComponent(projectId)}`
+        : "/dashboard/faq/topics";
+      router.replace(`/auth?redirectTo=${encodeURIComponent(scopedRedirect)}`);
       return;
     }
     setError(null);
     try {
       const [topicList, faqList] = await Promise.all([
-        dbListTopicsByUserId(supabase, user.id),
-        dbListFaqsByUserIdLight(supabase, user.id),
+        dbListTopicsByUserId(supabase, user.id, projectId ?? undefined),
+        dbListFaqsByUserIdLight(supabase, user.id, projectId ?? undefined),
       ]);
       setTopics(topicList);
       setFaqs(faqList);
@@ -104,7 +109,7 @@ export default function ManageTopicsPage() {
     } finally {
       setLoading(false);
     }
-  }, [router]);
+  }, [projectId, router]);
 
   useEffect(() => {
     void load();
@@ -227,6 +232,7 @@ export default function ManageTopicsPage() {
       }
       const row = await dbInsertTopic(supabase, {
         userId: user.id,
+        projectId,
         title,
         isActive: false,
       });
@@ -250,7 +256,7 @@ export default function ManageTopicsPage() {
             Topics
           </span>
           <Link
-            href="/dashboard"
+            href={projectId ? `/project/${projectId}/dashboard` : "/studio"}
             className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6b6b6b] hover:text-[#0a0a0a]"
           >
             ← Dashboard
@@ -270,7 +276,7 @@ export default function ManageTopicsPage() {
           Topics
         </span>
         <Link
-          href="/dashboard"
+          href={projectId ? `/project/${projectId}/dashboard` : "/studio"}
           className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6b6b6b] hover:text-[#0a0a0a]"
         >
           ← Dashboard
@@ -555,7 +561,7 @@ export default function ManageTopicsPage() {
                     </p>
                   </div>
                   <Link
-                    href={`/dashboard/faq/create?topic=${selectedTopic.id}`}
+                    href={`/dashboard/faq/create?topic=${selectedTopic.id}${projectId ? `&projectId=${encodeURIComponent(projectId)}` : ""}`}
                     className="interactive-smooth inline-flex h-10 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm shadow-black/[0.06] transition-colors hover:bg-surface-muted"
                   >
                     Add question
@@ -577,7 +583,7 @@ export default function ManageTopicsPage() {
                           {faq.title}
                         </span>
                         <Link
-                          href={`/dashboard/faq/${faq.id}`}
+                          href={`/dashboard/faq/${faq.id}${projectId ? `?projectId=${encodeURIComponent(projectId)}` : ""}`}
                           className="text-[10px] font-medium uppercase tracking-widest text-[#6b6b6b] underline hover:text-[#0a0a0a]"
                         >
                           Edit FAQ

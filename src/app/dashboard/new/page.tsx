@@ -18,10 +18,10 @@ export default function NewFaqPage() {
     <main className="mt-8 flex flex-1 flex-col gap-10">
       <div>
         <Link
-          href="/dashboard"
+          href="/studio"
           className="text-[11px] font-medium uppercase tracking-widest text-[#6b6b6b] hover:text-[#0a0a0a]"
         >
-          ← Back to Dashboard
+          ← Back to Studio
         </Link>
         <h1 className="mt-4 text-2xl font-semibold tracking-tight text-[#0a0a0a] sm:text-3xl">
           Create new FAQ page
@@ -37,10 +37,10 @@ export default function NewFaqPage() {
           template, and get your unique link and embed code here.
         </p>
         <Link
-          href="/dashboard"
+          href="/studio"
           className="btn-shadow-smooth btn-ghost-edge interactive-smooth mt-6 inline-block rounded-xl bg-black/[0.05] px-5 py-2 text-[11px] font-medium uppercase tracking-widest text-[#020617]"
         >
-          Back to Dashboard
+          Back to Studio
         </Link>
       </section>
     </main>

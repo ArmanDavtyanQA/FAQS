@@ -25,7 +25,6 @@ export function getProjectStudioNav(projectId: string): {
   const base = `/project/${projectId}`;
   return [
     { id: "dashboard", href: `${base}/dashboard`, label: "Dashboard" },
-    { id: "faq", href: `${base}/faq`, label: "FAQ" },
     { id: "analytics", href: `${base}/analytics`, label: "Analytics" },
     { id: "templates", href: `${base}/templates`, label: "Templates" },
     { id: "orders", href: `${base}/orders`, label: "Orders" },

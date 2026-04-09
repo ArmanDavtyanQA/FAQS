@@ -78,10 +78,10 @@ export default function AccountPage() {
     <main className="flex flex-1 flex-col gap-10">
       <div>
         <Link
-          href="/dashboard"
+          href="/studio"
           className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6b6b6b] hover:text-[#0a0a0a]"
         >
-          ← Dashboard
+          ← Studio
         </Link>
         <p className="label-caps mt-6">Account</p>
       </div>

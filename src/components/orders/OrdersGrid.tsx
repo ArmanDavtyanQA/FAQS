@@ -10,6 +10,7 @@ import type { OrderRow, OrderStatus } from "@/components/orders/types";
 export type { OrderRow, OrderStatus } from "@/components/orders/types";
 
 export type OrdersGridProps = {
+  projectId?: string;
   orders?: OrderRow[];
   onCreateOrder?: (order: OrderRow) => void;
   onEdit?: (id: string) => void;
@@ -88,7 +89,6 @@ type RowMenuProps = {
 
 function RowActionsMenu({ orderId, onEdit, onDelete }: RowMenuProps) {
   const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const btnRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [coords, setCoords] = useState({ top: 0, left: 0 });
@@ -102,10 +102,6 @@ function RowActionsMenu({ orderId, onEdit, onDelete }: RowMenuProps) {
       top: r.bottom + 6,
       left: r.right - width,
     });
-  }, []);
-
-  useEffect(() => {
-    setMounted(true);
   }, []);
 
   const toggle = () => {
@@ -141,7 +137,7 @@ function RowActionsMenu({ orderId, onEdit, onDelete }: RowMenuProps) {
     return () => document.removeEventListener("pointerdown", close);
   }, [open]);
 
-  const portal = mounted
+  const portal = typeof window !== "undefined"
     ? createPortal(
       <>
         {open ? (
@@ -218,17 +214,32 @@ function RowActionsMenu({ orderId, onEdit, onDelete }: RowMenuProps) {
 }
 
 export default function OrdersGrid({
+  projectId,
   orders = MOCK_ORDERS,
   onCreateOrder,
   onEdit,
   onDelete,
 }: OrdersGridProps) {
-  const [rows, setRows] = useState<OrderRow[]>(orders);
+  const storageKey = projectId
+    ? `quantum:project-orders:v1:${projectId}`
+    : null;
+  const [rows, setRows] = useState<OrderRow[]>(() => {
+    if (!storageKey || typeof window === "undefined") return orders;
+    try {
+      const raw = window.localStorage.getItem(storageKey);
+      if (!raw) return orders;
+      const parsed = JSON.parse(raw) as OrderRow[];
+      return Array.isArray(parsed) ? parsed : orders;
+    } catch {
+      return orders;
+    }
+  });
   const [createOpen, setCreateOpen] = useState(false);
 
   useEffect(() => {
-    setRows(orders);
-  }, [orders]);
+    if (!storageKey || typeof window === "undefined") return;
+    window.localStorage.setItem(storageKey, JSON.stringify(rows));
+  }, [rows, storageKey]);
 
   const handleCreate = (order: OrderRow) => {
     setRows((prev) => [order, ...prev]);

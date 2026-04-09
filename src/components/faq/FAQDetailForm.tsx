@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabaseClient";
 import { dbUpdateFaq } from "@/lib/faq/supabase-faq";
@@ -16,6 +16,8 @@ const inputClass =
 
 export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const projectId = searchParams.get("projectId")?.trim() || null;
   const [title, setTitle] = useState(initial.title);
   const [answers, setAnswers] = useState<string[]>(
     initial.answers.length ? initial.answers : [""],
@@ -47,7 +49,11 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
           data: { user },
         } = await supabase.auth.getUser();
         if (!user?.id || cancelled) return;
-        const list = await dbListTopicsByUserId(supabase, user.id);
+        const list = await dbListTopicsByUserId(
+          supabase,
+          user.id,
+          projectId ?? undefined,
+        );
         if (!cancelled) setTopics(list);
       } catch {
         if (!cancelled) setError("Could not load topics.");
@@ -58,7 +64,7 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [projectId]);
 
   useEffect(() => {
     setTopicIds(initial.topicIds ?? []);
@@ -168,7 +174,11 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
             <p className="mt-1 text-xs text-[#5A4A40]">
               At least one required.{" "}
               <Link
-                href="/dashboard/faq/topics"
+                href={
+                  projectId
+                    ? `/dashboard/faq/topics?projectId=${encodeURIComponent(projectId)}`
+                    : "/dashboard/faq/topics"
+                }
                 className="underline hover:text-[#0a0a0a]"
               >
                 Manage topics
@@ -180,7 +190,11 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
               <p className="mt-2 text-sm text-[#5A4A40]">
                 No topics yet.{" "}
                 <Link
-                  href="/dashboard/faq/create"
+                  href={
+                    projectId
+                      ? `/dashboard/faq/create?projectId=${encodeURIComponent(projectId)}`
+                      : "/dashboard/faq/create"
+                  }
                   className="underline hover:text-[#0a0a0a]"
                 >
                   Create topics
@@ -305,7 +319,11 @@ export default function FAQDetailForm({ faq: initial }: { faq: FAQ }) {
           </button>
           <button
             type="button"
-            onClick={() => router.push("/dashboard")}
+            onClick={() =>
+              router.push(
+                projectId ? `/project/${projectId}/dashboard` : "/studio",
+              )
+            }
             className="btn-shadow-smooth btn-ghost-edge interactive-smooth inline-flex h-10 items-center justify-center rounded-xl bg-surface px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a]"
           >
             Back to list

@@ -6,10 +6,10 @@ export default function ContactPage() {
     <main className="flex flex-1 flex-col gap-6">
       <div>
         <Link
-          href="/dashboard"
+          href="/studio"
           className="text-[11px] font-medium uppercase tracking-widest text-[#6b6b6b] hover:text-[#0a0a0a]"
         >
-          ← Dashboard
+          ← Studio
         </Link>
         <h1 className="mt-2 text-2xl font-semibold tracking-tight text-[#0a0a0a]">
           Contact

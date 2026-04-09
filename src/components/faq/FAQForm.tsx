@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { dbInsertFaq } from "@/lib/faq/supabase-faq";
@@ -17,6 +16,12 @@ type Props = {
   paidPlan: boolean;
   /** When set (e.g. `?topic=` from manage topics), empty question blocks default to this topic. */
   initialTopicId?: string | null;
+  /** Optional project scope for project-specific FAQ ownership. */
+  projectId?: string | null;
+  /** Optional callback for modal flow after successful save. */
+  onFinish?: () => void | Promise<void>;
+  /** Optional callback for modal flow cancel action. */
+  onCancel?: () => void;
 };
 
 type QuestionBlock = {
@@ -32,6 +37,9 @@ function defaultTopicIds(topics: Topic[]): string[] {
 export default function FAQForm({
   paidPlan,
   initialTopicId = null,
+  projectId = null,
+  onFinish,
+  onCancel,
 }: Props) {
   const router = useRouter();
   const [topics, setTopics] = useState<Topic[]>([]);
@@ -86,7 +94,11 @@ export default function FAQForm({
           if (!cancelled) setTopicsLoading(false);
           return;
         }
-        const list = await dbListTopicsByUserId(supabase, user.id);
+        const list = await dbListTopicsByUserId(
+          supabase,
+          user.id,
+          projectId ?? undefined,
+        );
         if (!cancelled) {
           setTopics(list);
           setQuestions((qs) =>
@@ -114,7 +126,7 @@ export default function FAQForm({
     return () => {
       cancelled = true;
     };
-  }, [initialTopicId]);
+  }, [initialTopicId, projectId]);
 
   function hasMeaningfulText(html: string) {
     const text = html
@@ -151,6 +163,7 @@ export default function FAQForm({
       }
       const row = await dbInsertTopic(supabase, {
         userId: user.id,
+        projectId,
         title,
       });
       setTopics((prev) => {
@@ -342,6 +355,7 @@ export default function FAQForm({
       for (const row of prepared) {
         await dbInsertFaq(supabase, {
           userId: user.id,
+          projectId,
           title: row.title,
           answers: row.answers,
           status,
@@ -349,7 +363,15 @@ export default function FAQForm({
         });
       }
 
-      router.push("/dashboard");
+      if (onFinish) {
+        await onFinish();
+        return;
+      }
+      if (projectId) {
+        router.push(`/project/${projectId}/dashboard`);
+      } else {
+        router.push("/studio");
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create FAQ");
     } finally {
@@ -385,14 +407,8 @@ export default function FAQForm({
                 Step 1 — Topics <span className="text-[#5A4A40]">*</span>
               </p>
               <p className="mt-1 text-xs text-[#5A4A40]">
-                Create topics first. You can rename or delete them later from{" "}
-                <Link
-                  href="/dashboard/faq/topics"
-                  className="underline hover:text-[#0a0a0a]"
-                >
-                  Manage topics
-                </Link>
-                .
+                Create topics first, then assign each question to one or more
+                topics.
               </p>
             </div>
           </div>
@@ -683,7 +699,13 @@ export default function FAQForm({
           </button>
           <button
             type="button"
-            onClick={() => router.push("/dashboard")}
+            onClick={() =>
+              onCancel
+                ? onCancel()
+                : router.push(
+                    projectId ? `/project/${projectId}/dashboard` : "/studio",
+                  )
+            }
             className={`${btnSolid} h-10 px-6`}
           >
             Cancel
@@ -715,10 +737,10 @@ export default function FAQForm({
                 return (
                   <div
                     key={idx}
-                    className={`overflow-hidden rounded-xl bg-surface/60 backdrop-blur-md transition-all duration-500 blur-[0.5px] hover:blur-none ${
+                    className={`overflow-hidden rounded-xl border border-[#e8e6e3] bg-surface/60 shadow-sm shadow-black/[0.06] backdrop-blur-md transition-[box-shadow,border-color,background-color] duration-300 ${
                       isPreviewOpen
-                        ? "border-2 border-[#0a0a0a] shadow-md shadow-black/15 ring-1 ring-[#0a0a0a]/10"
-                        : "border border-[#e8e6e3] shadow-sm shadow-black/[0.06]"
+                        ? "border-[#0a0a0a] shadow-md shadow-black/15 ring-1 ring-[#0a0a0a]/10"
+                        : "hover:border-[#d6d3d1] hover:bg-surface/70"
                     }`}
                   >
                     <button

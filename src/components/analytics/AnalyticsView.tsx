@@ -32,6 +32,7 @@ export type AnalyticsPerformancePoint = {
 };
 
 export type AnalyticsViewProps = {
+  projectId?: string;
   metrics?: AnalyticsLensMetric[];
   performanceData?: AnalyticsPerformancePoint[];
 };
@@ -90,6 +91,59 @@ function buildMockPerformanceSeries(): AnalyticsPerformancePoint[] {
   return out;
 }
 
+function hashSeed(input: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < input.length; i++) {
+    h ^= input.charCodeAt(i);
+    h +=
+      (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
+  }
+  return Math.abs(h >>> 0);
+}
+
+function buildProjectMetrics(projectId: string): AnalyticsLensMetric[] {
+  const seed = hashSeed(projectId);
+  const total = 120000 + (seed % 240000);
+  const avg = 95 + (seed % 320);
+  const count = 350 + (seed % 1800);
+  return [
+    {
+      id: "total-amount",
+      label: "Total Amount",
+      valueFormatted: `$${total.toLocaleString()}.00`,
+      glow: "amber",
+    },
+    {
+      id: "avg-order",
+      label: "Average Order Amount",
+      valueFormatted: `$${avg.toLocaleString()}.00`,
+      glow: "slate",
+    },
+    {
+      id: "orders-count",
+      label: "Orders Count",
+      valueFormatted: count.toLocaleString(),
+      glow: "emerald",
+    },
+  ];
+}
+
+function buildProjectPerformanceSeries(projectId: string): AnalyticsPerformancePoint[] {
+  const seed = hashSeed(projectId);
+  const out: AnalyticsPerformancePoint[] = [];
+  const start = new Date();
+  start.setDate(start.getDate() - 27);
+  for (let i = 0; i < 28; i++) {
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+    const label = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const wave = 24 + Math.sin((i + (seed % 6)) / 3) * 12 + (seed % 20);
+    const trend = i > 16 ? (i - 16) * ((seed % 5) + 1) * 0.8 : 0;
+    out.push({ date: label, orders: Math.max(8, Math.round(wave + trend)) });
+  }
+  return out;
+}
+
 export const MOCK_PERFORMANCE_DATA: AnalyticsPerformancePoint[] =
   buildMockPerformanceSeries();
 
@@ -122,21 +176,32 @@ function PerformanceTooltip({
 }
 
 export default function AnalyticsView({
-  metrics = MOCK_ANALYTICS_METRICS,
-  performanceData = MOCK_PERFORMANCE_DATA,
+  projectId,
+  metrics,
+  performanceData,
 }: AnalyticsViewProps) {
+  const resolvedMetrics = useMemo(() => {
+    if (metrics) return metrics;
+    return projectId ? buildProjectMetrics(projectId) : MOCK_ANALYTICS_METRICS;
+  }, [metrics, projectId]);
+  const resolvedPerformanceData = useMemo(() => {
+    if (performanceData) return performanceData;
+    return projectId
+      ? buildProjectPerformanceSeries(projectId)
+      : MOCK_PERFORMANCE_DATA;
+  }, [performanceData, projectId]);
   const gradientId = useId().replace(/:/g, "");
   const fillId = `perf-area-${gradientId}`;
 
   const chartData = useMemo(
-    () => performanceData.map((d) => ({ ...d })),
-    [performanceData],
+    () => resolvedPerformanceData.map((d) => ({ ...d })),
+    [resolvedPerformanceData],
   );
 
   return (
     <div className="mx-auto w-full max-w-6xl">
       <div className="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6">
-        {metrics.map((m) => (
+        {resolvedMetrics.map((m) => (
           <div
             key={m.id}
             className="panel-base glass-slab relative overflow-hidden rounded-2xl p-6 shadow-[20px_0_50px_rgba(0,0,0,0.02)]"

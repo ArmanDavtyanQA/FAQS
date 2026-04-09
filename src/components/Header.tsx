@@ -90,11 +90,6 @@ export default function Header() {
                   Studio
                 </Link>
               )}
-            {pathname !== "/dashboard" && (
-              <Link href="/dashboard" className={btnGhost}>
-                Dashboard
-              </Link>
-            )}
             <Link
               href="/dashboard/account"
               className={`${btnGhost} max-w-[160px] truncate`}

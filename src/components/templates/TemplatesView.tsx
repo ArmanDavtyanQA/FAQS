@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import * as Dialog from "@radix-ui/react-dialog";
 import { motion } from "framer-motion";
 import { Info, Lock, Sparkles } from "lucide-react";
+import { getProjectTheme, setProjectTheme } from "@/lib/studio/projectScope";
 
 export type TemplateId = "minimalist" | "branded" | "quantum";
 
@@ -21,6 +22,8 @@ const greekShort = "Lorem ipsum dolor sit amet consectetur elit sed do.";
 type TemplatesViewProps = {
   /** When omitted, uses `MOCK_USER_PLAN` until global auth supplies this. */
   userPlan?: UserPlan;
+  /** Optional project scope for project-specific selected template. */
+  projectId?: string;
   selectedId?: TemplateId | null;
   onSelect?: (id: TemplateId) => void;
   onPreviewLayout?: (id: TemplateId) => void;
@@ -567,18 +570,42 @@ function LockedProOverlay({
 
 export default function TemplatesView({
   userPlan: userPlanProp,
+  projectId,
   selectedId: controlledId,
   onSelect,
   onPreviewLayout,
 }: TemplatesViewProps) {
   const effectivePlan = userPlanProp ?? MOCK_USER_PLAN;
-  const [internalId, setInternalId] = useState<TemplateId | null>(null);
+  const [internalSelection, setInternalSelection] = useState<{
+    projectId: string | null;
+    id: TemplateId | null;
+  }>({ projectId: null, id: null });
+  const storedProjectTheme = useSyncExternalStore(
+    (onStoreChange) => {
+      if (typeof window === "undefined") return () => {};
+      window.addEventListener("storage", onStoreChange);
+      return () => window.removeEventListener("storage", onStoreChange);
+    },
+    () => (projectId ? getProjectTheme(projectId) : null),
+    () => null,
+  );
+  const internalId =
+    internalSelection.projectId === (projectId ?? null)
+      ? internalSelection.id
+      : null;
   const selectedId =
-    controlledId !== undefined ? controlledId : internalId;
+    controlledId !== undefined ? controlledId : internalId ?? storedProjectTheme;
   const [pricingOpen, setPricingOpen] = useState(false);
 
+  useEffect(() => {
+    if (controlledId !== undefined || !projectId) return;
+    setProjectTheme(projectId, selectedId ?? null);
+  }, [controlledId, projectId, selectedId]);
+
   const selectUnlocked = (id: TemplateId) => {
-    if (controlledId === undefined) setInternalId(id);
+    if (controlledId === undefined) {
+      setInternalSelection({ projectId: projectId ?? null, id });
+    }
     onSelect?.(id);
   };
 

@@ -1,5 +1,9 @@
+"use client";
+
+import { useParams } from "next/navigation";
 import AnalyticsView from "@/components/analytics/AnalyticsView";
 
 export default function ProjectAnalyticsPage() {
-  return <AnalyticsView />;
+  const { id } = useParams<{ id: string }>();
+  return <AnalyticsView projectId={id} />;
 }

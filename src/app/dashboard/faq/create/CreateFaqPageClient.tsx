@@ -8,6 +8,7 @@ import FAQForm from "@/components/faq/FAQForm";
 export default function CreateFaqPageClient({ paidPlan }: { paidPlan: boolean }) {
   const searchParams = useSearchParams();
   const initialTopicId = searchParams.get("topic");
+  const projectId = searchParams.get("projectId");
 
   return (
     <div className="-mx-4 min-h-[calc(100dvh-6rem)] bg-transparent text-[#0a0a0a] sm:-mx-6 lg:-mx-10">
@@ -16,7 +17,7 @@ export default function CreateFaqPageClient({ paidPlan }: { paidPlan: boolean })
           Create
         </span>
         <Link
-          href="/dashboard"
+          href={projectId ? `/project/${projectId}/dashboard` : "/studio"}
           className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6b6b6b] hover:text-[#0a0a0a]"
         >
           ← Dashboard
@@ -37,6 +38,7 @@ export default function CreateFaqPageClient({ paidPlan }: { paidPlan: boolean })
           <FAQForm
             paidPlan={paidPlan}
             initialTopicId={initialTopicId || null}
+            projectId={projectId || null}
           />
         </div>
       </main>

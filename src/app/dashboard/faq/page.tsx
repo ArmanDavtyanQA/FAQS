@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 
 /**
- * FAQ list lives on the main dashboard. Redirect legacy /dashboard/faq here.
+ * Root dashboard is deprecated. Send legacy FAQ index to Studio.
  */
 export default function DashboardFaqRedirectPage() {
-  redirect("/dashboard");
+  redirect("/studio");
 }

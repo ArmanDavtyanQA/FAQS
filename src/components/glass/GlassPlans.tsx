@@ -111,7 +111,6 @@ export default function GlassPlans() {
                 delay: i * 0.06,
                 ease: [0.22, 0.61, 0.36, 1],
               }}
-              whileHover={{ y: -6, scale: 1.01 }}
               className={`${planCardBase} ${
                 plan.emphasized
                   ? "ring-1 ring-slate-300/70 shadow-[0_24px_72px_rgba(15,23,42,0.12)]"

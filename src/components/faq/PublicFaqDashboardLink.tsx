@@ -7,8 +7,10 @@ import { supabase } from "@/lib/supabaseClient";
 /** Upper-right ← Dashboard when the viewer owns the public FAQ (inside main card header) */
 export default function PublicFaqDashboardLink({
   ownerUserId,
+  projectId,
 }: {
   ownerUserId: string;
+  projectId?: string;
 }) {
   const [isOwner, setIsOwner] = useState(false);
 
@@ -33,10 +35,10 @@ export default function PublicFaqDashboardLink({
   return (
     <div className="shrink-0 self-start pt-0.5 text-right">
       <Link
-        href="/dashboard"
+        href={projectId ? `/project/${projectId}/dashboard` : "/studio"}
         className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6B7280] transition-colors hover:text-[#1F1F1F]"
       >
-        ← Dashboard
+        ← {projectId ? "Project dashboard" : "Studio"}
       </Link>
     </div>
   );

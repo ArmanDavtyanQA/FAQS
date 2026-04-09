@@ -5,7 +5,11 @@ import { GlassHero, GlassPlans } from "@/components/glass";
 
 export default function Home() {
   return (
-    <main className="flex min-h-0 flex-1 flex-col gap-16 lg:gap-24">
+    <main className="relative -mx-4 flex min-h-0 flex-1 flex-col gap-16 overflow-hidden sm:-mx-6 lg:-mx-10 lg:gap-24">
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.32] [background-image:linear-gradient(rgba(31,41,55,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(31,41,55,0.14)_1px,transparent_1px)] [background-size:34px_34px]"
+        aria-hidden
+      />
       <GlassHero />
 
       <GlassPlans />
@@ -56,16 +60,8 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={{ once: true, margin: "-30px" }}
               transition={{ duration: 0.65, delay: i * 0.08, ease: [0.22, 0.61, 0.36, 1] }}
-              whileHover={{ y: -8, scale: 1.02 }}
-              className="group relative flex flex-col overflow-hidden rounded-[2rem] border border-slate-200/90 bg-white/95 p-8 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-sm transition-all duration-500"
+              className="group relative flex flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_20px_60px_rgba(15,23,42,0.08)] transition-all duration-500"
             >
-              <div
-                className="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]"
-                aria-hidden
-              >
-                <div className="absolute -left-[18%] bottom-[-32%] h-[min(18rem,55vw)] w-[min(28rem,95%)] rounded-full bg-gradient-to-tr from-slate-400/10 via-indigo-500/8 to-transparent blur-[72px]" />
-              </div>
-              <div className="absolute inset-0 rounded-[inherit] bg-gradient-to-br from-white/50 via-transparent to-indigo-500/[0.04] opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
               <div className="relative z-10">
                 <span className="text-[11px] font-bold tracking-[0.2em] text-slate-900">
                   {item.n}
@@ -80,10 +76,6 @@ export default function Home() {
             </motion.div>
           ))}
         </div>
-        <div
-          className="pointer-events-none absolute right-0 top-1/3 h-64 w-64 translate-x-1/3 rounded-full bg-gradient-to-tr from-slate-400/12 via-indigo-400/8 to-transparent blur-[80px]"
-          aria-hidden
-        />
       </section>
 
       <footer className="flex justify-center pb-10 pt-16">

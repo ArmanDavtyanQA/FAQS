@@ -137,7 +137,7 @@ export default function StudioProjectsHub() {
             className="group/card relative rounded-2xl shadow-[20px_0_50px_rgba(0,0,0,0.02)]"
           >
             <div
-              className="glass-slab antigravity-lift relative overflow-hidden rounded-2xl border border-r border-black/[0.04] text-left transition-[border-color] group-hover/card:border-black/[0.1]"
+              className="glass-slab relative overflow-hidden rounded-2xl border border-r border-black/[0.04] text-left transition-[border-color] group-hover/card:border-black/[0.1]"
             >
               {/* Stretched hit target: primary navigation (dashboard) */}
               <Link
@@ -175,12 +175,12 @@ export default function StudioProjectsHub() {
                 </span>
               </div>
               <nav
-                className="relative z-10 flex flex-wrap gap-1 border-t border-black/[0.06] bg-black/[0.025] px-2 py-2"
+                className="relative z-10 flex flex-nowrap items-center gap-1.5 overflow-x-auto border-t border-black/[0.07] bg-gradient-to-b from-black/[0.02] to-black/[0.04] px-2.5 py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
                 aria-label={`Shortcuts for ${p.name}`}
               >
                 {(
                   [
-                    ["FAQ", `/project/${p.id}/faq`],
+                    ["Dashboard", `/project/${p.id}/dashboard`],
                     ["Analytics", `/project/${p.id}/analytics`],
                     ["Templates", `/project/${p.id}/templates`],
                     ["Orders", `/project/${p.id}/orders`],
@@ -190,7 +190,7 @@ export default function StudioProjectsHub() {
                     key={href}
                     href={href}
                     prefetch
-                    className="rounded-lg px-3 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-ui-muted transition-colors hover:bg-white/55 hover:text-ui-strong"
+                    className="interactive-smooth rounded-lg border border-transparent bg-white/0 px-3 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-ui-muted shadow-none transition-[background-color,color,border-color,box-shadow] duration-200 hover:border-black/[0.08] hover:bg-white/85 hover:text-ui-strong hover:shadow-[0_6px_18px_-12px_rgba(0,0,0,0.45)] focus:outline-none focus-visible:border-black/[0.12] focus-visible:bg-white focus-visible:text-ui-strong focus-visible:ring-2 focus-visible:ring-yellow-500/35"
                     onClick={(e) => e.stopPropagation()}
                   >
                     {label}

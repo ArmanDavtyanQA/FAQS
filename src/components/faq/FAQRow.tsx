@@ -13,10 +13,16 @@ function topicDisplayText(faq: FAQ): string {
     : `${faq.topicIds.length} topics`;
 }
 
-export default function FAQRow({ faq }: { faq: FAQ }) {
+export default function FAQRow({
+  faq,
+  projectId,
+}: {
+  faq: FAQ;
+  projectId?: string;
+}) {
   return (
     <Link
-      href={`/dashboard/faq/${faq.id}`}
+      href={`/dashboard/faq/${faq.id}${projectId ? `?projectId=${encodeURIComponent(projectId)}` : ""}`}
       className="grid grid-cols-[1fr_minmax(0,1.2fr)_auto] gap-4 px-4 py-3 text-sm transition-colors duration-300 hover:bg-surface-muted md:grid-cols-[minmax(0,1.2fr)_minmax(0,1.4fr)_auto]"
     >
       <span className="truncate font-light tracking-widest text-[#0a0a0a]">

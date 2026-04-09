@@ -214,10 +214,10 @@ export default function ContactForm({
       <div className="mt-6 flex flex-wrap gap-3">
         <button
           type="button"
-          onClick={() => router.push("/dashboard")}
+          onClick={() => router.push("/studio")}
           className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-surface-muted"
         >
-          Back to dashboard
+          Back to studio
         </button>
         <button
           type="button"
@@ -392,10 +392,10 @@ export default function ContactForm({
                   <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                     <button
                       type="button"
-                      onClick={() => router.push("/dashboard")}
+                      onClick={() => router.push("/studio")}
                       className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-all duration-300 hover:bg-surface-muted"
                     >
-                      Back to dashboard
+                      Back to studio
                     </button>
                     <button
                       type="button"

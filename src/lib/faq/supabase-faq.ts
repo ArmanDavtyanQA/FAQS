@@ -6,6 +6,7 @@ import { dbSetFaqTopicLinks } from "./supabase-topics";
 export interface FaqRow {
   id: string;
   user_id: string;
+  project_id?: string | null;
   title: string;
   answers: string[];
   status: FAQStatus;
@@ -59,14 +60,35 @@ function parseTopicLinks(
 }
 
 const SELECT_LIGHT = `
-  id,user_id,title,status,created_at,
+  id,user_id,project_id,title,status,created_at,
   faq_topic_links(topic_id, faq_topics(id, title, is_active))
 `;
 
 const SELECT_FULL = `
+  id,user_id,project_id,title,answers,status,created_at,
+  faq_topic_links(topic_id, faq_topics(id, title, is_active))
+`;
+
+const SELECT_LIGHT_LEGACY = `
+  id,user_id,title,status,created_at,
+  faq_topic_links(topic_id, faq_topics(id, title, is_active))
+`;
+
+const SELECT_FULL_LEGACY = `
   id,user_id,title,answers,status,created_at,
   faq_topic_links(topic_id, faq_topics(id, title, is_active))
 `;
+
+function isMissingProjectIdColumn(error: { message?: string } | null): boolean {
+  const msg = (error?.message ?? "").toLowerCase();
+  return (
+    msg.includes("column faqs.project_id does not exist") ||
+    msg.includes("column \"project_id\" does not exist") ||
+    (msg.includes("project_id") &&
+      msg.includes("faqs") &&
+      msg.includes("schema cache"))
+  );
+}
 
 export function rowToFaq(
   row: FaqRowWithLinks,
@@ -83,6 +105,7 @@ export function rowToFaq(
     status: row.status === "published" ? "published" : "draft",
     createdAt: row.created_at,
     userId: row.user_id,
+    projectId: row.project_id ?? null,
     topicIds,
     topicLabels: topicLabels.length ? topicLabels : undefined,
   };
@@ -92,13 +115,28 @@ export function rowToFaq(
 export async function dbListFaqsByUserIdLight(
   client: SupabaseClient,
   userId: string,
+  projectId?: string,
 ): Promise<FAQ[]> {
-  const { data, error } = await client
+  let query = client
     .from("faqs")
     .select(SELECT_LIGHT)
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false });
+    .eq("user_id", userId);
+  if (projectId) query = query.eq("project_id", projectId);
+  const { data, error } = await query.order("created_at", { ascending: false });
 
+  if (error && isMissingProjectIdColumn(error)) {
+    // Strict isolation: without DB-level project_id support, refuse scoped reads.
+    if (projectId) return [];
+    const { data: legacyData, error: legacyError } = await client
+      .from("faqs")
+      .select(SELECT_LIGHT_LEGACY)
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+    if (legacyError) throw new Error(legacyError.message);
+    return (legacyData as unknown as FaqRowWithLinks[]).map((r) =>
+      rowToFaq({ ...r, answers: [] } as FaqRowWithLinks),
+    );
+  }
   if (error) throw new Error(error.message);
   return (data as unknown as FaqRowWithLinks[]).map((r) =>
     rowToFaq({ ...r, answers: [] } as FaqRowWithLinks),
@@ -108,13 +146,28 @@ export async function dbListFaqsByUserIdLight(
 export async function dbListFaqsByUserId(
   client: SupabaseClient,
   userId: string,
+  projectId?: string,
 ): Promise<FAQ[]> {
-  const { data, error } = await client
+  let query = client
     .from("faqs")
     .select(SELECT_FULL)
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false });
+    .eq("user_id", userId);
+  if (projectId) query = query.eq("project_id", projectId);
+  const { data, error } = await query.order("created_at", { ascending: false });
 
+  if (error && isMissingProjectIdColumn(error)) {
+    // Strict isolation: without DB-level project_id support, refuse scoped reads.
+    if (projectId) return [];
+    const { data: legacyData, error: legacyError } = await client
+      .from("faqs")
+      .select(SELECT_FULL_LEGACY)
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+    if (legacyError) throw new Error(legacyError.message);
+    return (legacyData as unknown as FaqRowWithLinks[]).map((row) =>
+      rowToFaq(row),
+    );
+  }
   if (error) throw new Error(error.message);
   return (data as unknown as FaqRowWithLinks[]).map((row) => rowToFaq(row));
 }
@@ -122,14 +175,30 @@ export async function dbListFaqsByUserId(
 export async function dbListPublishedByUserId(
   client: SupabaseClient,
   userId: string,
+  projectId?: string,
 ): Promise<FAQ[]> {
-  const { data, error } = await client
+  let query = client
     .from("faqs")
     .select(SELECT_FULL)
     .eq("user_id", userId)
-    .eq("status", "published")
-    .order("created_at", { ascending: true });
+    .eq("status", "published");
+  if (projectId) query = query.eq("project_id", projectId);
+  const { data, error } = await query.order("created_at", { ascending: true });
 
+  if (error && isMissingProjectIdColumn(error)) {
+    // Strict isolation: without DB-level project_id support, refuse scoped reads.
+    if (projectId) return [];
+    const { data: legacyData, error: legacyError } = await client
+      .from("faqs")
+      .select(SELECT_FULL_LEGACY)
+      .eq("user_id", userId)
+      .eq("status", "published")
+      .order("created_at", { ascending: true });
+    if (legacyError) throw new Error(legacyError.message);
+    return (legacyData as unknown as FaqRowWithLinks[])
+      .map((row) => rowToFaq(row, { excludeInactiveTopics: true }))
+      .filter((faq) => faq.topicIds.length > 0);
+  }
   if (error) throw new Error(error.message);
   return (data as unknown as FaqRowWithLinks[])
     .map((row) => rowToFaq(row, { excludeInactiveTopics: true }))
@@ -139,13 +208,26 @@ export async function dbListPublishedByUserId(
 export async function dbGetFaqById(
   client: SupabaseClient,
   id: string,
+  projectId?: string,
 ): Promise<FAQ | null> {
-  const { data, error } = await client
+  let q = client
     .from("faqs")
     .select(SELECT_FULL)
-    .eq("id", id)
-    .maybeSingle();
+    .eq("id", id);
+  if (projectId) q = q.eq("project_id", projectId);
+  const { data, error } = await q.maybeSingle();
 
+  if (error && isMissingProjectIdColumn(error)) {
+    if (projectId) return null;
+    const { data: legacyData, error: legacyError } = await client
+      .from("faqs")
+      .select(SELECT_FULL_LEGACY)
+      .eq("id", id)
+      .maybeSingle();
+    if (legacyError) throw new Error(legacyError.message);
+    if (!legacyData) return null;
+    return rowToFaq(legacyData as unknown as FaqRowWithLinks);
+  }
   if (error) throw new Error(error.message);
   if (!data) return null;
   return rowToFaq(data as unknown as FaqRowWithLinks);
@@ -155,6 +237,7 @@ export async function dbInsertFaq(
   client: SupabaseClient,
   input: {
     userId: string;
+    projectId?: string | null;
     title: string;
     answers: string[];
     status?: FAQStatus;
@@ -173,6 +256,7 @@ export async function dbInsertFaq(
     .from("faqs")
     .insert({
       user_id: input.userId,
+      project_id: input.projectId ?? null,
       title,
       answers,
       status: input.status ?? "draft",
@@ -180,6 +264,24 @@ export async function dbInsertFaq(
     .select("id,user_id,title,answers,status,created_at")
     .single();
 
+  if (error && isMissingProjectIdColumn(error)) {
+    const { data: legacyData, error: legacyError } = await client
+      .from("faqs")
+      .insert({
+        user_id: input.userId,
+        title,
+        answers,
+        status: input.status ?? "draft",
+      })
+      .select("id,user_id,title,answers,status,created_at")
+      .single();
+    if (legacyError) throw new Error(legacyError.message);
+    const faqId = (legacyData as FaqRow).id;
+    await dbSetFaqTopicLinks(client, faqId, topicIds);
+    const full = await dbGetFaqById(client, faqId);
+    if (!full) throw new Error("FAQ not found after insert");
+    return full;
+  }
   if (error) throw new Error(error.message);
   const faqId = (data as FaqRow).id;
   await dbSetFaqTopicLinks(client, faqId, topicIds);

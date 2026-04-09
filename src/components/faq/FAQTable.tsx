@@ -7,9 +7,10 @@ import FAQRow from "./FAQRow";
 type Props = {
   faqs: FAQ[];
   topics: Topic[];
+  projectId?: string;
 };
 
-export default function FAQTable({ faqs, topics }: Props) {
+export default function FAQTable({ faqs, topics, projectId }: Props) {
   const [topicFilter, setTopicFilter] = useState<string>("all");
 
   const filteredFaqs = useMemo(() => {
@@ -50,7 +51,7 @@ export default function FAQTable({ faqs, topics }: Props) {
     return (
       <div className="divide-y divide-[#e8e6e3] bg-transparent">
         {list.map((faq) => (
-          <FAQRow key={faq.id} faq={faq} />
+          <FAQRow key={faq.id} faq={faq} projectId={projectId} />
         ))}
       </div>
     );
