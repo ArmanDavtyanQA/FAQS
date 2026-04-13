@@ -737,10 +737,10 @@ export default function FAQForm({
                 return (
                   <div
                     key={idx}
-                    className={`overflow-hidden rounded-xl border border-[#e8e6e3] bg-surface/60 shadow-sm shadow-black/[0.06] backdrop-blur-md transition-[box-shadow,border-color,background-color] duration-300 ${
+                    className={`overflow-hidden rounded-xl border border-[#e8e6e3] bg-surface/60 shadow-sm shadow-black/[0.06] backdrop-blur-md transition-[box-shadow,border-color] duration-300 ${
                       isPreviewOpen
                         ? "border-[#0a0a0a] shadow-md shadow-black/15 ring-1 ring-[#0a0a0a]/10"
-                        : "hover:border-[#d6d3d1] hover:bg-surface/70"
+                        : "hover:border-[#d6d3d1]"
                     }`}
                   >
                     <button
@@ -751,10 +751,8 @@ export default function FAQForm({
                           cur === idx ? null : idx,
                         )
                       }
-                      className={`flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors ${
-                        isPreviewOpen
-                          ? "bg-surface"
-                          : "hover:bg-surface-muted/90"
+                      className={`flex w-full items-center justify-between gap-4 px-5 py-4 text-left ${
+                        isPreviewOpen ? "bg-surface" : ""
                       }`}
                     >
                       <span className="text-sm font-medium text-[#0a0a0a]">

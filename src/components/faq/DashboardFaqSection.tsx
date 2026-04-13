@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { dbListFaqsByUserIdLight } from "@/lib/faq/supabase-faq";
 import { dbListTopicsByUserId } from "@/lib/faq/supabase-topics";
@@ -26,6 +27,7 @@ export default function DashboardFaqSection({
 }: {
   projectId?: string;
 }) {
+  const router = useRouter();
   const paidPlan = process.env.NEXT_PUBLIC_FAQ_PLAN === "paid";
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
@@ -33,9 +35,15 @@ export default function DashboardFaqSection({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
+  const [createInitialTopicId, setCreateInitialTopicId] = useState<string | null>(null);
+  const [topicsOpen, setTopicsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [topicsChannel] = useState(() =>
+    Math.random().toString(36).slice(2, 10),
+  );
   const loadedForUserRef = useRef<string | null>(null);
   const loadInFlightRef = useRef<string | null>(null);
+  const topicsFrameRef = useRef<HTMLIFrameElement | null>(null);
 
   const load = useCallback(async (uid: string) => {
     if (loadInFlightRef.current === uid) return;
@@ -61,6 +69,48 @@ export default function DashboardFaqSection({
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    function onTopicsMessage(event: MessageEvent) {
+      if (event.origin !== window.location.origin) return;
+      if (event.source !== topicsFrameRef.current?.contentWindow) return;
+      const payload = event.data as {
+        type?: string;
+        channel?: string;
+        href?: string;
+      } | null;
+      if (!payload?.type) return;
+      if (payload.channel !== topicsChannel) return;
+      if (payload.type === "faq-topics:done") {
+        setTopicsOpen(false);
+        return;
+      }
+      if (payload.type === "faq-topics:updated") {
+        setTopicsOpen(false);
+        if (userId) void load(userId);
+        return;
+      }
+      if (payload.type === "faq-topics:navigate" && payload.href) {
+        setTopicsOpen(false);
+        if (payload.href.startsWith("/dashboard/faq/create")) {
+          try {
+            const u = new URL(payload.href, window.location.origin);
+            const topic = u.searchParams.get("topic");
+            setCreateInitialTopicId(topic || null);
+            setCreateOpen(true);
+            return;
+          } catch {
+            // fall through to router push
+          }
+        }
+        if (payload.href.startsWith("/")) {
+          router.push(payload.href);
+        }
+      }
+    }
+    window.addEventListener("message", onTopicsMessage);
+    return () => window.removeEventListener("message", onTopicsMessage);
+  }, [load, router, topicsChannel, userId]);
 
   useEffect(() => {
     let cancelled = false;
@@ -127,6 +177,9 @@ export default function DashboardFaqSection({
       : `/faq/${userId}${projectId ? `?projectId=${encodeURIComponent(projectId)}` : ""}`;
 
   const actionsLocked = loading;
+  const topicsUrl = projectId
+    ? `/dashboard/faq/topics?projectId=${encodeURIComponent(projectId)}&modalChannel=${encodeURIComponent(topicsChannel)}`
+    : `/dashboard/faq/topics?modalChannel=${encodeURIComponent(topicsChannel)}`;
 
   return (
     <>
@@ -164,28 +217,26 @@ export default function DashboardFaqSection({
           </button>
         </div>
         <div className="flex w-full flex-col gap-3 sm:ml-auto sm:w-auto sm:flex-row">
-          <Link
-            href={
-              projectId
-                ? `/dashboard/faq/topics?projectId=${encodeURIComponent(projectId)}`
-                : "/dashboard/faq/topics"
-            }
-            prefetch={!actionsLocked}
-            tabIndex={actionsLocked ? -1 : undefined}
-            aria-disabled={actionsLocked}
+          <button
+            type="button"
+            disabled={actionsLocked}
             className={actionBtn}
-            onClick={(e) => {
-              if (actionsLocked) e.preventDefault();
+            onClick={() => {
+              if (actionsLocked) return;
+              setCreateOpen(false);
+              setTopicsOpen(true);
             }}
           >
             Manage topics
-          </Link>
+          </button>
           <button
             type="button"
             disabled={actionsLocked}
             className={actionBtnPrimary}
             onClick={() => {
               if (actionsLocked) return;
+              setTopicsOpen(false);
+              setCreateInitialTopicId(null);
               setCreateOpen(true);
             }}
           >
@@ -205,7 +256,43 @@ export default function DashboardFaqSection({
           <FAQTable faqs={faqs} topics={topics} projectId={projectId} />
         )}
       </div>
+      {mounted && topicsOpen
+        && !createOpen
+        ? createPortal(
+            <div className="fixed inset-0 z-[1000] flex items-center justify-center px-4 py-6 sm:px-6">
+              <button
+                type="button"
+                aria-label="Close manage topics dialog"
+                className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+                onClick={() => setTopicsOpen(false)}
+              />
+              <div className="relative z-[1] flex h-[92dvh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-[#e8e6e3] bg-[#fdfdfb] shadow-[0_30px_120px_rgba(0,0,0,0.2)]">
+                <div className="flex items-center justify-between gap-4 border-b border-[#e8e6e3] px-4 py-3 sm:px-5">
+                  <h2 className="text-lg font-semibold tracking-tight text-ui-strong">
+                    Manage topics
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => setTopicsOpen(false)}
+                    className="btn-ui btn-ui-ghost h-9 rounded-xl px-3"
+                  >
+                    Close
+                  </button>
+                </div>
+                <iframe
+                  ref={topicsFrameRef}
+                  src={topicsUrl}
+                  className="h-full w-full bg-white"
+                  title="Manage topics"
+                  sandbox="allow-same-origin allow-scripts allow-forms"
+                />
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
       {mounted && createOpen
+        && !topicsOpen
         ? createPortal(
             <div className="fixed inset-0 z-[1000] flex items-center justify-center px-4 py-6 sm:px-6">
               <button
@@ -229,10 +316,12 @@ export default function DashboardFaqSection({
                 </div>
                 <FAQForm
                   paidPlan={paidPlan}
+                  initialTopicId={createInitialTopicId}
                   projectId={projectId ?? null}
                   onCancel={() => setCreateOpen(false)}
                   onFinish={async () => {
                     setCreateOpen(false);
+                    setCreateInitialTopicId(null);
                     if (userId) await load(userId);
                   }}
                 />

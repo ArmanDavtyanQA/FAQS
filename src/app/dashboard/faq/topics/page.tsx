@@ -29,6 +29,7 @@ export default function ManageTopicsPage() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const projectId = searchParams.get("projectId")?.trim() || null;
+  const modalChannel = searchParams.get("modalChannel")?.trim() || null;
   const prevPathRef = useRef<string | null>(null);
   const [topics, setTopics] = useState<Topic[]>([]);
   const [faqs, setFaqs] = useState<FAQ[]>([]);
@@ -49,6 +50,28 @@ export default function ManageTopicsPage() {
   const [createSaving, setCreateSaving] = useState(false);
   const [confirmDiscardCreateOpen, setConfirmDiscardCreateOpen] =
     useState(false);
+  const isInIframe = typeof window !== "undefined" && window.self !== window.top;
+
+  function notifyParent(type: "faq-topics:done" | "faq-topics:updated") {
+    if (typeof window === "undefined") return;
+    if (window.self === window.top) return;
+    window.parent.postMessage(
+      { type, channel: modalChannel },
+      window.location.origin,
+    );
+  }
+
+  function navigateParent(href: string) {
+    if (typeof window === "undefined") return;
+    if (window.self === window.top) {
+      router.push(href);
+      return;
+    }
+    window.parent.postMessage(
+      { type: "faq-topics:navigate", href, channel: modalChannel },
+      window.location.origin,
+    );
+  }
 
   function closeCreateModal() {
     setCreateOpen(false);
@@ -88,8 +111,11 @@ export default function ManageTopicsPage() {
       data: { user },
     } = await supabase.auth.getUser();
     if (!user) {
-      const scopedRedirect = projectId
-        ? `/dashboard/faq/topics?projectId=${encodeURIComponent(projectId)}`
+      const params = new URLSearchParams();
+      if (projectId) params.set("projectId", projectId);
+      if (modalChannel) params.set("modalChannel", modalChannel);
+      const scopedRedirect = params.toString()
+        ? `/dashboard/faq/topics?${params.toString()}`
         : "/dashboard/faq/topics";
       router.replace(`/auth?redirectTo=${encodeURIComponent(scopedRedirect)}`);
       return;
@@ -170,6 +196,7 @@ export default function ManageTopicsPage() {
       setTopics((prev) =>
         prev.map((x) => (x.id === selectedTopic.id ? { ...x, title: t } : x)),
       );
+      notifyParent("faq-topics:updated");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Save failed");
     } finally {
@@ -194,6 +221,7 @@ export default function ManageTopicsPage() {
           x.id === topic.id ? { ...x, isActive } : x,
         ),
       );
+      notifyParent("faq-topics:updated");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Update failed");
     } finally {
@@ -210,6 +238,7 @@ export default function ManageTopicsPage() {
       setTopics((prev) => prev.filter((x) => x.id !== topicPendingDelete.id));
       if (editingTopicId === topicPendingDelete.id) closeEditModal();
       setTopicPendingDelete(null);
+      notifyParent("faq-topics:updated");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Delete failed");
     } finally {
@@ -241,6 +270,7 @@ export default function ManageTopicsPage() {
       );
       setEditingTopicId(row.id);
       closeCreateModal();
+      notifyParent("faq-topics:updated");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not create topic");
     } finally {
@@ -255,12 +285,22 @@ export default function ManageTopicsPage() {
           <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#0a0a0a]">
             Topics
           </span>
-          <Link
-            href={projectId ? `/project/${projectId}/dashboard` : "/studio"}
-            className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6b6b6b] hover:text-[#0a0a0a]"
-          >
-            ← Dashboard
-          </Link>
+          {isInIframe ? (
+            <button
+              type="button"
+              onClick={() => notifyParent("faq-topics:done")}
+              className="btn-ui btn-ui-ghost h-9 rounded-xl px-3 text-[11px]"
+            >
+              Done
+            </button>
+          ) : (
+            <Link
+              href={projectId ? `/project/${projectId}/dashboard` : "/studio"}
+              className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6b6b6b] hover:text-[#0a0a0a]"
+            >
+              ← Dashboard
+            </Link>
+          )}
         </DashboardAreaHeader>
         <main className="mx-auto flex max-w-5xl items-center justify-center px-5 py-24">
           <DashboardSpinner label="Loading topics…" />
@@ -275,12 +315,22 @@ export default function ManageTopicsPage() {
         <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#0a0a0a]">
           Topics
         </span>
-        <Link
-          href={projectId ? `/project/${projectId}/dashboard` : "/studio"}
-          className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6b6b6b] hover:text-[#0a0a0a]"
-        >
-          ← Dashboard
-        </Link>
+        {isInIframe ? (
+          <button
+            type="button"
+            onClick={() => notifyParent("faq-topics:done")}
+            className="btn-ui btn-ui-ghost h-9 rounded-xl px-3 text-[11px]"
+          >
+            Done
+          </button>
+        ) : (
+          <Link
+            href={projectId ? `/project/${projectId}/dashboard` : "/studio"}
+            className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6b6b6b] hover:text-[#0a0a0a]"
+          >
+            ← Dashboard
+          </Link>
+        )}
       </DashboardAreaHeader>
 
       <main className="mx-auto max-w-5xl px-5 py-14">
@@ -316,14 +366,14 @@ export default function ManageTopicsPage() {
 
         {topics.length > 0 && (
           <p className="mt-8 text-sm text-[#6b6b6b]">
-            Click a topic row to open the editor.
+            Use the Edit button to open topic details.
           </p>
         )}
 
         <div className="mt-6 overflow-hidden rounded-2xl border border-[#e8e6e3] bg-surface shadow-sm">
-          <div className="overflow-x-auto">
+          <div className="max-h-[52dvh] overflow-auto">
             <table className="w-full min-w-[640px] border-collapse text-left text-sm">
-              <thead>
+              <thead className="sticky top-0 z-[1]">
                 <tr className="border-b border-[#e8e6e3] bg-surface-muted text-[10px] font-medium uppercase tracking-widest text-[#6b6b6b]">
                   <th className="px-4 py-3 font-medium">Topic</th>
                   <th className="px-4 py-3 font-medium">Questions</th>
@@ -350,16 +400,7 @@ export default function ManageTopicsPage() {
                     return (
                       <tr
                         key={topic.id}
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => setEditingTopicId(topic.id)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            setEditingTopicId(topic.id);
-                          }
-                        }}
-                        className="cursor-pointer border-b border-[#e8e6e3] transition-colors last:border-b-0 hover:bg-surface-muted/80"
+                        className="border-b border-[#e8e6e3] transition-colors last:border-b-0 hover:bg-surface-muted/50"
                       >
                         <td className="px-4 py-3 font-medium text-[#0a0a0a]">
                           {topic.title}
@@ -381,9 +422,15 @@ export default function ManageTopicsPage() {
                         <td className="px-4 py-3 text-right">
                           <div
                             className="flex flex-wrap items-center justify-end gap-2"
-                            onClick={(e) => e.stopPropagation()}
-                            onKeyDown={(e) => e.stopPropagation()}
                           >
+                            <button
+                              type="button"
+                              disabled={busy}
+                              onClick={() => setEditingTopicId(topic.id)}
+                              className={btnSm}
+                            >
+                              Edit
+                            </button>
                             {topic.isActive ? (
                               <button
                                 type="button"
@@ -497,18 +544,6 @@ export default function ManageTopicsPage() {
                   />
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  <button
-                    type="button"
-                    disabled={
-                      busyId === selectedTopic.id ||
-                      !editTitle.trim() ||
-                      editTitle.trim() === selectedTopic.title
-                    }
-                    onClick={() => void saveTitle()}
-                    className="interactive-smooth inline-flex h-10 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-surface-muted disabled:opacity-45"
-                  >
-                    Save name
-                  </button>
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-xs text-[#6b6b6b]">Visibility</span>
                     {selectedTopic.isActive ? (
@@ -560,12 +595,26 @@ export default function ManageTopicsPage() {
                       topic pre-selected.
                     </p>
                   </div>
-                  <Link
-                    href={`/dashboard/faq/create?topic=${selectedTopic.id}${projectId ? `&projectId=${encodeURIComponent(projectId)}` : ""}`}
-                    className="interactive-smooth inline-flex h-10 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm shadow-black/[0.06] transition-colors hover:bg-surface-muted"
-                  >
-                    Add question
-                  </Link>
+                  {isInIframe ? (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        navigateParent(
+                          `/dashboard/faq/create?topic=${selectedTopic.id}${projectId ? `&projectId=${encodeURIComponent(projectId)}` : ""}`,
+                        )
+                      }
+                      className="interactive-smooth inline-flex h-10 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm shadow-black/[0.06] transition-colors hover:bg-surface-muted"
+                    >
+                      Add question
+                    </button>
+                  ) : (
+                    <Link
+                      href={`/dashboard/faq/create?topic=${selectedTopic.id}${projectId ? `&projectId=${encodeURIComponent(projectId)}` : ""}`}
+                      className="interactive-smooth inline-flex h-10 items-center justify-center rounded-2xl border border-[#e8e6e3] bg-surface px-6 text-[11px] font-medium uppercase tracking-widest text-[#0a0a0a] shadow-sm shadow-black/[0.06] transition-colors hover:bg-surface-muted"
+                    >
+                      Add question
+                    </Link>
+                  )}
                 </div>
 
                 {faqsForSelected.length === 0 ? (
@@ -582,12 +631,26 @@ export default function ManageTopicsPage() {
                         <span className="text-sm text-[#0a0a0a]">
                           {faq.title}
                         </span>
-                        <Link
-                          href={`/dashboard/faq/${faq.id}${projectId ? `?projectId=${encodeURIComponent(projectId)}` : ""}`}
-                          className="text-[10px] font-medium uppercase tracking-widest text-[#6b6b6b] underline hover:text-[#0a0a0a]"
-                        >
-                          Edit FAQ
-                        </Link>
+                        {isInIframe ? (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              navigateParent(
+                                `/dashboard/faq/${faq.id}${projectId ? `?projectId=${encodeURIComponent(projectId)}` : ""}`,
+                              )
+                            }
+                            className="text-[10px] font-medium uppercase tracking-widest text-[#6b6b6b] underline hover:text-[#0a0a0a]"
+                          >
+                            Edit FAQ
+                          </button>
+                        ) : (
+                          <Link
+                            href={`/dashboard/faq/${faq.id}${projectId ? `?projectId=${encodeURIComponent(projectId)}` : ""}`}
+                            className="text-[10px] font-medium uppercase tracking-widest text-[#6b6b6b] underline hover:text-[#0a0a0a]"
+                          >
+                            Edit FAQ
+                          </Link>
+                        )}
                       </li>
                     ))}
                   </ul>
@@ -596,14 +659,28 @@ export default function ManageTopicsPage() {
             </div>
 
             <div className="shrink-0 border-t border-[#e8e6e3] bg-surface-muted px-6 py-4">
-              <button
-                type="button"
-                disabled={busyId === selectedTopic.id}
-                onClick={() => requestCloseEditModal()}
-                className="interactive-smooth inline-flex h-10 w-full items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-4 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-surface disabled:opacity-45 sm:w-auto"
-              >
-                Close
-              </button>
+              <div className="flex w-full flex-wrap justify-end gap-3">
+                <button
+                  type="button"
+                  disabled={busyId === selectedTopic.id}
+                  onClick={() => requestCloseEditModal()}
+                  className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-surface px-4 text-[11px] font-light uppercase tracking-widest text-[#0a0a0a] shadow-sm transition-colors hover:bg-surface disabled:opacity-45"
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  disabled={
+                    busyId === selectedTopic.id ||
+                    !editTitle.trim() ||
+                    editTitle.trim() === selectedTopic.title
+                  }
+                  onClick={() => void saveTitle()}
+                  className="interactive-smooth inline-flex h-10 items-center justify-center rounded-xl border border-[#e8e6e3] bg-[#0a0a0a] px-5 text-[11px] font-medium uppercase tracking-widest text-white shadow-sm transition-colors hover:bg-[#262626] disabled:opacity-45"
+                >
+                  Save
+                </button>
+              </div>
             </div>
           </div>
         </div>
