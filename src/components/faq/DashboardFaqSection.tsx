@@ -38,9 +38,8 @@ export default function DashboardFaqSection({
   const [createInitialTopicId, setCreateInitialTopicId] = useState<string | null>(null);
   const [topicsOpen, setTopicsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [topicsChannel] = useState(() =>
-    Math.random().toString(36).slice(2, 10),
-  );
+  /** Set when opening the modal so SSR/CSR HTML match (no Math.random in initial render). */
+  const [topicsChannel, setTopicsChannel] = useState<string | null>(null);
   const loadedForUserRef = useRef<string | null>(null);
   const loadInFlightRef = useRef<string | null>(null);
   const topicsFrameRef = useRef<HTMLIFrameElement | null>(null);
@@ -177,9 +176,12 @@ export default function DashboardFaqSection({
       : `/faq/${userId}${projectId ? `?projectId=${encodeURIComponent(projectId)}` : ""}`;
 
   const actionsLocked = loading;
-  const topicsUrl = projectId
-    ? `/dashboard/faq/topics?projectId=${encodeURIComponent(projectId)}&modalChannel=${encodeURIComponent(topicsChannel)}`
-    : `/dashboard/faq/topics?modalChannel=${encodeURIComponent(topicsChannel)}`;
+  const topicsUrl =
+    topicsChannel != null
+      ? projectId
+        ? `/dashboard/faq/topics?projectId=${encodeURIComponent(projectId)}&modalChannel=${encodeURIComponent(topicsChannel)}`
+        : `/dashboard/faq/topics?modalChannel=${encodeURIComponent(topicsChannel)}`
+      : null;
 
   return (
     <>
@@ -224,6 +226,7 @@ export default function DashboardFaqSection({
             onClick={() => {
               if (actionsLocked) return;
               setCreateOpen(false);
+              setTopicsChannel((c) => c ?? Math.random().toString(36).slice(2, 10));
               setTopicsOpen(true);
             }}
           >
@@ -279,13 +282,19 @@ export default function DashboardFaqSection({
                     Close
                   </button>
                 </div>
-                <iframe
-                  ref={topicsFrameRef}
-                  src={topicsUrl}
-                  className="h-full w-full bg-white"
-                  title="Manage topics"
-                  sandbox="allow-same-origin allow-scripts allow-forms"
-                />
+                {topicsUrl ? (
+                  <iframe
+                    ref={topicsFrameRef}
+                    src={topicsUrl}
+                    className="h-full w-full bg-white"
+                    title="Manage topics"
+                    sandbox="allow-same-origin allow-scripts allow-forms"
+                  />
+                ) : (
+                  <div className="flex flex-1 items-center justify-center bg-white text-sm text-ui-muted">
+                    Loading…
+                  </div>
+                )}
               </div>
             </div>,
             document.body,

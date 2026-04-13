@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
@@ -24,7 +31,7 @@ const btnSm =
 const btnDanger =
   "btn-ui btn-ui-danger rounded-xl px-3 py-1.5 text-[10px] disabled:pointer-events-none disabled:opacity-45";
 
-export default function ManageTopicsPage() {
+function ManageTopicsPage() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -50,7 +57,11 @@ export default function ManageTopicsPage() {
   const [createSaving, setCreateSaving] = useState(false);
   const [confirmDiscardCreateOpen, setConfirmDiscardCreateOpen] =
     useState(false);
-  const isInIframe = typeof window !== "undefined" && window.self !== window.top;
+  /** Must not read window during render — SSR and iframe embed disagree on first paint. */
+  const [isInIframe, setIsInIframe] = useState(false);
+  useEffect(() => {
+    setIsInIframe(window.self !== window.top);
+  }, []);
 
   function notifyParent(type: "faq-topics:done" | "faq-topics:updated") {
     if (typeof window === "undefined") return;
@@ -912,5 +923,19 @@ export default function ManageTopicsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function ManageTopicsPageWithSuspense() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-[50vh] items-center justify-center px-5">
+          <DashboardSpinner label="Loading topics…" />
+        </div>
+      }
+    >
+      <ManageTopicsPage />
+    </Suspense>
   );
 }
